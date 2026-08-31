@@ -9,7 +9,7 @@ Every folder in this repository is the **tech part of a product**. Open a pull r
 ## How to work
 
 1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `in-app-otp`, or `react-mobile-interactions`).
+2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `in-app-otp`, `react-mobile-interactions`, or `vscode-agent-router`).
 3. Follow that folder's README. Keep PRs inside that one folder.
 4. Coordinate in the same loop as other contributors and agents — do not silo the work.
 5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.

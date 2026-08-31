@@ -1,0 +1,223 @@
+{
+  "name": "agent-router",
+  "displayName": "Agent Router",
+  "version": "0.1.0",
+  "description": "Route Cursor agents to Claude, Codex, Slack, and any catalog peer over MCP, CLI, or API — including cloud runtimes.",
+  "publisher": "splitin",
+  "license": "MIT",
+  "author": "SplitInTech, @ojchavan",
+  "homepage": "https://github.com/splitintech/open-internal-tools/tree/main/vscode-agent-router",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/splitintech/open-internal-tools.git",
+    "directory": "vscode-agent-router"
+  },
+  "bugs": {
+    "url": "https://github.com/splitintech/open-internal-tools/issues"
+  },
+  "categories": ["Other", "Machine Learning", "Chat"],
+  "keywords": ["cursor", "claude", "codex", "slack", "mcp", "agent"],
+  "type": "module",
+  "main": "./dist/extension.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "agent-router-mcp": "./dist/mcp.js"
+  },
+  "engines": {
+    "vscode": "^1.93.0",
+    "node": ">=20"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "agentRouter",
+          "title": "Agent Router",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "agentRouter": [
+        {
+          "id": "agentRouter.peers",
+          "name": "Peers"
+        },
+        {
+          "id": "agentRouter.jobs",
+          "name": "Jobs"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "agentRouter.listPeers",
+        "title": "Agent Router: List Peers"
+      },
+      {
+        "command": "agentRouter.probe",
+        "title": "Agent Router: Probe Transports"
+      },
+      {
+        "command": "agentRouter.refreshPeers",
+        "title": "Agent Router: Refresh Peers",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "agentRouter.showOutput",
+        "title": "Agent Router: Show Output"
+      },
+      {
+        "command": "agentRouter.handoffClaude",
+        "title": "Agent Router: Handoff to Claude Code"
+      },
+      {
+        "command": "agentRouter.handoffCodex",
+        "title": "Agent Router: Handoff to Codex"
+      },
+      {
+        "command": "agentRouter.handoffCodexFile",
+        "title": "Agent Router: Add File to Codex"
+      },
+      {
+        "command": "agentRouter.handoffCursor",
+        "title": "Agent Router: Handoff to Cursor Chat"
+      },
+      {
+        "command": "agentRouter.handoffSlack",
+        "title": "Agent Router: Handoff Selection to Slack"
+      },
+      {
+        "command": "agentRouter.slackAuth",
+        "title": "Agent Router: Slack Auth Status"
+      },
+      {
+        "command": "agentRouter.slackPost",
+        "title": "Agent Router: Post to Slack"
+      },
+      {
+        "command": "agentRouter.openJob",
+        "title": "Agent Router: Open Job"
+      },
+      {
+        "command": "agentRouter.showPeer",
+        "title": "Agent Router: Show Peer"
+      },
+      {
+        "command": "agentRouter.addPeer",
+        "title": "Agent Router: Add Peer from Template"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "agentRouter.handoffClaude",
+          "when": "editorHasSelection",
+          "group": "agentRouter@1"
+        },
+        {
+          "command": "agentRouter.handoffCodex",
+          "when": "editorHasSelection",
+          "group": "agentRouter@2"
+        },
+        {
+          "command": "agentRouter.handoffSlack",
+          "when": "editorHasSelection",
+          "group": "agentRouter@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "agentRouter.handoffCodexFile",
+          "when": "resourceSet && !explorerResourceIsFolder",
+          "group": "agentRouter@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "agentRouter.refreshPeers",
+          "when": "view == agentRouter.peers",
+          "group": "navigation"
+        },
+        {
+          "command": "agentRouter.addPeer",
+          "when": "view == agentRouter.peers",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "agentRouter.openJob",
+          "when": "view == agentRouter.jobs && viewItem == agentRouterJob"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Agent Router",
+      "properties": {
+        "agentRouter.catalogPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional extra catalog JSON path. User catalog also loads from ~/.agent-router/peers.json"
+        },
+        "agentRouter.slackTeamId": {
+          "type": "string",
+          "default": "",
+          "description": "Slack team/workspace ID for CLI --team"
+        },
+        "agentRouter.slackChannel": {
+          "type": "string",
+          "default": "",
+          "description": "Default Slack channel ID for launch/post"
+        },
+        "agentRouter.codexCloudEnvId": {
+          "type": "string",
+          "default": "",
+          "description": "Codex cloud environment id for `codex cloud exec --env`"
+        },
+        "agentRouter.cursorCloudRepoUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Git remote URL for Cursor Cloud Agent launches"
+        },
+        "agentRouter.notifySlackOnJobComplete": {
+          "type": "boolean",
+          "default": false,
+          "description": "Post to agentRouter.slackChannel when a cloud job reaches a terminal status"
+        },
+        "agentRouter.pollIntervalMs": {
+          "type": "number",
+          "default": 15000,
+          "description": "Cloud job poll interval in milliseconds"
+        },
+        "agentRouter.timeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "description": "CLI/API timeout in milliseconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "mcp": "node dist/mcp.js",
+    "package": "npm run build && npx --yes @vscode/vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/vscode": "^1.93.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

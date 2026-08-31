@@ -49,6 +49,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **[slack-agent-hq](slack-agent-hq/)**: Slack project-thread router plus taggable Cursor, Claude, Codex, ChatGPT, and specialist bots.
 - **[in-app-otp](in-app-otp/)**: `@splitin/in-app-otp` — in-app OTP handoff for marketplace verification.
 - **[react-mobile-interactions](react-mobile-interactions/)**: `@splitin/react-mobile-interactions` — swipe, back layers, and native-feeling mobile motion.
+- **[vscode-agent-router](vscode-agent-router/)**: Cursor / VS Code dispatcher to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API.
 - **Careers**: SplitIn tech careers live at [splitin.net/careers-requests](https://www.splitin.net/careers-requests).
 
 ## Table of contents
@@ -106,7 +107,7 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product — and that every contributor would have **% equity** in that hosted service.
 - You leave every project in its **best possible condition**: fast, small, beautiful, cheap, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
 
-If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), or [react-mobile-interactions](react-mobile-interactions/) as maintainer.
+If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), [react-mobile-interactions](react-mobile-interactions/), or [vscode-agent-router](vscode-agent-router/) as maintainer.
 
 ## Tech stack
 
@@ -118,6 +119,7 @@ Use what the folder already uses unless the job clearly needs something else. Cu
 | [slack-agent-hq](slack-agent-hq/) | TypeScript on Node 20+ | Slack Bolt, Slack CLI, YAML config, SQLite (`node:sqlite`), vitest, tsx, npm workspaces |
 | [in-app-otp](in-app-otp/) | TypeScript | tsup, vitest; adapters for React, Express, Django, Supabase |
 | [react-mobile-interactions](react-mobile-interactions/) | TypeScript + React | vitest, tsup, mobile gesture / overlay primitives |
+| [vscode-agent-router](vscode-agent-router/) | TypeScript on Node 20+ | Cursor/VS Code extension, MCP stdio, `tsup`, vitest, official Claude/Codex/Slack CLIs |
 
 Shared defaults: MIT product folders, install from that folder only, secrets in `.env` / `~/.config` never in git, OSS first, indie-cheap to run. Slack-side coding agents are official apps (`@Cursor`, `@Claude`, `@Codex`, `@ChatGPT`) plus MCP/CLI/API rows in `integrations.yaml` — not a new custom bot per vendor.
 
@@ -159,6 +161,15 @@ npm install && npm test
 
 Full steps: [in-app-otp/README.md](in-app-otp/README.md) and [react-mobile-interactions/README.md](react-mobile-interactions/README.md).
 
+Agent Router is a Cursor / VS Code extension. Install it from its own folder:
+
+```zsh
+cd open-internal-tools/vscode-agent-router
+npm install && npm test && npm run build
+```
+
+Full steps: [vscode-agent-router/README.md](vscode-agent-router/README.md).
+
 ## Projects
 
 Each folder has a SplitIn URL that 301s to that GitHub tree: `https://www.splitin.net/tech-stack/open-internal-tools/{folder}`.
@@ -170,6 +181,7 @@ Each folder has a SplitIn URL that 301s to that GitHub tree: `https://www.spliti
 | Slack agent HQ | [slack-agent-hq](slack-agent-hq/) | [tech-stack/open-internal-tools/slack-agent-hq](https://www.splitin.net/tech-stack/open-internal-tools/slack-agent-hq) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
 | In-app OTP | [in-app-otp](in-app-otp/) | [tech-stack/open-internal-tools/in-app-otp](https://www.splitin.net/tech-stack/open-internal-tools/in-app-otp) | Framework-neutral in-app OTP handoff for marketplace verification | Open — independent contributor / project CTO |
 | React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | [tech-stack/open-internal-tools/react-mobile-interactions](https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
+| Agent Router | [vscode-agent-router](vscode-agent-router/) | [tech-stack/open-internal-tools/vscode-agent-router](https://www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router) | Route Cursor agents to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API | Open — independent contributor / project CTO |
 
 New products land as a new folder. That folder is the tech for that product.
 

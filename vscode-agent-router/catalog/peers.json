@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "transportPreference": ["mcp", "cli", "api"],
+  "peers": [
+    {
+      "id": "cursor",
+      "title": "Cursor",
+      "kind": "agent",
+      "runtimes": ["local", "cloud", "ide"],
+      "capabilities": ["consult", "launch", "handoff", "inbox"],
+      "transports": {
+        "cli": {
+          "bin": "cursor",
+          "allow": ["agent", "mcp"]
+        },
+        "api": {
+          "baseUrl": "https://api.cursor.com",
+          "authEnv": "CURSOR_API_KEY",
+          "cloudCreatePath": "/v1/agents"
+        }
+      }
+    },
+    {
+      "id": "claude",
+      "title": "Claude Code",
+      "kind": "agent",
+      "runtimes": ["local", "cloud", "ide"],
+      "capabilities": ["consult", "launch", "handoff", "inbox"],
+      "transports": {
+        "cli": {
+          "bin": "claude",
+          "allow": ["-p", "--cloud", "--print", "--resume", "--continue"]
+        },
+        "api": {
+          "baseUrl": "https://api.anthropic.com",
+          "authEnv": "ANTHROPIC_API_KEY"
+        }
+      },
+      "ide": {
+        "extensionId": "anthropic.claude-code",
+        "handoffUri": "vscode://anthropic.claude-code/open?prompt="
+      }
+    },
+    {
+      "id": "codex",
+      "title": "OpenAI Codex",
+      "kind": "agent",
+      "runtimes": ["local", "cloud", "ide"],
+      "capabilities": ["consult", "launch", "handoff", "inbox"],
+      "transports": {
+        "cli": {
+          "bin": "codex",
+          "allow": ["exec", "cloud", "review"]
+        },
+        "api": {
+          "baseUrl": "https://chatgpt.com/backend-api",
+          "authEnv": "CODEX_API_KEY"
+        }
+      },
+      "ide": {
+        "extensionId": "openai.chatgpt",
+        "commands": ["chatgpt.addToThread", "chatgpt.addFileToThread"]
+      },
+      "cloud": {
+        "envIdSetting": "agentRouter.codexCloudEnvId"
+      }
+    },
+    {
+      "id": "slack",
+      "title": "Slack",
+      "kind": "comms",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "launch", "api", "inbox"],
+      "transports": {
+        "cli": {
+          "bin": "slack",
+          "resolve": "slack-cli",
+          "allow": ["api", "auth", "docs", "app", "manifest", "trigger", "datastore"]
+        },
+        "api": {
+          "baseUrl": "https://slack.com/api",
+          "authEnv": "SLACK_BOT_TOKEN"
+        },
+        "mcp": {
+          "configName": "slack"
+        }
+      }
+    },
+    {
+      "id": "github",
+      "title": "GitHub",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "launch", "api"],
+      "transports": {
+        "cli": {
+          "bin": "gh",
+          "allow": ["issue", "pr", "repo", "api", "run", "release", "auth"]
+        },
+        "api": {
+          "baseUrl": "https://api.github.com",
+          "authEnv": "GITHUB_TOKEN"
+        },
+        "mcp": {
+          "configName": "github"
+        }
+      }
+    },
+    {
+      "id": "railway",
+      "title": "Railway",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "launch", "api"],
+      "transports": {
+        "cli": {
+          "bin": "railway",
+          "allow": ["status", "logs", "up", "down", "variables", "environment", "service"]
+        },
+        "api": {
+          "baseUrl": "https://backboard.railway.com/graphql/v2",
+          "authEnv": "RAILWAY_TOKEN"
+        },
+        "mcp": {
+          "configName": "railway"
+        }
+      }
+    },
+    {
+      "id": "vercel",
+      "title": "Vercel",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "launch", "api"],
+      "transports": {
+        "cli": {
+          "bin": "vercel",
+          "allow": ["ls", "inspect", "logs", "env", "deploy", "project"]
+        },
+        "api": {
+          "baseUrl": "https://api.vercel.com",
+          "authEnv": "VERCEL_TOKEN"
+        },
+        "mcp": {
+          "configName": "vercel"
+        }
+      }
+    },
+    {
+      "id": "supabase",
+      "title": "Supabase",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "launch", "api"],
+      "transports": {
+        "cli": {
+          "bin": "supabase",
+          "allow": ["status", "db", "functions", "gen", "projects", "login"]
+        },
+        "api": {
+          "baseUrl": "https://api.supabase.com",
+          "authEnv": "SUPABASE_ACCESS_TOKEN"
+        },
+        "mcp": {
+          "configName": "supabase"
+        }
+      }
+    },
+    {
+      "id": "stripe",
+      "title": "Stripe",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "api"],
+      "transports": {
+        "cli": {
+          "bin": "stripe",
+          "allow": ["listen", "logs", "events", "resources", "get", "post"]
+        },
+        "api": {
+          "baseUrl": "https://api.stripe.com",
+          "authEnv": "STRIPE_API_KEY"
+        },
+        "mcp": {
+          "configName": "stripe"
+        }
+      }
+    },
+    {
+      "id": "linear",
+      "title": "Linear",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["consult", "launch", "api"],
+      "transports": {
+        "api": {
+          "baseUrl": "https://api.linear.app/graphql",
+          "authEnv": "LINEAR_API_KEY"
+        },
+        "mcp": {
+          "configName": "linear"
+        }
+      }
+    }
+  ]
+}
