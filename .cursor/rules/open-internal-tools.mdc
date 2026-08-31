@@ -24,6 +24,6 @@ We let open source build the tech side of the small community little capitalists
 - Every new folder is the **tech part of a product**, not a random gist.
 - That folder's maintainer is the CTO of that SplitIn tech-career project.
 - Individual contributors own scope, issues, and releases for that product-tech only.
-- Careers for SplitIn live at https://www.splitin.net
+- Careers for SplitIn live at https://www.splitin.net/careers-requests
 - Never commit webhooks, tokens, or `~/.config` secrets.
 - Do not push this program from the SplitIn app remote.

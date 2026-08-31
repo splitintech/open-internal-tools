@@ -19,4 +19,4 @@ The maintainer of a folder is the independent contributor who owns that product'
 
 ## Careers
 
-SplitIn tech careers: [https://www.splitin.net](https://www.splitin.net)
+SplitIn tech careers: [https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)

@@ -17,7 +17,7 @@
   ·
   <a href="#projects">Projects</a>
   ·
-  <a href="https://www.splitin.net">Careers</a>
+  <a href="https://www.splitin.net/careers-requests">Careers</a>
 </p>
 
 <p align="center">
@@ -37,7 +37,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **Open now, product later**: a project can remain MIT, or become a proprietary SplitIn product when it earns that path.
 - **Maintainer CTOs**: independent contributors own that product's tech end to end.
 - **[mac-unlock-notify](mac-unlock-notify/)**: first product-tech — Slack your phone when this Mac is unlocked.
-- **Careers**: SplitIn tech careers live at [splitin.net](https://www.splitin.net).
+- **Careers**: SplitIn tech careers live at [splitin.net/careers-requests](https://www.splitin.net/careers-requests).
 
 ## Table of contents
 
@@ -97,7 +97,7 @@ This repo is **MIT** community tech. Contributors build end-to-end dev tools her
 
 ## Careers
 
-Independent contributors who want to own a product's tech end to end — and people exploring SplitIn tech careers — start at **[https://www.splitin.net](https://www.splitin.net)**.
+Independent contributors who want to own a product's tech end to end — and people exploring SplitIn tech careers — start at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
   <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">
