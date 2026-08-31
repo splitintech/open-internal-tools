@@ -1,12 +1,69 @@
-# mac-unlock-notify
+<p align="center">
+  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
+</p>
 
-A security tool to notify your iPhone in Slack whenever your Mac is unlocked in your absence.
+<h1 align="center">mac-unlock-notify</h1>
+
+<p align="center">
+  <strong>Slack your iPhone when this Mac is unlocked.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/splitintech/open-internal-tools/blob/main/mac-unlock-notify/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <a href="https://github.com/splitintech/open-internal-tools/tree/main/mac-unlock-notify"><img src="https://img.shields.io/badge/product-open--internal--tools-orange" alt="Open Internal Tools"></a>
+  <a href="https://github.com/splitintech/open-internal-tools/issues"><img src="https://img.shields.io/github/issues/splitintech/open-internal-tools" alt="Issues"></a>
+</p>
+
+<p align="center">
+  <a href="../README.md">Hub</a>
+  ·
+  <a href="#getting-started">Docs</a>
+  ·
+  <a href="#behavior">Behavior</a>
+  ·
+  <a href="https://www.splitin.net/careers-requests">Careers</a>
+</p>
+
+<p align="center">
+  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+</p>
+
+# A security canary for your Mac, delivered as a Slack banner on your phone
 
 Plug-and-play on any personal Mac: clone, run `./install.sh`, paste a Slack incoming webhook. A LaunchAgent watches lock state with `ioreg` and `curl`s Slack on **locked → unlocked** only.
 
 ```text
 unlock → ioreg → zsh watcher → curl → Slack webhook → iPhone banner
 ```
+
+- **Unlock only**: no ping on agent start if the Mac is already unlocked.
+- **Out of the box**: one installer, one webhook, one LaunchAgent.
+- **Version by version**: keep improving the watcher without touching SplitIn the product.
+- **Stay open, host later**: MIT package today; a hosted SplitIn product if it earns that path.
+
+## Table of contents
+
+- [Getting started](#getting-started)
+- [Requirements](#requirements)
+- [Slack setup](#slack-setup)
+- [Install](#install)
+- [Confirm it works](#confirm-it-works)
+- [Uninstall](#uninstall)
+- [Behavior](#behavior)
+- [Security](#security)
+- [Commands](#commands)
+- [Careers](#careers)
+
+## Getting started
+
+```zsh
+git clone https://github.com/splitintech/open-internal-tools.git
+cd open-internal-tools/mac-unlock-notify
+chmod +x install.sh uninstall.sh bin/mac-unlock-notify
+./install.sh
+```
+
+This folder is the **tech part of a product** in [open-internal-tools](https://github.com/splitintech/open-internal-tools). Domain specialists own it end to end. Work in sync with other contributors and agents.
 
 ## Requirements
 
@@ -15,7 +72,7 @@ unlock → ioreg → zsh watcher → curl → Slack webhook → iPhone banner
 - Slack iOS app with notifications allowed
 - `zsh`, `curl`, `python3`, and `ioreg` (all stock on macOS)
 
-## 1. Slack (once)
+## Slack setup
 
 1. Create a **private** channel, e.g. `#mac-unlock`.
 2. Open [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From scratch**.
@@ -24,17 +81,10 @@ unlock → ioreg → zsh watcher → curl → Slack webhook → iPhone banner
 5. Copy the URL (`https://hooks.slack.com/services/…`). Treat it as a password.
 6. In that channel, notify on **All messages**.
 7. Slack **Preferences → Notifications → When I'm not active on desktop → Immediately, even if I'm active**.
-   Without this, Slack on the Mac you just unlocked often swallows the iPhone banner. See [Slack notification settings](https://slack.com/help/articles/201355156-Configure-your-Slack-notifications).
+   Without this, Slack on the Mac you just unlocked often swallows the iPhone banner. See [Slack notification settings](https://slack.com/help/articles/201355156-Configure-your-slack-notifications).
 8. On iPhone: Slack notifications on; allow Slack in any Focus mode.
 
-## 2. Install on this Mac
-
-```zsh
-git clone https://github.com/splitintech/open-internal-tools.git
-cd open-internal-tools/mac-unlock-notify
-chmod +x install.sh uninstall.sh bin/mac-unlock-notify
-./install.sh
-```
+## Install
 
 You will be asked for the webhook (input is hidden). The installer:
 
@@ -52,7 +102,7 @@ Non-interactive:
 
 The clone can be deleted after install. Re-run `./install.sh` from a fresh clone to upgrade.
 
-## 3. Confirm it works
+## Confirm it works
 
 ```zsh
 ~/.local/bin/mac-unlock-notify --status    # unlocked or locked
@@ -79,7 +129,7 @@ Logs: `~/Library/Logs/mac-unlock-notify.log`
 ## Behavior
 
 | Event | Slack? |
-|---|---|
+| --- | --- |
 | Agent starts while already unlocked | No |
 | Lid open, lock screen still up | No |
 | Password / Touch ID / Apple Watch unlock | Yes |
@@ -96,13 +146,21 @@ Logs: `~/Library/Logs/mac-unlock-notify.log`
 ## Commands
 
 | Command | What it does |
-|---|---|
+| --- | --- |
 | `./install.sh` | Install or reinstall for the current user |
 | `./uninstall.sh` | Remove the agent and copied files |
 | `mac-unlock-notify --watch` | Foreground watcher (LaunchAgent uses this) |
 | `mac-unlock-notify --test` | Send one Slack message |
 | `mac-unlock-notify --status` | Print `locked` or `unlocked` |
 
+## Careers
+
+Own this product-tech end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
+
+<p align="center">
+  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+</p>
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). Program rules: [CONTRIBUTING.md](../CONTRIBUTING.md).

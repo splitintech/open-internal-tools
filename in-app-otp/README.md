@@ -1,16 +1,65 @@
-# @splitin/in-app-otp
+<p align="center">
+  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
+</p>
 
-Framework-neutral in-app OTP handoff primitives for marketplace verification flows.
+<h1 align="center">@splitin/in-app-otp</h1>
 
-Use this when one authenticated actor should see a 4-digit code in-app and another authenticated actor must enter it before a sensitive transition can continue.
+<p align="center">
+  <strong>In-app OTP handoff for marketplace verification flows.</strong>
+</p>
 
-## Install
+<p align="center">
+  <a href="https://github.com/splitintech/open-internal-tools/blob/main/in-app-otp/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <a href="https://www.npmjs.com/package/@splitin/in-app-otp"><img src="https://img.shields.io/badge/npm-@splitin/in--app--otp-cb3837" alt="npm package"></a>
+  <a href="https://github.com/splitintech/open-internal-tools/tree/main/in-app-otp"><img src="https://img.shields.io/badge/product-open--internal--tools-orange" alt="Open Internal Tools"></a>
+</p>
+
+<p align="center">
+  <a href="../README.md">Hub</a>
+  ·
+  <a href="#getting-started">Docs</a>
+  ·
+  <a href="#server-usage">Server</a>
+  ·
+  <a href="#react-usage">React</a>
+  ·
+  <a href="https://www.splitin.net/careers-requests">Careers</a>
+</p>
+
+<p align="center">
+  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+</p>
+
+# One actor sees the code. Another must enter it. The sensitive step cannot continue until they do.
+
+Framework-neutral primitives for when one authenticated **viewer** should see a 4-digit code in-app and an authenticated **verifier** must enter it before a tour, trip, booking, or order can proceed.
+
+Built internally at SplitIn, open sourced as a **package** others can install. It can stay MIT and later also ship as a hosted SplitIn product. A domain specialist owns this folder end to end.
+
+- **Viewer / verifier / subject / purpose**: explicit roles, not a generic SMS OTP.
+- **Hash at rest**: the server stores `codeHash`; plaintext is ephemeral.
+- **Out of the box**: React display + entry, REST, Express, Supabase, Django guidance.
+- **Version by version**: keep shipping the package; supporting tools for sibling products as needed.
+
+## Table of contents
+
+- [Getting started](#getting-started)
+- [Core concepts](#core-concepts)
+- [Server usage](#server-usage)
+- [React usage](#react-usage)
+- [HTTP contract](#http-contract)
+- [Supabase adapter](#supabase-adapter)
+- [Django / Rickshaw](#django--rickshaw-guidance)
+- [SplitIn live tours](#splitin-guidance)
+- [Careers](#careers)
+
+## Getting started
 
 ```bash
 npm install @splitin/in-app-otp
 ```
 
-## Development
+From this hub:
 
 ```sh
 git clone https://github.com/splitintech/open-internal-tools.git
@@ -20,7 +69,9 @@ npm run build
 npm test
 ```
 
-## Core Concepts
+Work in sync with other contributors and agents. PRs stay in `in-app-otp/`.
+
+## Core concepts
 
 - `viewer`: the user who can see the OTP.
 - `verifier`: the user who must enter the OTP.
@@ -29,7 +80,7 @@ npm test
 
 The package defaults to 4 numeric digits, a 5 minute TTL, and 5 attempts. The server stores only `codeHash`; plaintext OTPs are returned only as an ephemeral server result or through an explicitly configured ephemeral viewer-code store.
 
-## Server Usage
+## Server usage
 
 ```ts
 import {
@@ -72,7 +123,7 @@ await verifyOtpChallenge({
 }, deps);
 ```
 
-## React Usage
+## React usage
 
 ```tsx
 import { OtpCodeDisplay, OtpEntryForm, useOtpEntry } from "@splitin/in-app-otp/react";
@@ -95,7 +146,7 @@ function VerifierScreen({ client, challengeId }: any) {
 }
 ```
 
-## HTTP Contract
+## HTTP contract
 
 The optional REST adapter expects these routes:
 
@@ -117,7 +168,7 @@ type OtpHttpChallengeResponse = {
 
 `codeHash` is never returned. Verifier responses never include the plaintext OTP.
 
-## Supabase Adapter
+## Supabase adapter
 
 Use `SupabaseOtpChallengeStore` with a service-role Supabase client. The package exports `SUPABASE_IN_APP_OTP_MIGRATION_SQL` as a starting migration template.
 
@@ -127,11 +178,11 @@ Recommended RLS posture:
 - only service role can create, verify, cancel, lock, or expire challenges;
 - plaintext OTP is never stored in Postgres.
 
-## Django / Rickshaw Guidance
+## Django / Rickshaw guidance
 
 For Django, mirror the `in_app_otp_challenges` fields in a model and perform verification inside `transaction.atomic()` with `select_for_update()`. For Rickshaw trip start, the future integration point is `driver_trip_transition(..., action="start")`: verify `purpose = "rickshaw.trip.start"` for `subjectType = "trip"` before transitioning to `STARTED`.
 
-## SplitIn Guidance
+## SplitIn guidance
 
 For SplitIn live tours, the intended future integration is:
 
@@ -142,3 +193,15 @@ For SplitIn live tours, the intended future integration is:
 - `verifierUserId = guide_id`
 
 The guide initiates the live-tour start, the renter sees the OTP in-app, and the guide enters it before the tour can transition from `starting` to `live`.
+
+## Careers
+
+Own this package end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
+
+<p align="center">
+  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+</p>
+
+## License
+
+MIT. See [LICENSE](LICENSE). Program rules: [CONTRIBUTING.md](../CONTRIBUTING.md).

@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/splitintech/open-internal-tools/blob/main/LICENSE"><img src="https://img.shields.io/github/license/splitintech/open-internal-tools" alt="MIT license"></a>
+  <a href="https://github.com/splitintech/open-internal-tools/stargazers"><img src="https://img.shields.io/github/stars/splitintech/open-internal-tools?style=flat" alt="GitHub stars"></a>
   <a href="https://github.com/splitintech/open-internal-tools/graphs/contributors"><img src="https://img.shields.io/github/contributors/splitintech/open-internal-tools" alt="Contributors"></a>
   <a href="https://github.com/splitintech/open-internal-tools/issues"><img src="https://img.shields.io/github/issues/splitintech/open-internal-tools" alt="Issues"></a>
 </p>
@@ -53,7 +54,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - [Projects](#projects)
 - [Contributing](#contributing)
 - [Open source](#open-source-vs-splitin-product)
-- [Careers](#careers)
+- [We're hiring](#were-hiring)
 
 ## How projects work
 
@@ -141,9 +142,11 @@ Do not commit webhooks, tokens, or local `~/.config` files.
 
 Projects start **internal**, then go out as **open-source packages**. They keep improving **version by version**, including out-of-the-box apps and supporting tools for other projects. A package may **stay open source** and later also run as a **hosted proprietary SplitIn product**. SplitIn the company is at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
 
-## Careers
+## We're hiring
 
-Independent contributors who want to own a product's tech end to end — and people exploring SplitIn tech careers — start at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
+Hey! If you're reading this, you've proven yourself as a dedicated README reader.
+
+You might also make a great addition. Independent contributors who want to own a product's tech end to end — and people exploring SplitIn tech careers — start at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
   <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">
