@@ -7,3 +7,6 @@ env
 config/env
 /tmp/
 **/.config/
+**/node_modules/
+**/dist/
+**/coverage/

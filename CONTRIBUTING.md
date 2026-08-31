@@ -9,8 +9,8 @@ Every folder in this repository is the **tech part of a product**. Open a pull r
 ## How to work
 
 1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify` or `slack-agent-hq`).
-3. Follow that folder's README. PRs for Slack agent HQ stay under `slack-agent-hq/` only.
+2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `in-app-otp`, or `react-mobile-interactions`).
+3. Follow that folder's README. Keep PRs inside that one folder.
 4. Coordinate in the same loop as other contributors and agents — do not silo the work.
 5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
 

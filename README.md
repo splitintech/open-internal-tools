@@ -38,8 +38,10 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **Tools that support tools**: we build as many internal supporting tools as other projects need.
 - **Domain and tool specialists**: each specialist maintains everything for that tool or domain end to end.
 - **People and agents, in sync**: every contributor works with other contributors **and** agents synchronously.
-- **[mac-unlock-notify](mac-unlock-notify/)**: first product-tech — Slack your phone when this Mac is unlocked.
+- **[mac-unlock-notify](mac-unlock-notify/)**: Slack your phone when this Mac is unlocked.
 - **[slack-agent-hq](slack-agent-hq/)**: Slack project-thread router plus taggable Cursor, Claude, Codex, ChatGPT, and specialist bots.
+- **[in-app-otp](in-app-otp/)**: `@splitin/in-app-otp` — in-app OTP handoff for marketplace verification.
+- **[react-mobile-interactions](react-mobile-interactions/)**: `@splitin/react-mobile-interactions` — swipe, back layers, and native-feeling mobile motion.
 - **Careers**: SplitIn tech careers live at [splitin.net/careers-requests](https://www.splitin.net/careers-requests).
 
 ## Table of contents
@@ -73,7 +75,7 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You work **synchronously with other contributors and agents**, not as a solo silo.
 - You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product.
 
-If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/) or [slack-agent-hq](slack-agent-hq/) as maintainer.
+If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), or [react-mobile-interactions](react-mobile-interactions/) as maintainer.
 
 ## Getting started
 
@@ -99,12 +101,28 @@ chmod +x install.sh
 
 Full steps: [slack-agent-hq/README.md](slack-agent-hq/README.md).
 
+Packages live in their own folders too:
+
+```zsh
+cd open-internal-tools/in-app-otp
+npm install && npm test
+```
+
+```zsh
+cd open-internal-tools/react-mobile-interactions
+npm install && npm test
+```
+
+Full steps: [in-app-otp/README.md](in-app-otp/README.md) and [react-mobile-interactions/README.md](react-mobile-interactions/README.md).
+
 ## Projects
 
 | Product | Tech folder | What it does | Maintainer |
 | --- | --- | --- | --- |
 | Mac unlock canary | [mac-unlock-notify](mac-unlock-notify/) | Notify Slack on iPhone when this Mac is unlocked | Open — independent contributor / project CTO |
 | Slack agent HQ | [slack-agent-hq](slack-agent-hq/) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
+| In-app OTP | [in-app-otp](in-app-otp/) | Framework-neutral in-app OTP handoff for marketplace verification | Open — independent contributor / project CTO |
+| React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
 
 New products land as a new folder. That folder is the tech for that product.
 
