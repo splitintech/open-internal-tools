@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
+  <img src="docs/banner.webp" alt="in-app-otp by SplitInTech — Viewer sees code, verifier confirms, transaction proceeds">
 </p>
 
 <h1 align="center">@splitin/in-app-otp</h1>

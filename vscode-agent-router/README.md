@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="media/icon.svg" alt="Agent Router" width="64" height="64">
+  <img src="docs/banner.webp" alt="vscode-agent-router by SplitInTech — Route developer tasks across agents inside VS Code">
 </p>
 
 <h1 align="center">vscode-agent-router</h1>

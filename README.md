@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
+  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
 </p>
 
 <h1 align="center">Open Internal Tools</h1>
