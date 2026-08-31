@@ -2,6 +2,10 @@
 
 Every folder in this repository is the **tech part of a product**. Open a pull request against **one** product folder at a time.
 
+## Who we want
+
+Contributors who **build and lead end-to-end projects**, not only small patches. Own a product-tech folder like a little-capitalist FFmpeg: ship a real tool that makes end consumers' lives easier. That tool may stay open source or later become a SplitIn product.
+
 ## How to work
 
 1. Fork or branch from `main`.

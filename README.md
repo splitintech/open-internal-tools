@@ -28,9 +28,13 @@
 
 We let open source build the tech side of the small community little capitalists projects. Maintainers would be confident independent contributors who would love to build the tech for the projects end to end.
 
+We bring open source contributors here to **build and lead end-to-end developer tools**. Those tools can later become proprietary SplitIn products, or stay open source. Think of FFmpeg if it were a little capitalist: a serious end-to-end tool, owned by people who ship it, that makes **end consumers' lives easier** — not a weekend gist.
+
 This repository is MIT open source. Every new folder is the tech part of a product — not a random gist. SplitIn the company lives at [splitin.net](https://www.splitin.net).
 
 - **Product-tech folders**: every new project in this repo is the tech part of a product.
+- **Dev tools for consumers**: we build developer tools whose job is to make the end user's life easier.
+- **Open now, product later**: a project can remain MIT, or become a proprietary SplitIn product when it earns that path.
 - **Maintainer CTOs**: independent contributors own that product's tech end to end.
 - **[mac-unlock-notify](mac-unlock-notify/)**: first product-tech — Slack your phone when this Mac is unlocked.
 - **Careers**: SplitIn tech careers live at [splitin.net](https://www.splitin.net).
@@ -38,11 +42,23 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 ## Table of contents
 
 - [Mission](#open-internal-tools-is-how-splitin-lets-open-source-build-the-tech-side-of-small-community-little-capitalist-products)
+- [Who we want](#who-we-want)
 - [Getting started](#getting-started)
 - [Projects](#projects)
 - [Contributing](#contributing)
 - [Open source](#open-source-vs-splitin-product)
 - [Careers](#careers)
+
+## Who we want
+
+We are not looking for drive-by typo PRs as the main contribution. We want **contributors who build and lead end-to-end projects**:
+
+- You can take a product-tech folder from idea to something people actually use.
+- You own scope, architecture, docs, and release for that tool — the project CTO.
+- You like FFmpeg-shaped work: one sharp tool, done properly, that consumers feel.
+- You are comfortable that the tool might stay open source **or** later become a SplitIn product.
+
+If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/) as maintainer.
 
 ## Getting started
 
@@ -77,7 +93,7 @@ Do not commit webhooks, tokens, or local `~/.config` files.
 
 ## Open-source vs SplitIn product
 
-This repo is **MIT** community tech for small-community products. SplitIn the company and product are at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
+This repo is **MIT** community tech. Contributors build end-to-end dev tools here in the open. A tool may **stay open source**, or later be turned into a **proprietary SplitIn product**. SplitIn the company is at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
 
 ## Careers
 
