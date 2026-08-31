@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.webp" alt="react-mobile-interactions by SplitInTech — Gestures, motion, navigation, haptics">
+  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
 </p>
 
 <h1 align="center">@splitin/react-mobile-interactions</h1>
@@ -33,7 +33,7 @@
 </p>
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="react-mobile-interactions by SplitInTech — Gestures, motion, navigation, haptics">
 </p>
 
 # Mobile interactions that feel native — package first, product later
@@ -208,7 +208,7 @@ import {
 Own this package end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="react-mobile-interactions by SplitInTech — Gestures, motion, navigation, haptics">
 </p>
 
 ## License

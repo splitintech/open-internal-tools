@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
+  <img src="docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
 </p>
 
 <h1 align="center">Open Internal Tools</h1>
@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
 </p>
 
 # Open internal tools is how SplitIn lets open source build the **tech side** of small-community little-capitalist products
@@ -254,5 +254,5 @@ Leave every project in its **best possible condition**. Break the barriers of so
 Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**. Engineering mission, vision, values, and the stack: **[https://www.splitin.net/tech-stack](https://www.splitin.net/tech-stack)**.
 
 <p align="center">
-  <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
 </p>

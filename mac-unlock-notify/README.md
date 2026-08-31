@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.webp" alt="mac-unlock-notify by SplitInTech — Unlock event, webhook alert, phone notification">
+  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
 </p>
 
 <h1 align="center">mac-unlock-notify</h1>
@@ -31,7 +31,7 @@
 </p>
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="mac-unlock-notify by SplitInTech — Unlock event, webhook alert, phone notification">
 </p>
 
 # A security canary for your Mac, delivered as a Slack banner on your phone
@@ -180,7 +180,7 @@ Logs: `~/Library/Logs/mac-unlock-notify.log`
 Own this product-tech end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="mac-unlock-notify by SplitInTech — Unlock event, webhook alert, phone notification">
 </p>
 
 ## License

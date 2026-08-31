@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.webp" alt="vscode-agent-router by SplitInTech — Route developer tasks across agents inside VS Code">
+  <img src="media/icon.svg" alt="Agent Router" width="64" height="64">
 </p>
 
 <h1 align="center">vscode-agent-router</h1>
@@ -27,6 +27,10 @@
 
 <p align="center">
   <a href="https://www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router">www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router</a>
+</p>
+
+<p align="center">
+  <img src="docs/banner.webp" alt="vscode-agent-router by SplitInTech — Route developer tasks across agents inside VS Code">
 </p>
 
 # One Cursor agent. Official Claude, Codex, and Slack. No scraped UIs.
@@ -321,6 +325,10 @@ Then in Cursor:
 ## Careers
 
 Own this dispatcher end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
+
+<p align="center">
+  <img src="docs/banner.webp" alt="vscode-agent-router by SplitInTech — Route developer tasks across agents inside VS Code">
+</p>
 
 ## License
 

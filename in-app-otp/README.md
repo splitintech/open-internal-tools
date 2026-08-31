@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.webp" alt="in-app-otp by SplitInTech — Viewer sees code, verifier confirms, transaction proceeds">
+  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
 </p>
 
 <h1 align="center">@splitin/in-app-otp</h1>
@@ -33,7 +33,7 @@
 </p>
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="in-app-otp by SplitInTech — Viewer sees code, verifier confirms, transaction proceeds">
 </p>
 
 # One actor sees the code. Another must enter it. The sensitive step cannot continue until they do.
@@ -221,7 +221,7 @@ The guide initiates the live-tour start, the renter sees the OTP in-app, and the
 Own this package end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="in-app-otp by SplitInTech — Viewer sees code, verifier confirms, transaction proceeds">
 </p>
 
 ## License
