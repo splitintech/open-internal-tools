@@ -21,6 +21,8 @@
   ·
   <a href="#swipe-tabs">Swipe</a>
   ·
+  <a href="#use-cases">Use cases</a>
+  ·
   <a href="#overlay-back-layers">Back</a>
   ·
   <a href="https://www.splitin.net/careers-requests">Careers</a>
@@ -44,6 +46,7 @@ Built internally, open sourced so others can use the same gestures SplitIn uses.
 ## Table of contents
 
 - [Getting started](#getting-started)
+- [Use cases](#use-cases)
 - [Swipe tabs](#swipe-tabs)
 - [Overlay back layers](#overlay-back-layers)
 - [Edge-swipe back](#edge-swipe-back)
@@ -70,6 +73,21 @@ npm test
 ```
 
 Work in sync with other contributors and agents. PRs stay in `react-mobile-interactions/`.
+
+## Use cases
+
+Ten ways developers integrate `@splitin/react-mobile-interactions` into a React or PWA app:
+
+1. **Listing detail tabs** — swipe between photos, details, and activity with `useSwipeableTabs` without stealing taps from buttons.
+2. **React Router edge-back** — `MobileEdgeBackHandler` + `navigate(-1)` for an iOS-style left-edge pop.
+3. **Filter / sort bottom sheet** — register the sheet on the overlay back stack so Android/iOS back closes it first.
+4. **Modal above sheet** — two `useMobileBackLayer` priorities; dialog wins, then the sheet.
+5. **Onboarding carousel** — swipe forward/back across steps; ignore inputs so form fields still type.
+6. **Inbox vs thread** — swipe between list and conversation panes in a messaging PWA.
+7. **Map + list dual pane** — bind swipe on the list; maps, canvases, and iframes stay ignored by default.
+8. **Checkout stepper** — swipe between cart, address, and pay; `canStart` blocks back when the flow is complete.
+9. **Settings / profile routes** — wrap pages in `MobileRouteTransition` for sheet-up motion with `nativeSprings.smooth`.
+10. **Accessible dialogs** — use `nativeDialogVariants` / `shouldAnimate()` so reduced-motion users skip transforms.
 
 ## Swipe tabs
 

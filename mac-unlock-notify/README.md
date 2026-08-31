@@ -19,6 +19,8 @@
   ·
   <a href="#getting-started">Docs</a>
   ·
+  <a href="#use-cases">Use cases</a>
+  ·
   <a href="#behavior">Behavior</a>
   ·
   <a href="https://www.splitin.net/careers-requests">Careers</a>
@@ -44,6 +46,7 @@ unlock → ioreg → zsh watcher → curl → Slack webhook → iPhone banner
 ## Table of contents
 
 - [Getting started](#getting-started)
+- [Use cases](#use-cases)
 - [Requirements](#requirements)
 - [Slack setup](#slack-setup)
 - [Install](#install)
@@ -64,6 +67,21 @@ chmod +x install.sh uninstall.sh bin/mac-unlock-notify
 ```
 
 This folder is the **tech part of a product** in [open-internal-tools](https://github.com/splitintech/open-internal-tools). Domain specialists own it end to end. Work in sync with other contributors and agents.
+
+## Use cases
+
+Ten ways developers integrate this watcher into real setups:
+
+1. **Personal laptop canary** — Slack your phone when *this* Mac goes from locked to unlocked while you are away.
+2. **Travel / hotel check** — confirm the lid was not opened overnight; one banner per unlock, with computer name and local time.
+3. **Shared studio or office Mac** — know when a communal workstation is unlocked without installing a full MDM agent.
+4. **CI / build Mac mini** — alert `#ops` when someone physically unlocks a dedicated builder that should stay locked.
+5. **Onboarding script** — `./install.sh --webhook "$SLACK_WEBHOOK" --skip-test` in a new-hire laptop bootstrap.
+6. **Incident correlation** — grep `~/Library/Logs/mac-unlock-notify.log` next to SSH or auth logs when a session looks wrong.
+7. **Status bar / SketchyBar / Hammerspoon** — poll `mac-unlock-notify --status` (`locked` / `unlocked`) in a local widget.
+8. **Contractor presence** — require the LaunchAgent as a lightweight “this machine was used” signal, not a keylogger.
+9. **Webhook-shaped forks** — keep the `ioreg` watcher and point the `curl` at ntfy, Telegram, or Discord instead of Slack.
+10. **Fleet reinstall** — re-run `./install.sh` from a fresh clone to upgrade watchers without touching SplitIn the product.
 
 ## Requirements
 

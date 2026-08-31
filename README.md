@@ -18,6 +18,8 @@
   ·
   <a href="#projects">Projects</a>
   ·
+  <a href="#use-cases">Use cases</a>
+  ·
   <a href="https://www.splitin.net/careers-requests">Careers</a>
 </p>
 
@@ -53,6 +55,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - [Who we want](#who-we-want)
 - [Getting started](#getting-started)
 - [Projects](#projects)
+- [Use cases](#use-cases)
 - [Contributing](#contributing)
 - [Open source](#open-source-vs-splitin-product)
 - [We're seeking individual contributors](#were-seeking-individual-contributors)
@@ -128,6 +131,21 @@ Full steps: [in-app-otp/README.md](in-app-otp/README.md) and [react-mobile-inter
 | React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
 
 New products land as a new folder. That folder is the tech for that product.
+
+## Use cases
+
+Ten ways developers integrate this hub into their work. Each product folder also lists **ten** more, specific to that package.
+
+1. **Laptop canary** — install [mac-unlock-notify](mac-unlock-notify/README.md#use-cases) so Slack banners your phone on Mac unlock.
+2. **Two-actor verification** — `npm install @splitin/in-app-otp` for tours, trips, pickups, and check-ins ([10 use cases](in-app-otp/README.md#use-cases)).
+3. **Native-feeling PWA** — `npm install @splitin/react-mobile-interactions` for swipe tabs, edge-back, and sheets ([10 use cases](react-mobile-interactions/README.md#use-cases)).
+4. **Agent HQ in Slack** — run [slack-agent-hq](slack-agent-hq/README.md#use-cases) so Cursor, Claude, Codex, and ChatGPT share one project thread.
+5. **Sparse checkout one product** — clone only the folder you need, then follow that README.
+6. **New-hire laptop bootstrap** — script `mac-unlock-notify/install.sh --webhook …` next to the rest of the machine setup.
+7. **Marketplace live start** — gate a sensitive transition on hashed in-app OTP instead of SMS.
+8. **Mobile listing / checkout** — wire swipe and overlay back so Android/iOS back closes the right layer.
+9. **CI → same Slack thread** — GitHub failures open one thread, then `NEXT: @Cursor` — not a new channel per bot.
+10. **Propose a new product folder** — own it end to end as the specialist; keep it MIT, version it, make it faster and leaner.
 
 ## Contributing
 

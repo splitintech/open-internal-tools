@@ -21,6 +21,8 @@
   ·
   <a href="#server-usage">Server</a>
   ·
+  <a href="#use-cases">Use cases</a>
+  ·
   <a href="#react-usage">React</a>
   ·
   <a href="https://www.splitin.net/careers-requests">Careers</a>
@@ -44,6 +46,7 @@ Built internally at SplitIn, open sourced as a **package** others can install. I
 ## Table of contents
 
 - [Getting started](#getting-started)
+- [Use cases](#use-cases)
 - [Core concepts](#core-concepts)
 - [Server usage](#server-usage)
 - [React usage](#react-usage)
@@ -70,6 +73,21 @@ npm test
 ```
 
 Work in sync with other contributors and agents. PRs stay in `in-app-otp/`.
+
+## Use cases
+
+Ten ways developers integrate `@splitin/in-app-otp` so one authenticated actor sees a code and another must enter it:
+
+1. **Live tour start** — renter is `viewer`, guide is `verifier`, `subjectType = tour_session`, `purpose = splitin.live_tour.start`.
+2. **Trip / ride start** — passenger shows the code; driver enters it before `STARTED` (`purpose = rickshaw.trip.start`).
+3. **Marketplace pickup** — buyer displays a 4-digit code; seller verifies before marking the order handed off.
+4. **Key or lockbox exchange** — guest sees the code in-app; host or lock firmware is the verifier.
+5. **In-person check-in** — venue staff enter the guest’s on-screen OTP before a booking becomes `checked_in`.
+6. **Delivery without SMS** — recipient is viewer; courier is verifier; no carrier OTP, hash at rest only.
+7. **Two-person payout / refund** — ops viewer shows a code; a second authenticated admin must enter it to release money.
+8. **Device pairing** — phone shows the code; the other device or desktop session is the verifier.
+9. **Desk or access claim** — member shows the code at a front desk; staff verify before granting a co-working seat.
+10. **Destructive admin override** — staff OTP must be entered before delete, ban, or force-cancel; wire `OtpCodeDisplay` + `OtpEntryForm` and the REST routes.
 
 ## Core concepts
 
