@@ -29,6 +29,10 @@
 </p>
 
 <p align="center">
+  <a href="https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions">www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions</a>
+</p>
+
+<p align="center">
   <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
 </p>
 

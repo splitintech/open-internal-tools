@@ -22,6 +22,10 @@
 </p>
 
 <p align="center">
+  <a href="https://www.splitin.net/tech-stack/open-internal-tools">www.splitin.net/tech-stack/open-internal-tools</a>
+</p>
+
+<p align="center">
   <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">
 </p>
 
@@ -157,12 +161,15 @@ Full steps: [in-app-otp/README.md](in-app-otp/README.md) and [react-mobile-inter
 
 ## Projects
 
-| Product | Tech folder | What it does | Maintainer |
-| --- | --- | --- | --- |
-| Mac unlock canary | [mac-unlock-notify](mac-unlock-notify/) | Notify Slack on iPhone when this Mac is unlocked | Open — independent contributor / project CTO |
-| Slack agent HQ | [slack-agent-hq](slack-agent-hq/) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
-| In-app OTP | [in-app-otp](in-app-otp/) | Framework-neutral in-app OTP handoff for marketplace verification | Open — independent contributor / project CTO |
-| React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
+Each folder has a SplitIn URL that 301s to that GitHub tree: `https://www.splitin.net/tech-stack/open-internal-tools/{folder}`.
+
+| Product | Tech folder | splitin.net | What it does | Maintainer |
+| --- | --- | --- | --- | --- |
+| Hub | [open-internal-tools](https://github.com/splitintech/open-internal-tools) | [tech-stack/open-internal-tools](https://www.splitin.net/tech-stack/open-internal-tools) | Program repo for product-tech folders | Open — independent contributor / project CTO |
+| Mac unlock canary | [mac-unlock-notify](mac-unlock-notify/) | [tech-stack/open-internal-tools/mac-unlock-notify](https://www.splitin.net/tech-stack/open-internal-tools/mac-unlock-notify) | Notify Slack on iPhone when this Mac is unlocked | Open — independent contributor / project CTO |
+| Slack agent HQ | [slack-agent-hq](slack-agent-hq/) | [tech-stack/open-internal-tools/slack-agent-hq](https://www.splitin.net/tech-stack/open-internal-tools/slack-agent-hq) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
+| In-app OTP | [in-app-otp](in-app-otp/) | [tech-stack/open-internal-tools/in-app-otp](https://www.splitin.net/tech-stack/open-internal-tools/in-app-otp) | Framework-neutral in-app OTP handoff for marketplace verification | Open — independent contributor / project CTO |
+| React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | [tech-stack/open-internal-tools/react-mobile-interactions](https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
 
 New products land as a new folder. That folder is the tech for that product.
 
