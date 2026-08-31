@@ -34,8 +34,9 @@ We bring open source contributors here to **build and lead end-to-end developer 
 This repository is MIT open source. Every new folder is the tech part of a product — not a random gist. SplitIn the company lives at [splitin.net](https://www.splitin.net).
 
 - **Internal, then packages**: we build in-house, then publish packages so others can use the same tool.
-- **Stay open, host later**: a project can remain MIT and, when it earns it, also become a hosted SplitIn product.
+- **Stay open, host later**: a project can remain MIT and, when it earns it, also become a hosted SplitIn product. Every contributor would have **% equity** in that hosted service.
 - **Version by version**: every project keeps improving release by release, with out-of-the-box applications.
+- **Best possible condition**: every project uses technological advancements to break the barriers of software development — faster, smaller, more beautiful, cheaper, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
 - **Tools that support tools**: we build as many internal supporting tools as other projects need.
 - **Domain and tool specialists**: each specialist maintains everything for that tool or domain end to end.
 - **People and agents, in sync**: every contributor works with other contributors **and** agents synchronously.
@@ -50,6 +51,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 
 - [Mission](#open-internal-tools-is-how-splitin-lets-open-source-build-the-tech-side-of-small-community-little-capitalist-products)
 - [How projects work](#how-projects-work)
+- [Best possible condition](#best-possible-condition)
 - [Who we want](#who-we-want)
 - [Tech stack](#tech-stack)
 - [Getting started](#getting-started)
@@ -64,8 +66,23 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 2. **Open source as a package.** Others can install and use it. It can stay MIT forever.
 3. **Keep shipping versions.** Out-of-the-box applications improve release by release.
 4. **Support other projects.** Spin up as many internal tools as sibling products need.
-5. **Hosted product when it earns it.** The same line of work can later run as a proprietary SplitIn hosted service.
+5. **Hosted product when it earns it.** The same line of work can later run as a proprietary SplitIn hosted service. Every contributor would have **% equity** in that hosted service.
 6. **Work in sync.** Contributors coordinate with other contributors and with agents in the same thread of work — not in isolated handoffs.
+
+## Best possible condition
+
+Every project should be in its **best possible condition**. Contributors use technological advancements to **break the barriers of software development**.
+
+- If it can get **fast**, make it fast.
+- If it can get **smaller**, make it smaller.
+- If it can be **designed beautifully**, design it beautifully.
+- If it can **cost low**, make it cost low.
+- If the **user experience** can get better, make it better.
+- If it can be **monetized**, make it monetized.
+- If it can be **digitized**, make it digitized.
+- If it can **save time**, make it save time.
+- If it can be **integrated**, build it.
+- Even if **few developers** can use it, build it.
 
 ## Who we want
 
@@ -82,7 +99,8 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You like FFmpeg-shaped work: one sharp tool, done properly, that consumers feel.
 - You work **synchronously with other contributors and agents**, not as a solo silo.
 - You task yourself to **break the barriers of software development**: faster, smoother, easy for the user, low latency, high fidelity, least compute, least memory.
-- You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product.
+- You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product — and that every contributor would have **% equity** in that hosted service.
+- You leave every project in its **best possible condition**: fast, small, beautiful, cheap, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
 
 If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), or [react-mobile-interactions](react-mobile-interactions/) as maintainer.
 
@@ -155,20 +173,23 @@ We welcome contributions big and small:
 - Open an issue or a product request.
 - Send a pull request into **one** product folder.
 - Work with other contributors **and** agents in the same loop — propose, review, and ship together.
-- Task yourself to break the barriers of software development: ship products that are faster, smoother, easy for the user, low latency, high fidelity, and use the least compute and the least memory.
+- Task yourself to break the barriers of software development. Leave every project in its **best possible condition**: if it can get fast, make it fast; smaller, make it smaller; designed beautifully, design it beautifully; cost low, make it cost low; UX better, make it better; monetized, monetize it; digitized, digitize it; save time, save time; integrated, build it — even if few developers can use it.
+- Every contributor would have **% equity** in the hosted service that product later provides.
 - See [CONTRIBUTING.md](CONTRIBUTING.md) for secrets policy and the specialist model.
 
 Do not commit webhooks, tokens, or local `~/.config` files.
 
 ## Open-source vs SplitIn product
 
-Projects start **internal**, then go out as **open-source packages**. They keep improving **version by version**, including out-of-the-box apps and supporting tools for other projects. A package may **stay open source** and later also run as a **hosted proprietary SplitIn product**. SplitIn the company is at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
+Projects start **internal**, then go out as **open-source packages**. They keep improving **version by version**, including out-of-the-box apps and supporting tools for other projects. A package may **stay open source** and later also run as a **hosted proprietary SplitIn product**. Every contributor would have **% equity** in that hosted service. SplitIn the company is at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
 
 ## We're seeking individual contributors
 
 Hey! If you're reading this, you've proven yourself as a dedicated README reader.
 
-We are seeking **individual contributors** who pick the right tool for the job, compose open source instead of rebuilding it, keep cost indie-low, can write the code themselves, and use LLMs plus multi-agent workflows to ship more. Own a product's tech end to end. Task yourself to break the barriers of software development so every tool is faster, smoother, easy for the user, low latency, high fidelity, and uses the least compute and the least memory.
+We are seeking **individual contributors** who pick the right tool for the job, compose open source instead of rebuilding it, keep cost indie-low, can write the code themselves, and use LLMs plus multi-agent workflows to ship more. Own a product's tech end to end. Every contributor would have **% equity** in the hosted service that product later provides.
+
+Leave every project in its **best possible condition**. Break the barriers of software development: if it can get fast, make it fast; if it can get smaller, make it smaller; if it can be designed beautifully, design it beautifully; if it can cost low, make it cost low; if the user experience can get better, make it better; if it can be monetized, make it monetized; if it can be digitized, make it digitized; if it can save time, make it save time; if it can be integrated, build it — even if few developers can use it, build it.
 
 Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
