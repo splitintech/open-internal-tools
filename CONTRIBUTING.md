@@ -4,18 +4,19 @@ Every folder in this repository is the **tech part of a product**. Open a pull r
 
 ## Who we want
 
-Contributors who **build and lead end-to-end projects**, not only small patches. Own a product-tech folder like a little-capitalist FFmpeg: ship a real tool that makes end consumers' lives easier. That tool may stay open source or later become a SplitIn product.
+**Domain specialists** and **tool specialists** who maintain that domain or tool end to end. Contributors who **build and lead** projects: internal build → open-source package → versioned out-of-the-box apps, plus supporting tools other projects need. Work **synchronously with other contributors and agents**. A package may stay MIT and later also become a hosted SplitIn product.
 
 ## How to work
 
 1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify`).
-3. Follow that folder's README.
-4. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
+2. `cd` into the product-tech folder (for example `mac-unlock-notify` or `slack-agent-hq`).
+3. Follow that folder's README. PRs for Slack agent HQ stay under `slack-agent-hq/` only.
+4. Coordinate in the same loop as other contributors and agents — do not silo the work.
+5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
 
 ## Maintainers
 
-The maintainer of a folder is the independent contributor who owns that product's tech end to end — the SplitIn tech-career CTO for that project. They own scope, issues, and releases for that folder only.
+Each **domain specialist** or **tool specialist** owns everything for that tool or domain: scope, architecture, docs, versions, out-of-the-box apps, and supporting internals. They are the SplitIn tech-career CTO for that project. They ship in sync with other specialists and agents.
 
 ## Careers
 

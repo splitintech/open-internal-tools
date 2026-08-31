@@ -21,9 +21,13 @@ We let open source build the tech side of the small community little capitalists
 
 ## Operating model
 
+- Projects are **built internally**, then **open sourced as packages** for others to use.
+- A package can **stay open source** and later also become a **hosted proprietary SplitIn product**.
+- Every project improves **version by version**, with out-of-the-box applications.
+- Build as many **supporting internal tools** as other projects need.
+- Every **domain specialist** and **tool specialist** maintains that tool or domain end to end.
+- Every contributor works with other contributors **and agents synchronously**.
 - Every new folder is the **tech part of a product**, not a random gist.
-- That folder's maintainer is the CTO of that SplitIn tech-career project.
-- Individual contributors own scope, issues, and releases for that product-tech only.
 - Careers for SplitIn live at https://www.splitin.net/careers-requests
 - Never commit webhooks, tokens, or `~/.config` secrets.
 - Do not push this program from the SplitIn app remote.
