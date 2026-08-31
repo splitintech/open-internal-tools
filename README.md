@@ -18,6 +18,8 @@
   ·
   <a href="#projects">Projects</a>
   ·
+  <a href="https://www.splitin.net/tech-stack">Tech stack</a>
+  ·
   <a href="https://www.splitin.net/careers-requests">Careers</a>
 </p>
 
@@ -47,14 +49,17 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **Break the barriers of software development**: every contributor tasks themselves to make every tool **faster**, **smoother**, and **easier for the user** — **low latency**, **high fidelity**, **least compute**, **least memory**.
 - **[mac-unlock-notify](mac-unlock-notify/)**: Slack your phone when this Mac is unlocked.
 - **[slack-agent-hq](slack-agent-hq/)**: Slack project-thread router plus taggable Cursor, Claude, Codex, ChatGPT, and specialist bots.
+- **[ideation-loop-system](ideation-loop-system/)**: `#ideate` LOOP — ChatGPT PLAN → Codex PRD → Cursor/xAI/Codex 5.6 sol → Claude UI, one Slack thread, MEMORY.md + logs.
 - **[in-app-otp](in-app-otp/)**: `@splitin/in-app-otp` — in-app OTP handoff for marketplace verification.
 - **[react-mobile-interactions](react-mobile-interactions/)**: `@splitin/react-mobile-interactions` — swipe, back layers, and native-feeling mobile motion.
 - **[vscode-agent-router](vscode-agent-router/)**: Cursor / VS Code dispatcher to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API.
 - **Careers**: SplitIn tech careers live at [splitin.net/careers-requests](https://www.splitin.net/careers-requests).
+- **Engineering**: [Mission, vision, values, and the full stack](https://www.splitin.net/tech-stack) — Tech 51%, business 50%; 45% R&D back to open source.
 
 ## Table of contents
 
 - [Mission](#open-internal-tools-is-how-splitin-lets-open-source-build-the-tech-side-of-small-community-little-capitalist-products)
+- [Engineering mission and vision](#engineering-mission-and-vision)
 - [How projects work](#how-projects-work)
 - [Best possible condition](#best-possible-condition)
 - [Who we want](#who-we-want)
@@ -64,6 +69,27 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - [Contributing](#contributing)
 - [Open source](#open-source-vs-splitin-product)
 - [We're seeking individual contributors](#were-seeking-individual-contributors)
+
+## Engineering mission and vision
+
+This is the same engineering copy as [splitin.net/tech-stack](https://www.splitin.net/tech-stack). Housing mission lives on [About](https://www.splitin.net/about). Engineering is here.
+
+**Mission.** We build the tech stack behind the SplitIn closed-source and open-source projects. Individual contributors own folders end to end. We invest **45% as R&D** back to the open-source tools SplitIn uses, plus tech projects that digitize traditional businesses, current business-domain agent integrations, and technology open-source works — to build a future of prosperity. We build communities, design communities, develop buildings, and design buildings.
+
+**Vision.** **Tech 51%. Business 50.** Founders and cofounders of every project, and SplitIn LLC as the parent company, are shareholders. In the world of AI a computer can build many things if people and agents are orchestrated together like adults — for togetherness and prosperity. Everything is written down. You build the first MVP for the application we speak. The best is merged to the main repo with tests, trust-me-bro benchmarks, and live user tests. We build fast and then refine. Every contributor brings an acquaintance after building the building blocks of the architecture. Every project would be allotted funds.
+
+**Values.**
+
+- **45% R&D back to open source** — plus digitized businesses, agent integrations, and open-source work.
+- **Communities and buildings** — build them, design them. That work is all the CTOs.
+- **Founders, cofounders, and SplitIn LLC** are shareholders of every project.
+- **Everyone is an individual contributor** — no spectator roles. Own a folder end to end, in sync with other contributors and agents.
+- **Orchestrated like adults** — people and agents in the same loop.
+- **Everything is written down** — process, decisions, and benchmarks live in the repo.
+- **MVP, then merge** — tests, trust-me-bro benchmarks, and live user tests.
+- **Build fast, then refine** — every contributor brings an acquaintance after building the building blocks of the architecture.
+- **Every project is allotted funds.**
+- **Right tool, indie-cheap, break the barriers** — and **% equity** in the hosted service when a line of work becomes a SplitIn product.
 
 ## How projects work
 
@@ -107,9 +133,11 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product — and that every contributor would have **% equity** in that hosted service.
 - You leave every project in its **best possible condition**: fast, small, beautiful, cheap, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
 
-If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), [react-mobile-interactions](react-mobile-interactions/), or [vscode-agent-router](vscode-agent-router/) as maintainer.
+If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [ideation-loop-system](ideation-loop-system/), [in-app-otp](in-app-otp/), [react-mobile-interactions](react-mobile-interactions/), or [vscode-agent-router](vscode-agent-router/) as maintainer.
 
 ## Tech stack
+
+The public catalog is **[splitin.net/tech-stack](https://www.splitin.net/tech-stack)**. Folders here pick the right tool for that job.
 
 Use what the folder already uses unless the job clearly needs something else. Current products:
 
@@ -117,6 +145,7 @@ Use what the folder already uses unless the job clearly needs something else. Cu
 | --- | --- | --- |
 | [mac-unlock-notify](mac-unlock-notify/) | zsh on macOS | LaunchAgent, `ioreg`, `curl`, Slack incoming webhooks |
 | [slack-agent-hq](slack-agent-hq/) | TypeScript on Node 20+ | Slack Bolt, Slack CLI, YAML config, SQLite (`node:sqlite`), vitest, tsx, npm workspaces |
+| [ideation-loop-system](ideation-loop-system/) | TypeScript on Node 20+ | Same HQ router plus `#ideate` classifier, MEMORY.md, cost gates, specialist inner loops, `/loop` `/audit` `/done` |
 | [in-app-otp](in-app-otp/) | TypeScript | tsup, vitest; adapters for React, Express, Django, Supabase |
 | [react-mobile-interactions](react-mobile-interactions/) | TypeScript + React | vitest, tsup, mobile gesture / overlay primitives |
 | [vscode-agent-router](vscode-agent-router/) | TypeScript on Node 20+ | Cursor/VS Code extension, MCP stdio, `tsup`, vitest, official Claude/Codex/Slack CLIs |
@@ -146,6 +175,17 @@ chmod +x install.sh
 ```
 
 Full steps: [slack-agent-hq/README.md](slack-agent-hq/README.md).
+
+The `#ideate` LOOP is a separate product folder. Install it from **ideation-loop-system**:
+
+```zsh
+git clone https://github.com/splitintech/open-internal-tools.git
+cd open-internal-tools/ideation-loop-system
+chmod +x install.sh
+./install.sh
+```
+
+Full steps: [ideation-loop-system/README.md](ideation-loop-system/README.md).
 
 Packages live in their own folders too:
 
@@ -179,6 +219,7 @@ Each folder has a SplitIn URL that 301s to that GitHub tree: `https://www.spliti
 | Hub | [open-internal-tools](https://github.com/splitintech/open-internal-tools) | [tech-stack/open-internal-tools](https://www.splitin.net/tech-stack/open-internal-tools) | Program repo for product-tech folders | Open — independent contributor / project CTO |
 | Mac unlock canary | [mac-unlock-notify](mac-unlock-notify/) | [tech-stack/open-internal-tools/mac-unlock-notify](https://www.splitin.net/tech-stack/open-internal-tools/mac-unlock-notify) | Notify Slack on iPhone when this Mac is unlocked | Open — independent contributor / project CTO |
 | Slack agent HQ | [slack-agent-hq](slack-agent-hq/) | [tech-stack/open-internal-tools/slack-agent-hq](https://www.splitin.net/tech-stack/open-internal-tools/slack-agent-hq) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
+| Ideation loop system | [ideation-loop-system](ideation-loop-system/) | [tech-stack/open-internal-tools/ideation-loop-system](https://www.splitin.net/tech-stack/open-internal-tools/ideation-loop-system) | `#ideate` LOOP: ChatGPT → Codex → Cursor → Claude on one thread, with MEMORY.md, logs, and cost gates | Open — independent contributor / project CTO |
 | In-app OTP | [in-app-otp](in-app-otp/) | [tech-stack/open-internal-tools/in-app-otp](https://www.splitin.net/tech-stack/open-internal-tools/in-app-otp) | Framework-neutral in-app OTP handoff for marketplace verification | Open — independent contributor / project CTO |
 | React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | [tech-stack/open-internal-tools/react-mobile-interactions](https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
 | Agent Router | [vscode-agent-router](vscode-agent-router/) | [tech-stack/open-internal-tools/vscode-agent-router](https://www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router) | Route Cursor agents to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API | Open — independent contributor / project CTO |
@@ -210,7 +251,7 @@ We are seeking **individual contributors** who pick the right tool for the job, 
 
 Leave every project in its **best possible condition**. Break the barriers of software development: if it can get fast, make it fast; if it can get smaller, make it smaller; if it can be designed beautifully, design it beautifully; if it can cost low, make it cost low; if the user experience can get better, make it better; if it can be monetized, make it monetized; if it can be digitized, make it digitized; if it can save time, make it save time; if it can be integrated, build it — even if few developers can use it, build it.
 
-Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
+Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**. Engineering mission, vision, values, and the stack: **[https://www.splitin.net/tech-stack](https://www.splitin.net/tech-stack)**.
 
 <p align="center">
   <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">

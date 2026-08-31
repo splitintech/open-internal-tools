@@ -1,0 +1,81 @@
+# Generic workspace map. Copy to ../domains.yaml and edit channel names / first agents.
+# Do not commit your copy.
+
+domains:
+  - id: eng
+    channel: "#eng"
+    first_agent: cursor
+    extra_members:
+      - claude
+      - codex
+      - chatgpt
+      - watchdog
+      - ci
+    keywords:
+      - eng
+      - code
+      - bug
+      - pr
+      - payments
+      - stripe
+    repos: []
+  - id: legal
+    channel: "#ops-legal"
+    first_agent: claude
+    extra_members:
+      - cursor
+    keywords:
+      - legal
+      - policy
+    repos: []
+  - id: inbox
+    channel: "#ops-inbox"
+    first_agent: inbox
+    extra_members:
+      - claude
+    keywords:
+      - inbox
+      - email
+      - vendor
+      - gmail
+      - zoho
+    repos: []
+  - id: incidents
+    channel: "#incidents"
+    first_agent: triage
+    extra_members:
+      - cursor
+      - claude
+      - watchdog
+    keywords:
+      - incident
+      - outage
+      - sev
+    repos: []
+  - id: ideate
+    channel: "#ideate"
+    first_agent: chatgpt
+    extra_members:
+      - codex
+      - cursor
+      - claude
+      - watchdog
+      - triage
+    keywords:
+      - ideate
+      - idea
+      - feature
+      - language
+      - typescript
+      - deno
+      - picker
+      - seo
+      - sitemap
+      - route
+      - backend
+      - pwa
+      - desktop
+      - video
+      - live
+      - remotion
+    repos: []

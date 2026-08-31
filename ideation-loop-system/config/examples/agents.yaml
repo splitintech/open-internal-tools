@@ -1,0 +1,50 @@
+# Fill slack_user_id after you install each Slack app (Bot User ID from App Credentials
+# or from /invite in a channel). Vendor members use the official Slack apps — do not
+# wrap Cursor/Claude/Codex/ChatGPT as custom bots.
+
+agents:
+  - handle: cursor
+    mention: "@Cursor"
+    slack_user_id: ""
+    kind: vendor
+    role: Orchestrator. Composer 2.5 for regular/loops/crons/subagents; xAI for heavy (not a Slack member); Codex 5.6 sol for heavy coding. Join before UI.
+  - handle: claude
+    mention: "@Claude"
+    slack_user_id: ""
+    kind: vendor
+    role: "Claude Tag / Opus latest for UI-UX (local model if cost_class=local_only). Pencil MCP in the same thread."
+  - handle: codex
+    mention: "@Codex"
+    slack_user_id: ""
+    kind: vendor
+    role: "Main PLAN/PRD owner. Codex 5.6 sol when heavy. Write PRD.md. End with NEXT: @Cursor. Never skip to Claude."
+  - handle: chatgpt
+    mention: "@ChatGPT"
+    slack_user_id: ""
+    kind: vendor
+    role: "Ideate first. Images, spawn plan-subagents, Codex-ready PLAN packet, MEMORY.md, logs/chatgpt-*.md. End with NEXT: @Codex."
+  - handle: router
+    mention: "@router"
+    slack_user_id: ""
+    kind: specialist
+    role: Opens one project thread per task and performs NEXT handoffs.
+  - handle: triage
+    mention: "@triage"
+    slack_user_id: ""
+    kind: specialist
+    role: Morning loop over stale open projects.
+  - handle: ci
+    mention: "@ci"
+    slack_user_id: ""
+    kind: specialist
+    role: "GitHub workflow failure summaries. Always hands off with NEXT: @Cursor."
+  - handle: inbox
+    mention: "@inbox"
+    slack_user_id: ""
+    kind: specialist
+    role: Optional Gmail/Zoho intake into the inbox domain thread.
+  - handle: watchdog
+    mention: "@watchdog"
+    slack_user_id: ""
+    kind: specialist
+    role: Rate-limit and self-loop guard. Never opens a new thread.

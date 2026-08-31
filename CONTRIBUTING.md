@@ -4,13 +4,15 @@ Every folder in this repository is the **tech part of a product**. Open a pull r
 
 ## Who we want
 
-**Domain specialists** and **tool specialists** who maintain that domain or tool end to end. Contributors who **build and lead** projects: internal build → open-source package → versioned out-of-the-box apps, plus supporting tools other projects need. Work **synchronously with other contributors and agents**. A package may stay MIT and later also become a hosted SplitIn product.
+**Domain specialists** and **tool specialists** who maintain that domain or tool end to end. You pick the **right language and OSS for the job**, keep **indie-developer cost**, **can write without AI**, and **delegate to LLMs and multi-agent workflows** to solve more problems and ship faster. Build internally → open-source package → versioned out-of-the-box apps. Work **synchronously with other contributors and agents**. A package may stay MIT and later also become a hosted SplitIn product.
+
+See the hub [README tech stack](README.md#tech-stack) before you add a dependency.
 
 ## How to work
 
 1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `in-app-otp`, `react-mobile-interactions`, or `vscode-agent-router`).
-3. Follow that folder's README. Keep PRs inside that one folder.
+2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `slack-agent-hq`, `ideation-loop-system`, `in-app-otp`, `react-mobile-interactions`, or `vscode-agent-router`).
+3. Follow that folder's README. Keep PRs inside that one folder. Match the language already used there unless the job needs a different one.
 4. Coordinate in the same loop as other contributors and agents — do not silo the work.
 5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
 
