@@ -39,6 +39,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **Tools that support tools**: we build as many internal supporting tools as other projects need.
 - **Domain and tool specialists**: each specialist maintains everything for that tool or domain end to end.
 - **People and agents, in sync**: every contributor works with other contributors **and** agents synchronously.
+- **Break the barriers of software development**: every contributor tasks themselves to make every tool **faster**, **smoother**, and **easier for the user** — **low latency**, **high fidelity**, **least compute**, **least memory**.
 - **[mac-unlock-notify](mac-unlock-notify/)**: Slack your phone when this Mac is unlocked.
 - **[slack-agent-hq](slack-agent-hq/)**: Slack project-thread router plus taggable Cursor, Claude, Codex, ChatGPT, and specialist bots.
 - **[in-app-otp](in-app-otp/)**: `@splitin/in-app-otp` — in-app OTP handoff for marketplace verification.
@@ -54,7 +55,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - [Projects](#projects)
 - [Contributing](#contributing)
 - [Open source](#open-source-vs-splitin-product)
-- [We're hiring](#were-hiring)
+- [We're seeking individual contributors](#were-seeking-individual-contributors)
 
 ## How projects work
 
@@ -74,6 +75,7 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You own scope, architecture, docs, and release — the project CTO.
 - You like FFmpeg-shaped work: one sharp tool, done properly, that consumers feel.
 - You work **synchronously with other contributors and agents**, not as a solo silo.
+- You task yourself to **break the barriers of software development**: faster, smoother, easy for the user, low latency, high fidelity, least compute, least memory.
 - You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product.
 
 If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), or [react-mobile-interactions](react-mobile-interactions/) as maintainer.
@@ -134,6 +136,7 @@ We welcome contributions big and small:
 - Open an issue or a product request.
 - Send a pull request into **one** product folder.
 - Work with other contributors **and** agents in the same loop — propose, review, and ship together.
+- Task yourself to break the barriers of software development: ship products that are faster, smoother, easy for the user, low latency, high fidelity, and use the least compute and the least memory.
 - See [CONTRIBUTING.md](CONTRIBUTING.md) for secrets policy and the specialist model.
 
 Do not commit webhooks, tokens, or local `~/.config` files.
@@ -142,11 +145,13 @@ Do not commit webhooks, tokens, or local `~/.config` files.
 
 Projects start **internal**, then go out as **open-source packages**. They keep improving **version by version**, including out-of-the-box apps and supporting tools for other projects. A package may **stay open source** and later also run as a **hosted proprietary SplitIn product**. SplitIn the company is at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
 
-## We're hiring
+## We're seeking individual contributors
 
 Hey! If you're reading this, you've proven yourself as a dedicated README reader.
 
-You might also make a great addition. Independent contributors who want to own a product's tech end to end — and people exploring SplitIn tech careers — start at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
+We are seeking **individual contributors** who want to own a product's tech end to end — and who task themselves to break the barriers of software development so every tool is faster, smoother, easy for the user, low latency, high fidelity, and uses the least compute and the least memory.
+
+Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
   <img src="docs/brand/login-banner.webp" alt="SplitIn login welcome art">
