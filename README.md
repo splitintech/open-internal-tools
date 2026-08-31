@@ -18,8 +18,6 @@
   ·
   <a href="#projects">Projects</a>
   ·
-  <a href="#use-cases">Use cases</a>
-  ·
   <a href="https://www.splitin.net/careers-requests">Careers</a>
 </p>
 
@@ -53,9 +51,9 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - [Mission](#open-internal-tools-is-how-splitin-lets-open-source-build-the-tech-side-of-small-community-little-capitalist-products)
 - [How projects work](#how-projects-work)
 - [Who we want](#who-we-want)
+- [Tech stack](#tech-stack)
 - [Getting started](#getting-started)
 - [Projects](#projects)
-- [Use cases](#use-cases)
 - [Contributing](#contributing)
 - [Open source](#open-source-vs-splitin-product)
 - [We're seeking individual contributors](#were-seeking-individual-contributors)
@@ -71,8 +69,13 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 
 ## Who we want
 
-We are not looking for drive-by typo PRs as the main contribution. We want **contributors who build and lead end-to-end projects**:
+We are not looking for drive-by typo PRs as the main contribution. We want **contributors who build and lead end-to-end projects** and who already work the way this hub is built:
 
+- You pick the **right tool and language for that job**, not one stack for every folder. Shell for a LaunchAgent. TypeScript for a Slack router. React for mobile motion. Python or SQL when the package needs it.
+- You **pick and choose across open source** — Bolt, Slack CLI, vitest, tsup, existing MCP servers — instead of writing a platform from scratch.
+- You keep **cost as low as an indie developer**: no extra cloud, no extra seats, no extra daemons unless the product requires them.
+- You **use LLMs to write code** and you **ship fast**. Multiple agent workflows (Cursor, Claude, Codex, ChatGPT, and specialists in one thread) are how you scale, not a demo.
+- You **can write without AI**. You use AI **delegation** to solve more problems in the same week, not to skip understanding the system.
 - You are a **domain specialist** or **tool specialist** and you maintain everything for that domain or tool.
 - You can take a product-tech folder from internal build → package → versioned out-of-the-box app.
 - You own scope, architecture, docs, and release — the project CTO.
@@ -82,6 +85,19 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product.
 
 If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [in-app-otp](in-app-otp/), or [react-mobile-interactions](react-mobile-interactions/) as maintainer.
+
+## Tech stack
+
+Use what the folder already uses unless the job clearly needs something else. Current products:
+
+| Folder | Language / runtime | Libraries and services |
+| --- | --- | --- |
+| [mac-unlock-notify](mac-unlock-notify/) | zsh on macOS | LaunchAgent, `ioreg`, `curl`, Slack incoming webhooks |
+| [slack-agent-hq](slack-agent-hq/) | TypeScript on Node 20+ | Slack Bolt, Slack CLI, YAML config, SQLite (`node:sqlite`), vitest, tsx, npm workspaces |
+| [in-app-otp](in-app-otp/) | TypeScript | tsup, vitest; adapters for React, Express, Django, Supabase |
+| [react-mobile-interactions](react-mobile-interactions/) | TypeScript + React | vitest, tsup, mobile gesture / overlay primitives |
+
+Shared defaults: MIT product folders, install from that folder only, secrets in `.env` / `~/.config` never in git, OSS first, indie-cheap to run. Slack-side coding agents are official apps (`@Cursor`, `@Claude`, `@Codex`, `@ChatGPT`) plus MCP/CLI/API rows in `integrations.yaml` — not a new custom bot per vendor.
 
 ## Getting started
 
@@ -132,21 +148,6 @@ Full steps: [in-app-otp/README.md](in-app-otp/README.md) and [react-mobile-inter
 
 New products land as a new folder. That folder is the tech for that product.
 
-## Use cases
-
-Ten ways developers integrate this hub into their work. Each product folder also lists **ten** more, specific to that package.
-
-1. **Laptop canary** — install [mac-unlock-notify](mac-unlock-notify/README.md#use-cases) so Slack banners your phone on Mac unlock.
-2. **Two-actor verification** — `npm install @splitin/in-app-otp` for tours, trips, pickups, and check-ins ([10 use cases](in-app-otp/README.md#use-cases)).
-3. **Native-feeling PWA** — `npm install @splitin/react-mobile-interactions` for swipe tabs, edge-back, and sheets ([10 use cases](react-mobile-interactions/README.md#use-cases)).
-4. **Agent HQ in Slack** — run [slack-agent-hq](slack-agent-hq/README.md#use-cases) so Cursor, Claude, Codex, and ChatGPT share one project thread.
-5. **Sparse checkout one product** — clone only the folder you need, then follow that README.
-6. **New-hire laptop bootstrap** — script `mac-unlock-notify/install.sh --webhook …` next to the rest of the machine setup.
-7. **Marketplace live start** — gate a sensitive transition on hashed in-app OTP instead of SMS.
-8. **Mobile listing / checkout** — wire swipe and overlay back so Android/iOS back closes the right layer.
-9. **CI → same Slack thread** — GitHub failures open one thread, then `NEXT: @Cursor` — not a new channel per bot.
-10. **Propose a new product folder** — own it end to end as the specialist; keep it MIT, version it, make it faster and leaner.
-
 ## Contributing
 
 We welcome contributions big and small:
@@ -167,7 +168,7 @@ Projects start **internal**, then go out as **open-source packages**. They keep 
 
 Hey! If you're reading this, you've proven yourself as a dedicated README reader.
 
-We are seeking **individual contributors** who want to own a product's tech end to end — and who task themselves to break the barriers of software development so every tool is faster, smoother, easy for the user, low latency, high fidelity, and uses the least compute and the least memory.
+We are seeking **individual contributors** who pick the right tool for the job, compose open source instead of rebuilding it, keep cost indie-low, can write the code themselves, and use LLMs plus multi-agent workflows to ship more. Own a product's tech end to end. Task yourself to break the barriers of software development so every tool is faster, smoother, easy for the user, low latency, high fidelity, and uses the least compute and the least memory.
 
 Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
