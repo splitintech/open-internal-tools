@@ -1,0 +1,29 @@
+---
+description: Open internal tools program memory — aim, objective, and IC-as-CTO model for SplitIn community product-tech.
+alwaysApply: true
+---
+
+# open internal tools
+
+This repository is **open internal tools**, a SplitIn open-source program. It is not the SplitIn product app (`splitin.git`).
+
+## Aim
+
+We let open source developers make a little more money.
+
+## Objective
+
+Bring individual contributors together and build small community projects together.
+
+## Mission
+
+We let open source build the tech side of the small community little capitalists projects. Maintainers would be confident independent contributors who would love to build the tech for the projects end to end.
+
+## Operating model
+
+- Every new folder is the **tech part of a product**, not a random gist.
+- That folder's maintainer is the CTO of that SplitIn tech-career project.
+- Individual contributors own scope, issues, and releases for that product-tech only.
+- Careers for SplitIn live at https://www.splitin.net
+- Never commit webhooks, tokens, or `~/.config` secrets.
+- Do not push this program from the SplitIn app remote.

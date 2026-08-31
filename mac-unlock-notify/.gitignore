@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.env.*
+*.local
+env
+!env.example
+config/env
+/tmp/

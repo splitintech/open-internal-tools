@@ -1,0 +1,147 @@
+#!/bin/zsh
+# Watch macOS lock state and post to Slack on unlock.
+set -euo pipefail
+
+LABEL="com.mac-unlock-notify"
+CONFIG_DIR="${MAC_UNLOCK_CONFIG_DIR:-$HOME/.config/mac-unlock-notify}"
+ENV_FILE="$CONFIG_DIR/env"
+POLL_SECONDS="${MAC_UNLOCK_POLL_SECONDS:-1}"
+DEBOUNCE_SECONDS="${MAC_UNLOCK_DEBOUNCE_SECONDS:-5}"
+
+usage() {
+  cat <<'EOF'
+Usage: mac-unlock-notify [--watch] [--test] [--status] [--help]
+
+  --watch    Poll lock state and notify Slack on unlock (default)
+  --test     Send one Slack message and exit
+  --status   Print locked or unlocked and exit (no webhook required)
+  --help     Show this help
+EOF
+}
+
+log() {
+  print -r -- "$(date '+%Y-%m-%d %H:%M:%S') $*"
+}
+
+load_webhook() {
+  if [[ ! -f "$ENV_FILE" ]]; then
+    log "error: missing $ENV_FILE — run install.sh first" >&2
+    return 1
+  fi
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  set +a
+  if [[ -z "${SLACK_WEBHOOK:-}" ]]; then
+    log "error: SLACK_WEBHOOK is empty in $ENV_FILE" >&2
+    return 1
+  fi
+}
+
+screen_is_locked() {
+  local xml val
+  xml="$(/usr/sbin/ioreg -n Root -d1 -a 2>/dev/null)" || return 1
+  val="$(/usr/libexec/PlistBuddy -c 'Print :IOConsoleUsers:0:CGSSessionScreenIsLocked' /dev/stdin <<< "$xml" 2>/dev/null)" || return 1
+  [[ "$val" == "true" ]]
+}
+
+computer_name() {
+  /usr/sbin/scutil --get ComputerName 2>/dev/null || hostname -s
+}
+
+json_string() {
+  /usr/bin/python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1"
+}
+
+notify_unlock() {
+  local text payload http_code
+  text="Mac unlocked — $(computer_name) at $(date '+%Y-%m-%d %H:%M:%S')"
+  payload="$(printf '{"text":%s}' "$(json_string "$text")")"
+  http_code="$(
+    /usr/bin/curl -sS -o /dev/null -w '%{http_code}' \
+      -X POST "$SLACK_WEBHOOK" \
+      -H 'Content-Type: application/json' \
+      --data-binary "$payload"
+  )" || {
+    log "error: curl failed sending Slack unlock notice"
+    return 1
+  }
+  if [[ "$http_code" != "200" ]]; then
+    log "error: Slack returned HTTP $http_code"
+    return 1
+  fi
+  log "notified Slack (HTTP $http_code)"
+}
+
+cmd_status() {
+  if screen_is_locked; then
+    print locked
+  else
+    print unlocked
+  fi
+}
+
+cmd_test() {
+  load_webhook
+  notify_unlock
+}
+
+cmd_watch() {
+  if ! load_webhook; then
+    # Successful exit so launchd KeepAlive (SuccessfulExit=false) does not respawn.
+    return 0
+  fi
+
+  local locked=0 last=-1 last_notify=0 now
+  log "watching lock state ($LABEL)"
+  if screen_is_locked; then
+    last=1
+    log "initial state: locked"
+  else
+    last=0
+    log "initial state: unlocked (no notify)"
+  fi
+
+  while true; do
+    if screen_is_locked; then
+      locked=1
+    else
+      locked=0
+    fi
+    if (( last == 1 && locked == 0 )); then
+      now="$(date +%s)"
+      if (( now - last_notify >= DEBOUNCE_SECONDS )); then
+        log "transition: locked -> unlocked"
+        notify_unlock || true
+        last_notify="$now"
+      else
+        log "debounce: skipped duplicate unlock"
+      fi
+    elif (( last == 0 && locked == 1 )); then
+      log "transition: unlocked -> locked"
+    fi
+    last=$locked
+    sleep "$POLL_SECONDS"
+  done
+}
+
+mode="watch"
+if [[ $# -gt 0 ]]; then
+  case "$1" in
+    --watch) mode="watch" ;;
+    --test) mode="test" ;;
+    --status) mode="status" ;;
+    --help|-h) usage; exit 0 ;;
+    *)
+      print -r -- "unknown option: $1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+fi
+
+case "$mode" in
+  status) cmd_status ;;
+  test) cmd_test ;;
+  watch) cmd_watch ;;
+esac
