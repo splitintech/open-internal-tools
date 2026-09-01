@@ -1,8 +1,9 @@
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { gateIdeateHandoff } from "./phase.ts";
+import { gateIdeateHandoff, instructionFor } from "./phase.ts";
 import type { ProjectState } from "./types.ts";
 
 function project(over: Partial<ProjectState> = {}): ProjectState {
@@ -113,5 +114,26 @@ describe("gateIdeateHandoff", () => {
     });
     expect(g.ok).toBe(false);
     if (!g.ok) expect(g.reason).toMatch(/logs\/chatgpt/);
+  });
+});
+
+describe("instructionFor", () => {
+  it("loads chatgpt.plan from the prompt catalog", () => {
+    const root = join(dirname(fileURLToPath(import.meta.url)), "../../..");
+    const prevRoot = process.env.SLACK_AGENT_HQ_ROOT;
+    const prevPrompts = process.env.PROMPTS_DIR;
+    process.env.SLACK_AGENT_HQ_ROOT = root;
+    process.env.PROMPTS_DIR = join(root, "prompts");
+    try {
+      const text = instructionFor("chatgpt", project());
+      expect(text).toMatch(/chatgpt\.plan|best AI prompt engineer/i);
+      expect(text).toMatch(/Prompt id: `chatgpt\.plan`/);
+      expect(text).toMatch(/Memory packet/);
+    } finally {
+      if (prevRoot === undefined) delete process.env.SLACK_AGENT_HQ_ROOT;
+      else process.env.SLACK_AGENT_HQ_ROOT = prevRoot;
+      if (prevPrompts === undefined) delete process.env.PROMPTS_DIR;
+      else process.env.PROMPTS_DIR = prevPrompts;
+    }
   });
 });

@@ -61,3 +61,5 @@
 ## 11. Handoff blurb (paste in Slack)
 
 NEXT: @handle — one paragraph the next model must obey
+
+## 12. Seen by

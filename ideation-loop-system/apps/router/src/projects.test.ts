@@ -56,6 +56,8 @@ describe("openProjectThread + handoff", () => {
     expect(next.next_agent).toBe("claude");
     expect(next.thread_ts).toBe(project.thread_ts);
     expect(String(slack.posts.at(-1)?.text)).toMatch(/@Claude|your turn/);
+    expect(String(slack.posts.at(-1)?.text)).toMatch(/What already happened/);
+    expect(String(slack.posts.at(-1)?.text)).toMatch(/MEMORY\.md/);
     store.close();
   });
 
@@ -105,8 +107,9 @@ describe("openProjectThread + handoff", () => {
 
     writeFileSync(
       project.memory_path!,
-      "# MEMORY\n## 3. ChatGPT packet\n- Prompt for Codex: build the Deno desktop PWA\n\n## 4. Codex PRD\n",
+      "# MEMORY\n## 3. ChatGPT packet\n- Prompt for Codex: build the Deno desktop PWA\n\n## 4. Codex PRD\n\n## 11. Handoff blurb (paste in Slack)\n\nNEXT: @Codex — PLAN is ready.\n\n## 12. Seen by\n",
     );
+    writeFileSync(join(project.log_dir!, "chatgpt-test.md"), "# chatgpt\nShipped PLAN packet.\n");
     const toCodex = await handoffInThread({
       channelId: project.channel_id,
       threadTs: project.thread_ts,
@@ -117,6 +120,12 @@ describe("openProjectThread + handoff", () => {
     });
     expect(toCodex.next_agent).toBe("codex");
     expect(toCodex.phase).toBe("codex_prd");
+    const handoffText = String(slack.posts.at(-1)?.text);
+    expect(handoffText).toMatch(/What already happened/);
+    expect(handoffText).toMatch(/### MEMORY\.md/);
+    expect(handoffText).toMatch(/Last log \(@chatgpt\)/);
+    expect(handoffText).toMatch(/Shipped PLAN packet/);
+    expect(handoffText).toMatch(/codex\.prd|Prompt id/);
     store.close();
   });
 
@@ -141,6 +150,24 @@ describe("openProjectThread + handoff", () => {
         slack,
       }),
     ).rejects.toThrow(/not a Slack member/);
+    store.close();
+  });
+
+  it("arms chatgpt-banners cron for a repeat image job and still opens the vendor loop", async () => {
+    const config = loadHqConfig(root);
+    const store = new ProjectStore(":memory:");
+    const slack = fakeSlack();
+    const project = await openProjectThread({
+      domainInput: "ideate",
+      goal: "Create a cron to prompt ChatGPT on repeat to create banners of the existing images",
+      config,
+      store,
+      slack,
+    });
+    expect(project.domain).toBe("ideate");
+    expect(project.next_agent).toBe("chatgpt");
+    expect(store.listCronSubs(project.project_id).map((c) => c.name)).toContain("chatgpt-banners");
+    expect(String(slack.posts[1]?.text)).toMatch(/What already happened|chatgpt\.plan|first/i);
     store.close();
   });
 });

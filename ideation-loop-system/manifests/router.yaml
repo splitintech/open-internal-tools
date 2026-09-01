@@ -51,6 +51,14 @@ features:
       description: Record an integrations.yaml row on this thread
       usage_hint: "[id|none]"
       should_escape: false
+    - command: /memory
+      description: Post the shared MEMORY packet in this project thread
+      usage_hint: ""
+      should_escape: false
+    - command: /prompt
+      description: List or paste a catalog prompt (chatgpt.plan, recurring.*) in this thread
+      usage_hint: "[list|use <id>]"
+      should_escape: false
   shortcuts:
     - name: Create project thread
       type: message

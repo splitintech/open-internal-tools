@@ -99,7 +99,7 @@ export function checkPhase0Code(root = productRoot()): Phase0Check[] {
     checks.push(fileOk(root, rel));
   }
   const manifest = readFileSync(join(root, "manifests/router.yaml"), "utf8");
-  for (const cmd of ["/loop", "/audit", "/done", "/ack", "/job", "/budget", "/image", "/spend", "/integration"]) {
+  for (const cmd of ["/loop", "/audit", "/done", "/ack", "/job", "/budget", "/image", "/spend", "/integration", "/memory", "/prompt"]) {
     checks.push({
       id: `manifest${cmd}`,
       ok: manifest.includes(`command: ${cmd}`),
@@ -107,7 +107,7 @@ export function checkPhase0Code(root = productRoot()): Phase0Check[] {
     });
   }
   const autoNames = new Set(cfg.loops.cursor_automations.map((a) => a.name));
-  for (const name of ["pwa-contract", "desktop-deno-smoke", "video-pipeline-health", "seo-drift"]) {
+  for (const name of ["pwa-contract", "desktop-deno-smoke", "video-pipeline-health", "seo-drift", "chatgpt-banners"]) {
     checks.push({
       id: `automation.${name}`,
       ok: autoNames.has(name),

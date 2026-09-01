@@ -30,7 +30,7 @@ export function buildStateText(state: ProjectState): string {
   lines.push(
     "",
     "Same thread only. Reply `NEXT: @agent` or `/handoff @agent` (or react :next:) to hand off. Do not open a new thread per tool.",
-    "Read MEMORY.md before acting. Write a log before every NEXT:.",
+    "Read the Memory packet in this thread (and MEMORY.md) before acting. Write a log before every NEXT:.",
   );
   return lines.join("\n");
 }
@@ -75,7 +75,7 @@ export function buildStateBlocks(state: ProjectState) {
     elements: [
       {
         type: "mrkdwn",
-        text: "Handoff in this thread: `NEXT: @agent` · `/handoff @agent` · :next:  · Never a sibling thread per MCP. Logs + MEMORY.md before every NEXT:.",
+        text: "Handoff in this thread: `NEXT: @agent` · `/handoff @agent` · :next:  · `/memory` · `/prompt`. Never a sibling thread. Logs + MEMORY.md before every NEXT:.",
       },
     ],
   });

@@ -6,4 +6,6 @@ Pencil MCP in this thread. Never a sibling thread.
 
 Then `NEXT: @Cursor` to implement pixels, or mark done with human `/done`.
 
-Read MEMORY.md before acting. Never schema-first: Codex/Cursor own structure; you own interaction and visual quality.
+Read the Memory packet in this thread (and MEMORY.md) before acting. Never schema-first: Codex/Cursor own structure; you own interaction and visual quality.
+
+Open Claude Code from Cursor with Agent Router `route peer=claude runtime=ide` — it prefills, it does not auto-submit.

@@ -10,7 +10,7 @@ Pin this in every domain channel. The **thread** is the project. Do not open a s
 
 ## Who to tag first (edit to match your workspace)
 
-- **#ideate / any new feature or idea** → `@ChatGPT` first (PLAN packet) → `NEXT: @Codex` (PRD) → `NEXT: @Cursor` (build) → `NEXT: @Claude` (UI). Full LOOP: [IDEATE_LOOP_ENGINEERING.md](IDEATE_LOOP_ENGINEERING.md). Write `MEMORY.md` and a log before every `NEXT:`.
+- **#ideate / any new feature or idea** → `@ChatGPT` first (PLAN packet) → `NEXT: @Codex` (PRD) → `NEXT: @Cursor` (build) → `NEXT: @Claude` (UI). Full LOOP: [IDEATE_LOOP_ENGINEERING.md](IDEATE_LOOP_ENGINEERING.md). HQ pastes a **Memory packet** (MEMORY.md excerpt + last log + §11) on every `NEXT:`. Slack vendors usually cannot read the laptop. `/memory` reprints it. Write a log before every `NEXT:`.
 - Code / bug / PR → `@Cursor` (then `@Codex` or `@Claude` if needed)
 - Research / legal / spec → `@Claude`
 - CI failure → `@ci` then `@Cursor`

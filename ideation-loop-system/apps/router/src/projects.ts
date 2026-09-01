@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import {
+  appendSeenBy,
+  buildMemoryPacket,
   buildStateBlocks,
   buildStateText,
   budgetCentsFor,
@@ -18,15 +20,20 @@ import {
   guidanceFor,
   ideaFingerprint,
   instructionFor,
+  listPromptIds,
+  loadRenderedPrompt,
   logFilesForAgent,
   mentionMarkup,
   newProjectId,
   projectMetadata,
+  promptIdForAgent,
+  promptVars,
   seedMemory,
   type CostClass,
   type HqConfig,
   type LoopKind,
   type LoopPhase,
+  type MemoryPacket,
   type ProjectState,
   type ProjectStore,
 } from "@slack-agent-hq/protocol";
@@ -59,6 +66,22 @@ export type OpenProjectInput = {
   loopKinds?: LoopKind[];
   costClass?: CostClass;
 };
+
+const SLACK_SECTION_CAP = 2900;
+
+export function memoryPacketBlocks(packet: MemoryPacket): unknown[] {
+  const body =
+    packet.text.length > SLACK_SECTION_CAP
+      ? `${packet.text.slice(0, SLACK_SECTION_CAP - 120)}\n\n…truncated in this card. Full packet is in the message text. Use \`/memory\`.`
+      : packet.text;
+  return [
+    { type: "divider" },
+    {
+      type: "section",
+      text: { type: "mrkdwn", text: body.slice(0, 3000) },
+    },
+  ];
+}
 
 function initialPhase(domainId: string, firstHandle: string): LoopPhase | null {
   if (domainId === "ideate") return "chatgpt_plan";
@@ -162,19 +185,25 @@ export async function openProjectThread(input: OpenProjectInput): Promise<Projec
   };
 
   const mention = mentionMarkup(first);
-  const briefing = instructionFor(first.handle, state);
+  const promptId = promptIdForAgent(first.handle);
+  const briefing = instructionFor(first.handle, state, promptId);
   const loops = guidanceFor(kinds);
+  const packet = buildMemoryPacket(state, input.store, {
+    toAgent: first.handle,
+    promptId,
+  });
+  appendSeenBy(state.memory_path, first.handle);
   await input.slack.postMessage({
     channel: state.channel_id,
     thread_ts: state.thread_ts,
-    text: `${buildStateText(state)}\n\n${mention} you are first. Work in this thread.\n\n${briefing}${loops ? `\n\n${loops}` : ""}`,
-    blocks: buildStateBlocks(state),
+    text: `${buildStateText(state)}\n\n${mention} you are first. Work in this thread.\n\n${briefing}${loops ? `\n\n${loops}` : ""}\n\n${packet.text}`,
+    blocks: [...buildStateBlocks(state), ...memoryPacketBlocks(packet)],
     metadata: projectMetadata(state),
   });
 
   input.store.create(state);
   input.store.ensureLoopRuns(state.project_id, kinds, first.handle);
-  input.store.ensureCronSubs(state.project_id, cronsForKinds(kinds, input.config));
+  input.store.ensureCronSubs(state.project_id, cronsForKinds(kinds, input.config, state.goal));
   return state;
 }
 
@@ -253,15 +282,73 @@ export async function handoffInThread(args: {
     phase: gate.phase,
   });
   const mention = mentionMarkup(agent);
-  const briefing = instructionFor(agent.handle, next);
+  const promptId = promptIdForAgent(agent.handle);
+  const briefing = instructionFor(agent.handle, next, promptId);
+  const packet = buildMemoryPacket(next, args.store, {
+    fromAgent,
+    toAgent: agent.handle,
+    promptId,
+  });
+  appendSeenBy(next.memory_path, agent.handle);
   await args.slack.postMessage({
     channel: args.channelId,
     thread_ts: project.thread_ts,
-    text: `${buildStateText(next)}\n\n${mention} your turn. Same thread.\n\n${briefing}`,
-    blocks: buildStateBlocks(next),
+    text: `${buildStateText(next)}\n\n${mention} your turn. Same thread.\n\n${briefing}\n\n${packet.text}`,
+    blocks: [...buildStateBlocks(next), ...memoryPacketBlocks(packet)],
     metadata: projectMetadata(next),
   });
   return next;
+}
+
+export async function postMemoryPacket(args: {
+  channelId: string;
+  threadTs: string;
+  store: ProjectStore;
+  slack: SlackGateway;
+}): Promise<MemoryPacket> {
+  const project = args.store.getByThread(args.channelId, args.threadTs);
+  if (!project) throw new Error("No project thread here.");
+  const packet = buildMemoryPacket(project, args.store, {
+    toAgent: project.next_agent,
+    promptId: promptIdForAgent(project.next_agent),
+  });
+  await args.slack.postMessage({
+    channel: args.channelId,
+    thread_ts: project.thread_ts,
+    text: packet.text,
+    blocks: memoryPacketBlocks(packet),
+  });
+  return packet;
+}
+
+export function formatPromptList(): string {
+  const rows = listPromptIds();
+  if (!rows.length) return "No prompts in catalog. Add files under `prompts/`.";
+  return rows.map((p) => `• \`${p.id}\` — ${p.agent} (${p.when}) · ${p.file}`).join("\n");
+}
+
+export async function postCatalogPrompt(args: {
+  channelId: string;
+  threadTs: string;
+  promptId: string;
+  store: ProjectStore;
+  slack: SlackGateway;
+}): Promise<string> {
+  const project = args.store.getByThread(args.channelId, args.threadTs);
+  if (!project) throw new Error("No project thread here.");
+  const body = loadRenderedPrompt(args.promptId, promptVars(project));
+  const packet = buildMemoryPacket(project, args.store, {
+    toAgent: project.next_agent,
+    promptId: args.promptId,
+  });
+  const text = `Prompt \`${args.promptId}\`\n\n${body}\n\n${packet.text}`;
+  await args.slack.postMessage({
+    channel: args.channelId,
+    thread_ts: project.thread_ts,
+    text,
+    blocks: memoryPacketBlocks(packet),
+  });
+  return text;
 }
 
 export async function attachAudit(args: {

@@ -1,4 +1,5 @@
 import { chatgptPacketReady, lastLogMtime, logFilesForAgent, prdReady } from "./memory.ts";
+import { loadRenderedPrompt, promptIdForAgent, promptVars } from "./prompts.ts";
 import type { CostClass, LoopPhase, ProjectState } from "./types.ts";
 import { NON_SLACK_PEERS } from "./types.ts";
 
@@ -161,41 +162,23 @@ export function needsLogBeforeNext(project: ProjectState, fromAgent: string): bo
   return !mtime;
 }
 
-export function instructionFor(agent: string, project: ProjectState): string {
+export function instructionFor(agent: string, project: ProjectState, promptId?: string): string {
   const h = agent.replace(/^@/, "").toLowerCase();
   const memory = project.memory_path ?? "MEMORY.md";
-  if (h === "chatgpt") {
-    return [
-      "Spawn subagents. You are the best AI prompt engineer. Write a comprehensive, industry-standard loop-engineering PLAN for this idea, copy-paste ready for Codex.",
-      "Include: goal, `loop_kind[]`, constraints, files likely touched, test plan, **Prompt for Codex** (verbatim), risk, `cost_class`, MEMORY.md seed.",
-      "Create any needed images. Write `logs/chatgpt-<ts>.md`. End with exactly: `NEXT: @Codex`",
-      `Read ${memory} before acting.`,
-    ].join(" ");
-  }
-  if (h === "codex") {
-    const heavy = project.cost_class === "heavy" ? " Architecture is heavy — use Codex 5.6 sol." : "";
-    return [
-      "You own the main PLAN/PRD. Expand, contradict, and file-level the ChatGPT packet.",
-      `${heavy} Write \`PRD.md\`. If the PRD is over the token threshold, use Codex 5.6 sol. Update MEMORY.md. Log \`logs/codex-plan-<ts>.md\`.`,
-      "End with `NEXT: @Cursor` (or `NEXT: @Codex` if PRD still incomplete — never skip to Claude).",
-      `Read ${memory} before acting.`,
-    ].join(" ");
-  }
-  if (h === "cursor") {
-    return [
-      "You are the orchestrator. Spawn subagents: Cursor 2.5 / composer for regular tasks, loops, crons, and subagent orchestration; xAI for heavy non-UI; Codex 5.6 sol for heavy coding (`@Codex` in this thread if the coding agent should see Slack history).",
-      "Run all tagged inner loops. Each subagent writes `subagents/<job_id>/MEMORY.md`. Parent MEMORY indexes them. Join before UI.",
-      "Then `NEXT: @Claude` if UI, else verify. Link jobs with `/job <id> <peer> <runtime>`.",
-      `Read ${memory} before acting.`,
-    ].join(" ");
-  }
-  if (h === "claude") {
-    const local = project.cost_class === "local_only" ? " Use a local model and record `model_id`." : " Use Opus latest (Claude Code).";
-    return [
-      `Creative / UI-UX.${local} Pencil MCP in this thread.`,
-      "Then `NEXT: @Cursor` to implement pixels, or mark done with human `/done`.",
-      `Read ${memory} before acting.`,
-    ].join(" ");
+  const id = promptId ?? promptIdForAgent(h);
+  if (id) {
+    try {
+      const body = loadRenderedPrompt(id, promptVars(project));
+      const extra =
+        h === "codex" && project.cost_class === "heavy"
+          ? "\nArchitecture is heavy — use Codex 5.6 sol.\n"
+          : h === "claude" && project.cost_class === "local_only"
+            ? "\ncost_class=local_only: use a local model and record model_id.\n"
+            : "";
+      return `${body}${extra}\n\nPrompt id: \`${id}\`. Read the Memory packet in this thread (and ${memory}) before acting.`;
+    } catch {
+      /* catalog missing in tests without prompts dir — fall through */
+    }
   }
   return `Work in this thread. Update MEMORY.md and write a log before NEXT:. Path: ${memory}`;
 }

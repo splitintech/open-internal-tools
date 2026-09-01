@@ -59,6 +59,7 @@ export {
   costClassFromKinds,
   budgetCentsFor,
   slugFromGoal,
+  needsBannerCron,
 } from "./classifier.ts";
 export { normalizeLoops, DEFAULT_IDEATE, DEFAULT_BUDGETS, DEFAULT_NAGS, DEFAULT_CRONS, usdToCents } from "./defaults.ts";
 export {
@@ -73,6 +74,23 @@ export {
   featureDir,
   ARTIFACT_FOR_KIND,
 } from "./memory.ts";
+export { buildMemoryPacket, appendSeenBy } from "./packet.ts";
+export type { MemoryPacket } from "./packet.ts";
+export {
+  loadPromptCatalog,
+  loadPrompt,
+  loadRenderedPrompt,
+  promptIdForAgent,
+  promptIdForLoopKind,
+  ideRouteForPrompt,
+  loopRoutesFor,
+  promptVars,
+  listPromptIds,
+  promptsDir,
+  renderPrompt,
+  LOOP_PROMPT_IDS,
+} from "./prompts.ts";
+export type { PromptEntry, PromptCatalog } from "./prompts.ts";
 export { redactSecrets } from "./redact.ts";
 export {
   gateIdeateHandoff,

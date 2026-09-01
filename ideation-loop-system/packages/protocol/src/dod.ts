@@ -59,7 +59,9 @@ export function definitionOfDone(
   const requiredAcks: HumanAckKind[] = [];
   if (kinds.includes("seo_route_adder")) requiredAcks.push("seo_index");
   if (kinds.includes("video_live_maintainer")) requiredAcks.push("live_video");
-  if (kinds.includes("backend_picker") && /payment|stripe/i.test(project.goal)) requiredAcks.push("payments");
+  if (kinds.includes("backend_picker") && /payment|stripe|marketplace|payout|make money/i.test(project.goal)) {
+    requiredAcks.push("payments");
+  }
   for (const ack of requiredAcks) {
     if (!acks.includes(ack)) missing.push(`human /ack ${ack}`);
   }

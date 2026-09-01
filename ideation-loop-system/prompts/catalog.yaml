@@ -1,0 +1,69 @@
+prompts:
+  - id: chatgpt.plan
+    agent: chatgpt
+    when: ideate.first
+    file: chatgpt/plan.md
+  - id: chatgpt.images
+    agent: chatgpt
+    when: ideate.images
+    file: chatgpt/images.md
+  - id: codex.prd
+    agent: codex
+    when: ideate.prd
+    file: codex/prd.md
+  - id: cursor.orchestrate
+    agent: cursor
+    when: ideate.build
+    file: cursor/orchestrate.md
+  - id: claude.ui
+    agent: claude
+    when: ideate.ui
+    file: claude/ui.md
+  - id: recurring.seo-drift
+    agent: ci
+    when: cron.seo_drift
+    file: recurring/seo-drift.md
+  - id: recurring.pwa-contract
+    agent: ci
+    when: cron.pwa_contract
+    file: recurring/pwa-contract.md
+  - id: recurring.desktop-deno-smoke
+    agent: ci
+    when: cron.desktop_deno_smoke
+    file: recurring/desktop-deno-smoke.md
+  - id: recurring.video-pipeline-health
+    agent: ci
+    when: cron.video_pipeline_health
+    file: recurring/video-pipeline-health.md
+  - id: recurring.chatgpt-banners
+    agent: chatgpt
+    when: cron.chatgpt_banners
+    file: recurring/chatgpt-banners.md
+  - id: loop.language-picker
+    agent: cursor
+    when: loop.language_picker
+    file: loop/language-picker.md
+  - id: loop.oss-tool-picker
+    agent: cursor
+    when: loop.oss_tool_picker
+    file: loop/oss-tool-picker.md
+  - id: loop.seo-route-adder
+    agent: cursor
+    when: loop.seo_route_adder
+    file: loop/seo-route-adder.md
+  - id: loop.backend-picker
+    agent: cursor
+    when: loop.backend_picker
+    file: loop/backend-picker.md
+  - id: loop.pwa-maintainer
+    agent: cursor
+    when: loop.pwa_maintainer
+    file: loop/pwa-maintainer.md
+  - id: loop.pwa-desktop-deno
+    agent: cursor
+    when: loop.pwa_desktop_deno
+    file: loop/pwa-desktop-deno.md
+  - id: loop.video-live
+    agent: cursor
+    when: loop.video_live_maintainer
+    file: loop/video-live.md

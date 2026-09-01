@@ -41,6 +41,7 @@ export const DEFAULT_CRONS: CronSettings = {
   pwa_contract: "0 3 * * *",
   desktop_deno_smoke: "0 3 * * *",
   video_pipeline_health: "*/15 * * * *",
+  chatgpt_banners: "0 10 * * *",
   retention: "0 4 * * *",
   retention_days: 90,
 };

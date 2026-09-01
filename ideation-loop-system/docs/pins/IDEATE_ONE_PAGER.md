@@ -4,7 +4,7 @@ Every idea = one thread. Do not start a sibling thread per tool.
 2. NEXT: @Codex  PRD (5.6 sol if heavy)
 3. NEXT: @Cursor  composer 2.5; xAI or Codex 5.6 sol if heavy; inner pickers
 4. NEXT: @Claude  Opus UI (local if budget)
-5. Logs + MEMORY.md before every NEXT:
+5. Logs + MEMORY.md before every NEXT:. HQ pastes a Memory packet on every handoff (`/memory`). ChatGPT PLAN lives in `prompts/chatgpt/plan.md` (`chatgpt.plan`). Spawn Claude/Codex via Agent Router `runtime=ide`, never `claude -p`.
 
 Inner loops (checklists on STATE, not extra Slack apps): language picker, OSS tool picker, route+sitemap+SEO per route, backend picker, PWA, PWA desktop Deno, video+live.
 

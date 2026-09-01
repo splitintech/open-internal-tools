@@ -13,7 +13,7 @@ export function shouldClassifyIdeateMessage(args: {
   if (isAnyBot(msg)) return false;
   const inThread = Boolean(msg.thread_ts && msg.thread_ts !== msg.ts);
   if (inThread) return false;
-  if (/^\s*(NEXT:|\/project|\/loop|\/handoff|\/audit|\/done|\/ack|\/job|\/budget|\/image|\/integration|\/spend)\b/i.test(msg.text)) {
+  if (/^\s*(NEXT:|\/project|\/loop|\/handoff|\/audit|\/done|\/ack|\/job|\/budget|\/image|\/integration|\/spend|\/memory|\/prompt)\b/i.test(msg.text)) {
     return false;
   }
   if (msg.text.startsWith("*Project*")) return false;

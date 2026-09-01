@@ -9,5 +9,6 @@ Per-route adder. All required before `/done` and `/ack seo_index`:
 - [ ] regenerate `publicRoutes.generated.ts`
 - [ ] `npm run check:sitemap`
 - Auth routes stay `app-shell.html`
+- **Limited public/signup view**; after signup, uploads live on authenticated routes (not indexed)
 
 Routes:

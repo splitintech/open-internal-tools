@@ -22,9 +22,12 @@ import {
 } from "@slack-agent-hq/protocol";
 import {
   attachAudit,
+  formatPromptList,
   handoffInThread,
   markProjectDone,
   openProjectThread,
+  postCatalogPrompt,
+  postMemoryPacket,
 } from "./projects.ts";
 import { slackGateway } from "./slack-gateway.ts";
 
@@ -201,6 +204,66 @@ export function createRouterApp(config: HqConfig, store: ProjectStore) {
       await respond({
         response_type: "ephemeral",
         text: err instanceof Error ? err.message : "Audit failed",
+      });
+    }
+  });
+
+  app.command("/memory", async ({ command, ack, respond, client }) => {
+    await ack();
+    const threadTs = threadOf(command);
+    if (!threadTs) {
+      await respond({ response_type: "ephemeral", text: "Use `/memory` inside a project thread." });
+      return;
+    }
+    try {
+      await postMemoryPacket({
+        channelId: command.channel_id,
+        threadTs,
+        store,
+        slack: slackGateway(client),
+      });
+      await respond({ response_type: "ephemeral", text: "Posted Memory packet in this thread." });
+    } catch (err) {
+      await respond({
+        response_type: "ephemeral",
+        text: err instanceof Error ? err.message : "Memory packet failed",
+      });
+    }
+  });
+
+  app.command("/prompt", async ({ command, ack, respond, client }) => {
+    await ack();
+    const threadTs = threadOf(command);
+    const text = command.text.trim();
+    const [verb, id] = text.split(/\s+/);
+    if (!verb || verb.toLowerCase() === "list") {
+      await respond({ response_type: "ephemeral", text: formatPromptList() });
+      return;
+    }
+    if (verb.toLowerCase() !== "use" || !id) {
+      await respond({
+        response_type: "ephemeral",
+        text: "Usage: `/prompt list` or `/prompt use chatgpt.plan` in a project thread.",
+      });
+      return;
+    }
+    if (!threadTs) {
+      await respond({ response_type: "ephemeral", text: "Use `/prompt use <id>` inside a project thread." });
+      return;
+    }
+    try {
+      await postCatalogPrompt({
+        channelId: command.channel_id,
+        threadTs,
+        promptId: id,
+        store,
+        slack: slackGateway(client),
+      });
+      await respond({ response_type: "ephemeral", text: `Posted prompt \`${id}\`.` });
+    } catch (err) {
+      await respond({
+        response_type: "ephemeral",
+        text: err instanceof Error ? err.message : "Prompt failed",
       });
     }
   });

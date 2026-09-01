@@ -17,6 +17,8 @@ export const LOOP_KIND_KEYWORDS: Record<Exclude<LoopKind, "generic">, string[]> 
     " sql",
     "node 20",
     "javascript",
+    "npm",
+    "package",
   ],
   oss_tool_picker: [
     "library",
@@ -30,10 +32,20 @@ export const LOOP_KIND_KEYWORDS: Record<Exclude<LoopKind, "generic">, string[]> 
     "opensource",
     "mit ",
     "apache",
+    "npm",
+    "package",
+    "github stars",
+    "ffmpeg",
+    "publish",
+    "split-sign",
+    "splitsign",
+    "verification",
+    "open-internal-tools",
   ],
   seo_route_adder: [
     "page",
     "route",
+    "routes",
     "landing",
     "sitemap",
     "meta",
@@ -43,6 +55,8 @@ export const LOOP_KIND_KEYWORDS: Record<Exclude<LoopKind, "generic">, string[]> 
     "seo",
     "html shell",
     "publicroutes",
+    "signup",
+    "limited view",
   ],
   backend_picker: [
     "api",
@@ -55,6 +69,11 @@ export const LOOP_KIND_KEYWORDS: Record<Exclude<LoopKind, "generic">, string[]> 
     "rls",
     "supabase",
     "backend",
+    "marketplace",
+    "payout",
+    "stripe",
+    "payment",
+    "make money",
   ],
   pwa_maintainer: [
     "pwa",
@@ -75,12 +94,15 @@ export const LOOP_KIND_KEYWORDS: Record<Exclude<LoopKind, "generic">, string[]> 
   ],
   video_live_maintainer: [
     "video",
+    "videos",
     "live",
     "webrtc",
     "remotion",
     "stream",
     "hls",
     "agora",
+    "ffmpeg",
+    "encoder",
   ],
 };
 
@@ -161,6 +183,11 @@ export function parseLoopCommand(text: string | undefined | null): {
 export function ideaFingerprint(goal: string, kinds: LoopKind[]): string {
   const g = goal.toLowerCase().replace(/\s+/g, " ").trim();
   return `${g}|${[...kinds].sort().join(",")}`;
+}
+
+export function needsBannerCron(goal: string): boolean {
+  const hay = goal.toLowerCase();
+  return /\bbanners?\b/.test(hay) && /\b(image|images|chatgpt|existing)\b/.test(hay);
 }
 
 export function costClassFromKinds(kinds: LoopKind[], goal = ""): CostClass {

@@ -1,5 +1,6 @@
 import { appendFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { needsBannerCron } from "./classifier.ts";
 import type { BudgetEvent, HqConfig, LoopKind, ProjectState } from "./types.ts";
 import { usdToCents } from "./defaults.ts";
 import type { ProjectStore } from "./store.ts";
@@ -57,7 +58,11 @@ export function assertImageCap(project: ProjectState, store: ProjectStore, confi
   }
 }
 
-export function cronsForKinds(kinds: LoopKind[], config: HqConfig): Array<{ name: string; cadence: string }> {
+export function cronsForKinds(
+  kinds: LoopKind[],
+  config: HqConfig,
+  goal = "",
+): Array<{ name: string; cadence: string }> {
   const c = config.loops.crons;
   const out: Array<{ name: string; cadence: string }> = [];
   if (kinds.includes("seo_route_adder")) out.push({ name: "seo-drift", cadence: c.seo_drift });
@@ -65,6 +70,9 @@ export function cronsForKinds(kinds: LoopKind[], config: HqConfig): Array<{ name
   if (kinds.includes("pwa_desktop_deno")) out.push({ name: "desktop-deno-smoke", cadence: c.desktop_deno_smoke });
   if (kinds.includes("video_live_maintainer")) {
     out.push({ name: "video-pipeline-health", cadence: c.video_pipeline_health });
+  }
+  if (needsBannerCron(goal)) {
+    out.push({ name: "chatgpt-banners", cadence: c.chatgpt_banners });
   }
   return out;
 }

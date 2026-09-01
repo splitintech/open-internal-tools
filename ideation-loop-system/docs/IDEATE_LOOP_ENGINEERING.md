@@ -454,8 +454,8 @@ Every idea = one thread. Do not start a sibling thread per tool.
 | 1 YAML | **Implemented** | `ideate` domain, `loops.ideate`, budgets, `prd_token_threshold`, specialist loops, Cursor automations, retention cron. |
 | 2 Store | **Implemented** | Extra project columns; `loop_runs`, `handoffs`, `jobs`, `artifacts`, `budget_events`, `acks`, `cron_subs`. |
 | 3 Classifier | **Implemented** | `/loop`, `#ideate` human-only listener, duplicate fingerprint attach, bot messages ignored. |
-| 4 MEMORY + logs | **Implemented** | Seed under `data/memory/`, redact, memory-nag, log-nag, log gate on `NEXT:`. |
-| 5 ChatGPT packet | **Implemented** | Pin + HQ briefing; packet required before Codex. |
+| 4 MEMORY + logs | **Implemented** | Seed under `data/memory/`, redact, memory-nag, log-nag, log gate on `NEXT:`. Every handoff posts a **Memory packet** (MEMORY excerpt + last log + §11). `/memory` reprints it. |
+| 5 ChatGPT packet | **Implemented** | Pin + HQ briefing from `prompts/chatgpt/plan.md` (`chatgpt.plan`); packet required before Codex. `/prompt list` / `/prompt use`. |
 | 6 Codex PRD | **Implemented** | Pin + `PRD.md` gate; token threshold → `cost_class=heavy` (5.6 sol). |
 | 7 Cursor waves | **Implemented** | Pin; `/job` + `POST /hooks/jobs`; failed job → `@Cursor` (max 3); cron unsubscribe on `/done` and budget trip. |
 | 8 Claude UI | **Implemented** | Pin + local-model briefing when `local_only`. |
@@ -467,7 +467,7 @@ Every idea = one thread. Do not start a sibling thread per tool.
 
 Topic bots (section 8) stay **optional** — v1 uses checklists. `slack_user_id` values in `config/examples/agents.yaml` stay empty until `npm run inventory` after `slack login`.
 
-Slash commands: `/project` `/loop` `/handoff` `/audit` `/done` `/ack` `/job` `/budget` `/spend` `/image` `/integration`.
+Slash commands: `/project` `/loop` `/handoff` `/audit` `/done` `/ack` `/job` `/budget` `/spend` `/image` `/integration` `/memory` `/prompt`.
 
 ---
 

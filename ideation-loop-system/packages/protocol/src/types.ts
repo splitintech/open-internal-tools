@@ -111,6 +111,7 @@ export type CronSettings = {
   pwa_contract: string;
   desktop_deno_smoke: string;
   video_pipeline_health: string;
+  chatgpt_banners: string;
   retention: string;
   retention_days: number;
 };

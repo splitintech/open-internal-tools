@@ -1,12 +1,35 @@
 import cron from "node-cron";
 import {
   loadHqConfig,
+  loadRenderedPrompt,
   ProjectStore,
   projectsWithOpenCron,
+  promptVars,
   runSitemapCheck,
   type ProjectState,
 } from "@slack-agent-hq/protocol";
 import { replyThread, startMentionBot } from "@slack-agent-hq/runtime";
+
+function nagWithPrompt(
+  promptId: string,
+  project: ProjectState,
+  headline: string,
+  peer = "claude",
+): string {
+  let body = "";
+  try {
+    body = loadRenderedPrompt(promptId, promptVars(project)).trim();
+  } catch {
+    /* catalog optional in stripped installs */
+  }
+  return [
+    headline,
+    body,
+    `Cursor: \`route peer=${peer} runtime=ide promptId=${promptId}\` (opens the extension — do not use claude -p / codex exec).`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+}
 
 export async function startCi() {
   const config = loadHqConfig();
@@ -50,7 +73,11 @@ export async function startCi() {
         app.client,
         project.channel_id,
         project.thread_ts,
-        `CI seo-drift: \`${project.project_id}\` \`check:sitemap\` ${status}. Half-written public routes must fail CI. Stay in this thread.\n\`\`\`\n${result.log.slice(0, 1200)}\n\`\`\``,
+        nagWithPrompt(
+          "recurring.seo-drift",
+          project,
+          `CI seo-drift: \`${project.project_id}\` \`check:sitemap\` ${status}. Half-written public routes must fail CI. Stay in this thread.\n\`\`\`\n${result.log.slice(0, 1200)}\n\`\`\``,
+        ),
       );
     }
   }
@@ -62,7 +89,11 @@ export async function startCi() {
       void nagOpenCron(
         "pwa-contract",
         (p) =>
-          `CI pwa-contract: \`${p.project_id}\` still has an open PWA cron. Run PWA contract tests (empty/error/offline + install path). Link the job with \`/job\`. Same thread.`,
+          nagWithPrompt(
+            "recurring.pwa-contract",
+            p,
+            `CI pwa-contract: \`${p.project_id}\` still has an open PWA cron. Run PWA contract tests (empty/error/offline + install path). Link the job with \`/job\`. Same thread.`,
+          ),
       ),
     { timezone: tz },
   );
@@ -72,7 +103,11 @@ export async function startCi() {
       void nagOpenCron(
         "desktop-deno-smoke",
         (p) =>
-          `CI desktop-deno-smoke: \`${p.project_id}\` still has an open Deno cron. Run the Deno smoke (permissions allowlist). Link with \`/job\`. Same thread.`,
+          nagWithPrompt(
+            "recurring.desktop-deno-smoke",
+            p,
+            `CI desktop-deno-smoke: \`${p.project_id}\` still has an open Deno cron. Run the Deno smoke (permissions allowlist). Link with \`/job\`. Same thread.`,
+          ),
       ),
     { timezone: tz },
   );
@@ -82,13 +117,32 @@ export async function startCi() {
       void nagOpenCron(
         "video-pipeline-health",
         (p) =>
-          `CI video-pipeline-health: \`${p.project_id}\` live ingest check. Human \`/ack live_video\` before live/PII. Unsubscribe on \`/done\`. Same thread.`,
+          nagWithPrompt(
+            "recurring.video-pipeline-health",
+            p,
+            `CI video-pipeline-health: \`${p.project_id}\` live ingest check. Human \`/ack live_video\` before live/PII. Unsubscribe on \`/done\`. Same thread.`,
+          ),
+      ),
+    { timezone: tz },
+  );
+  cron.schedule(
+    config.loops.crons.chatgpt_banners,
+    () =>
+      void nagOpenCron(
+        "chatgpt-banners",
+        (p) =>
+          nagWithPrompt(
+            "recurring.chatgpt-banners",
+            p,
+            `CI chatgpt-banners: \`${p.project_id}\` repeat banners from existing images. NEXT: @ChatGPT — same thread. Does not open a ChatGPT Cloud HTTP session.`,
+            "chatgpt",
+          ),
       ),
     { timezone: tz },
   );
 
   await app.start();
-  console.log("@ci listening (mentions + seo-drift + pwa/deno/video crons)");
+  console.log("@ci listening (mentions + seo-drift + pwa/deno/video + chatgpt-banners crons)");
   return app;
 }
 

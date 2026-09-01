@@ -46,6 +46,7 @@ crons:
   pwa_contract: "0 3 * * *"
   desktop_deno_smoke: "0 3 * * *"
   video_pipeline_health: "*/15 * * * *"
+  chatgpt_banners: "0 10 * * *"
   retention: "0 4 * * *"
   retention_days: 90
 
@@ -75,3 +76,7 @@ cursor_automations:
     where: "@ci weekday 08:00 check:sitemap reminder on threads tagged seo_route_adder."
     trigger: "Weekdays 08:00"
     note: "CI must fail check:sitemap on a half-written public route. This automation only nags."
+  - name: chatgpt-banners
+    where: "Repeat ChatGPT image job from existing assets. Same project thread."
+    trigger: "Daily 10:00 while chatgpt-banners cron is armed"
+    note: "Opens Slack @ChatGPT or Agent Router route peer=chatgpt runtime=ide. Does not call ChatGPT Cloud HTTP."

@@ -31,7 +31,7 @@
 </p>
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="ideation-loop-system by SplitInTech — Turn raw ideas into structured, repeatable innovation loops">
 </p>
 
 # Contributors and agents, in the same thread — not a new channel per bot
@@ -114,7 +114,7 @@ Eleven ways developers integrate this HQ into a Slack workspace:
 
 | Piece | Role |
 | --- | --- |
-| `@router` | `/project`, `/loop`, `/handoff`, `/audit`, `/done`, `/ack`, `/job`, `/budget`, `#ideate` classifier, `NEXT:` / :next: |
+| `@router` | `/project`, `/loop`, `/handoff`, `/audit`, `/done`, `/ack`, `/job`, `/budget`, `/memory`, `/prompt`, `#ideate` classifier, `NEXT:` / :next: |
 | `@Cursor` `@Claude` `@Codex` `@ChatGPT` | Official Slack apps. Not wrapped. Ideate order: ChatGPT → Codex → Cursor → Claude |
 | `@triage` | Stale threads, memory-nag, vendor SLA |
 | `@ci` | CI mention; GitHub failures; weekday seo-drift nag |
@@ -134,7 +134,7 @@ NEXT: @Claude
 
 Do not open a new thread per MCP, mailbox, or CI job.
 
-**#ideate** is a locked LOOP: `@ChatGPT` (PLAN packet) → `@Codex` (PRD) → `@Cursor` (composer 2.5 / xAI / Codex 5.6 sol) → `@Claude` Opus for UI. Every feature writes `MEMORY.md` and a log. Plan: [docs/IDEATE_LOOP_ENGINEERING.md](docs/IDEATE_LOOP_ENGINEERING.md).
+**#ideate** is a locked LOOP: `@ChatGPT` (PLAN packet from `prompts/chatgpt/plan.md`) → `@Codex` (PRD) → `@Cursor` (composer 2.5 / xAI / Codex 5.6 sol) → `@Claude` Opus for UI. Every `NEXT:` includes a **Memory packet** so Slack vendors see what the previous agent did. `/memory` reprints it. `/prompt use chatgpt.plan` pastes a catalog prompt. Plan: [docs/IDEATE_LOOP_ENGINEERING.md](docs/IDEATE_LOOP_ENGINEERING.md).
 
 ## Adding GitHub, Pencil, Railway, or any MCP/CLI/API
 
@@ -168,7 +168,7 @@ This folder is product-tech an individual contributor owns end to end. SplitIn e
 Own this product-tech end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">
-  <img src="../docs/brand/login-banner.webp" alt="SplitIn login welcome art">
+  <img src="docs/banner.webp" alt="ideation-loop-system by SplitInTech — Turn raw ideas into structured, repeatable innovation loops">
 </p>
 
 ## License
