@@ -98,6 +98,10 @@ export interface RouterSettings {
   notifySlackOnJobComplete?: boolean;
   pollIntervalMs?: number;
   timeoutMs: number;
+  hqUrl?: string;
+  hqJobsSecret?: string;
+  projectId?: string;
+  promptsDir?: string;
 }
 
 export interface PeerAdapter {

@@ -9,7 +9,7 @@ export {
 } from "./core/registry";
 export { probePeer } from "./core/probe";
 export { adapterFor } from "./adapters/index";
-export { encodeClaudeHandoffUri } from "./adapters/claude";
+export { encodeClaudeHandoffUri, encodeRouterLaunchUri, parseRouterLaunchUri } from "./core/launchUri";
 export { JobStore, extractJobRef, isTerminalStatus } from "./core/jobs";
 export {
   resolveSlackCli,

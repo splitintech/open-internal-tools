@@ -35,26 +35,27 @@
 
 # One Cursor agent. Official Claude, Codex, and Slack. No scraped UIs.
 
-A Cursor (or VS Code) extension that **routes** work. The agent in this window — any model — calls small MCP tools. The router reaches each peer the way that product already ships: **MCP if it is already configured, otherwise CLI, otherwise HTTP API**. Cloud is a runtime on the same peers (`claude --cloud`, `codex cloud exec`, Cursor `POST /v1/agents`), not a second chat pane.
+A Cursor (or VS Code) extension that **routes** work. The agent in this window — any model — calls small MCP tools. For **Claude / Codex / ChatGPT**, the router **opens the official extension** (`vscode://splitin.agent-router/launch`). It does **not** run `claude -p`, `codex exec`, or those vendors’ HTTP APIs. GitHub / Railway / Slack CLI stay as tools. Cursor Cloud API is available only when you pass `runtime=cloud`.
 
 Built internally at SplitIn as the tech side of a product, then packaged so others can install the same dispatcher. A tool specialist owns this folder end to end. It can stay MIT and later also power a hosted SplitIn service. Every contributor would have **% equity** in that hosted service.
 
-- **Compose, do not rebuild**: Slack CLI, Claude Code CLI, Codex CLI, Cursor Cloud Agents API, `@modelcontextprotocol/sdk`, `tsup`, vitest, `@vscode/vsce`.
+- **Compose, do not rebuild**: Slack CLI, Claude Code / Codex / ChatGPT **extensions**, Cursor Cloud Agents API (opt-in), `@modelcontextprotocol/sdk`, `tsup`, vitest, `@vscode/vsce`.
 - **Indie-cheap**: no extra daemon, no extra cloud, no extra seat. Secrets in env / `~/.agent-router`, never in git.
-- **Out of the box**: F5 or a VSIX, sidebar Peers + Jobs, Command Palette, editor/explorer handoff menus.
+- **Out of the box**: F5 or a VSIX, sidebar Peers + Jobs, Command Palette, editor/explorer handoff menus, URI handler.
 - **Version by version**: catalog JSON adds peers without a new adapter class.
 
-This does **not** merge Composer, Claude’s sidebar, and Codex into one transcript. It is a dispatcher, the same way [slack-agent-hq](https://github.com/splitintech/open-internal-tools/tree/main/slack-agent-hq) routes Slack threads instead of inventing a new bot per vendor.
+This does **not** merge Composer, Claude’s sidebar, and Codex into one transcript. It is a dispatcher, the same way [ideation-loop-system](https://github.com/splitintech/open-internal-tools/tree/main/ideation-loop-system) routes Slack threads instead of inventing a new bot per vendor.
 
 ```text
 Cursor agent (any model)
   → MCP tools (list_peers, route, call_cli, slack_api, list_jobs)
     → AgentRouter
-      → Claude: claude -p | --cloud | vscode://anthropic.claude-code/open
-      → Codex:  codex exec | cloud exec | chatgpt.addToThread
-      → Cursor: POST api.cursor.com/v1/agents  (local = you already are the agent)
+      → Claude: vscode://splitin.agent-router/launch → Claude Code URI (prefills, does not auto-submit)
+      → Codex / ChatGPT: same URI → chatgpt.addToThread (openai.chatgpt)
+      → Cursor: Composer command if present; otherwise you already are the agent
       → Slack:  ~/.slack/bin/slack api | SLACK_BOT_TOKEN
       → GitHub / Railway / Vercel / Supabase / Stripe / Linear: allowlisted CLI or API
+      → ideation-hq: POST /hooks/jobs (failed jobs stay on the Slack thread)
 ```
 
 ## Table of contents
@@ -111,8 +112,8 @@ Then F5 (**Run Agent Router Extension**) or install the VSIX (see [Install](#ins
 
 Ten ways developers integrate Agent Router:
 
-1. **Consult Claude from Cursor** — a Composer/Grok/GPT agent calls `route peer=claude action=consult` and keeps going with `claude -p` output. No model switch in the Cursor picker.
-2. **Fan-out a fix to three clouds** — same prompt, `runtime=cloud` on `claude`, `codex`, and `cursor`; Jobs sidebar holds three ids; optional Slack when a job finishes.
+1. **Consult Claude from Cursor** — a Composer agent calls `route peer=claude action=consult runtime=ide` (default). Agent Router opens Claude Code with a **prefilled** prompt. It does **not** auto-submit and does **not** run `claude -p`.
+2. **Fan-out a fix** — same prompt, `runtime=ide` on `claude`, `codex`, and `chatgpt`; Jobs sidebar holds ids; poller can `POST` ideation HQ `/hooks/jobs`.
 3. **Handoff a selection to Claude Code** — editor context menu prefills `vscode://anthropic.claude-code/open?prompt=…` (does not auto-submit).
 4. **Add the current file to Codex** — explorer or editor title uses `chatgpt.addFileToThread` when `openai.chatgpt` is installed.
 5. **Post a cloud result to Slack** — `slack_api method=chat.postMessage` or **Agent Router: Post to Slack**, using the public Slack CLI (`~/.slack/bin/slack`).
@@ -163,7 +164,7 @@ Transport preference is **MCP → CLI → API**. If Railway/Supabase/Linear is a
 | --- | --- |
 | `list_peers` | Catalog ids, kinds, runtimes, transports |
 | `probe_peers` | CLIs on PATH, API env vars, `mcp.json`, Slack CLI fingerprint |
-| `route` | `consult` / `launch` / `handoff` / `api` / `inbox` for one peer |
+| `route` | Opens the VS Code/Cursor **extension** for `claude` / `codex` / `chatgpt` / local `cursor`. `params.promptId` loads a catalog prompt; `params.memoryPacket` appends shared MEMORY. Platform peers still CLI/API. |
 | `call_cli` | Allowlisted argv for a catalog CLI |
 | `call_api` | HTTP to that peer’s `baseUrl` using `authEnv` |
 | `slack_api` | `slack api family.method key=value` with HTTP fallback |
@@ -171,9 +172,10 @@ Transport preference is **MCP → CLI → API**. If Railway/Supabase/Linear is a
 | `job_status` | Get or `refresh` one job |
 
 ```text
-route peer=claude action=consult runtime=local prompt="Summarize src/auth.ts"
-route peer=claude action=launch runtime=cloud prompt="Fix the login bug"
-route peer=codex action=launch runtime=cloud prompt="Fix CI"
+route peer=claude action=consult runtime=ide prompt="Summarize src/auth.ts"
+route peer=chatgpt action=handoff params.promptId=chatgpt.plan params.memoryPacket="…"
+route peer=codex action=consult runtime=ide prompt="Fix tests"
+route peer=cursor action=consult runtime=ide prompt="Continue in Composer"
 route peer=cursor action=launch runtime=cloud prompt="Add a README"
 route peer=slack action=launch params.channel=C0123 text="Cloud job finished"
 slack_api method=chat.postMessage channel=C0123 text="done"
@@ -182,7 +184,7 @@ list_jobs
 job_status jobId=ar-… refresh=true
 ```
 
-`runtime=local` on peer `cursor` is rejected: you already are that agent. Use `runtime=cloud`.
+`runtime=local` / `cloud` on `claude`, `codex`, and `chatgpt` is **rejected** (`claude -p` / `codex exec` / vendor HTTP). Default is `runtime=ide`. Local Cursor opens Composer if this build exposes a handoff command; otherwise you already are the agent. Cursor Cloud remains `runtime=cloud`.
 
 ## Peers
 
@@ -190,9 +192,11 @@ Shipped in [`catalog/peers.json`](catalog/peers.json). User overlay: `~/.agent-r
 
 | Peer | MCP | CLI | API | Cloud / IDE |
 | --- | --- | --- | --- | --- |
-| cursor | — | — | `POST /v1/agents` | cloud yes; local = caller |
-| claude | — | `claude -p` / `--cloud` | Anthropic API | `--cloud`; URI handoff |
-| codex | — | `codex exec` / `cloud exec` | Codex backend | `codex cloud exec --env`; `openai.chatgpt` |
+| cursor | — | — | `POST /v1/agents` (opt-in `runtime=cloud`) | default **ide**: Composer / you are the agent |
+| claude | — | **refused** | **refused** | `vscode://splitin.agent-router/launch` → Claude Code URI (no auto-submit) |
+| codex | — | **refused** | **refused** | same URI → `chatgpt.addToThread` |
+| chatgpt | — | **refused** | **refused** | same URI → `openai.chatgpt` |
+| ideation-hq | — | — | `POST /hooks/jobs` | link jobs into the Slack thread |
 | slack | optional | `slack api` / `docs` / `auth` | `slack.com/api` | — |
 | github | optional | `gh` | api.github.com | — |
 | railway | optional | `railway` | GraphQL | — |
@@ -217,23 +221,21 @@ slack api chat.postMessage channel=C0123456789 text="Hello from Agent Router"
 
 ## Cloud jobs
 
-`route` with `runtime=cloud` and `action=launch` writes a JobStore row (`jobId` + optional URL) and returns immediately. The extension polls every `agentRouter.pollIntervalMs` (default 15s):
+Launches (`action=launch`) write a JobStore row. The extension polls every `agentRouter.pollIntervalMs` (default 15s) and **POSTs ideation HQ** `POST {hqUrl}/hooks/jobs` with `x-agent-router-secret` (`AGENT_ROUTER_JOBS_SECRET`) so failed jobs stay on the Slack thread.
 
-- Cursor: `GET https://api.cursor.com/v1/agents/{id}` (`CURSOR_API_KEY`)
-- Codex: `codex cloud status TASK_ID`
-- Claude: session URL on claude.ai/code (`claude --cloud` for create; `-p --cloud session_id` only to queue a follow-up)
+Cursor Cloud: `GET https://api.cursor.com/v1/agents/{id}` (`CURSOR_API_KEY`) when you explicitly pass `runtime=cloud`.
 
-Set `agentRouter.notifySlackOnJobComplete` and a channel to post when a job hits succeeded/failed.
+Set `agentRouter.hqUrl` / `AGENT_ROUTER_HQ_URL` and optional `agentRouter.projectId`. Set `agentRouter.notifySlackOnJobComplete` and a channel to post when a job hits succeeded/failed.
 
 Unpushed local files are not on the cloud clone. Push (or pass a remote SHA) first.
 
 ## IDE handoff
 
-The extension host is the only process that can open the other extensions.
+MCP `route` (including the `node dist/mcp.js` child) cannot call `vscode.commands.executeCommand`. It **opens** `vscode://splitin.agent-router/launch?peer=&prompt=`. The extension host then:
 
-- **Claude**: `vscode://anthropic.claude-code/open?prompt=` — prefills a **new tab**, does not submit, does not return a result. Consult uses the CLI.
-- **Codex**: `chatgpt.addToThread` / `chatgpt.addFileToThread`.
-- **Cursor local**: no clipboard paste into Composer as the primary path. Optional **Handoff to Cursor Chat** only if this Cursor build exposes `composer.newAgentChat` / `workbench.action.chat.open`.
+- **Claude**: `vscode://anthropic.claude-code/open?prompt=` — prefills a **new tab**, does **not** auto-submit, does not return a result.
+- **Codex / ChatGPT**: `chatgpt.addToThread` after `ensureExtension("openai.chatgpt")`.
+- **Cursor local/ide**: Composer command from `probeCursorHandoff` if present; otherwise “you are already the agent”.
 
 ## Add a peer
 
@@ -282,9 +284,12 @@ Do **not** put tokens in `settings.json` or this repo.
 
 | Setting / env | Purpose |
 | --- | --- |
-| `CURSOR_API_KEY` | Cursor Cloud Agents |
+| `CURSOR_API_KEY` | Cursor Cloud Agents (`runtime=cloud` only) |
 | `SLACK_BOT_TOKEN` | HTTP fallback if Slack CLI is missing |
-| `CODEX_CLOUD_ENV_ID` / `agentRouter.codexCloudEnvId` | `codex cloud exec --env` |
+| `AGENT_ROUTER_HQ_URL` / `agentRouter.hqUrl` | Ideation HQ base URL for `POST /hooks/jobs` |
+| `AGENT_ROUTER_JOBS_SECRET` | Shared secret header `x-agent-router-secret` |
+| `AGENT_ROUTER_PROJECT_ID` / `agentRouter.projectId` | Default HQ `project_id` on job posts |
+| `AGENT_ROUTER_PROMPTS_DIR` / `agentRouter.promptsDir` | Prompt catalog (default: sibling `../ideation-loop-system/prompts` or `~/.agent-router/prompts`) |
 | `CURSOR_CLOUD_REPO_URL` / `agentRouter.cursorCloudRepoUrl` | Git remote for Cursor cloud |
 | `agentRouter.slackTeamId` / `slackChannel` | Slack `--team` and default channel |
 | `agentRouter.notifySlackOnJobComplete` | Slack on terminal job status |

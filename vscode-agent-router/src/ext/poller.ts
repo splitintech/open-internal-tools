@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { isTerminalStatus } from "../core/jobs";
 import { pollJob } from "../core/poll";
+import { postHqJob } from "../core/hqJobs";
 import type { AgentRouter } from "../core/router";
 import type { JobsTreeProvider } from "./jobsTree";
 
@@ -22,6 +23,17 @@ export function startJobPoller(
         const next = await pollJob(job, router.ctx);
         const changed = next.status !== job.status;
         router.jobs.upsert(next);
+        const projectId = router.ctx.settings.projectId;
+        if (changed) {
+          const postedHq = await postHqJob(router.ctx, next, projectId);
+          if (router.ctx.settings.hqUrl || router.ctx.env.AGENT_ROUTER_HQ_URL) {
+            output.appendLine(
+              postedHq.ok
+                ? `HQ jobs hook updated ${next.id}`
+                : `HQ jobs hook failed: ${postedHq.error}`,
+            );
+          }
+        }
         if (changed && isTerminalStatus(next.status) && router.ctx.settings.notifySlackOnJobComplete) {
           const channel = router.ctx.settings.slackChannel;
           if (channel) {

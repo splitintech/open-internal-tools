@@ -37,22 +37,27 @@ export function createMcpServer(router: AgentRouter): McpServer {
     "route",
     {
       description:
-        "Dispatch to a peer over CLI or API. Prefer MCP already on the agent when the peer is already configured. Agents: cursor/claude/codex with runtime local|cloud|ide. Slack: launch posts a message, consult searches docs, api calls Web API methods.",
+        "Open the VS Code/Cursor extension for an agent peer (Claude Code, Codex/ChatGPT, Composer). Does not run claude -p or codex exec. Platform peers (github, railway, slack, …) still use CLI/API. Pass params.promptId to load a catalog prompt and params.memoryPacket to prepend shared MEMORY.",
       inputSchema: {
         peer: z
           .string()
           .describe(
-            "Peer id: cursor, claude, codex, slack, github, railway, vercel, supabase, stripe, linear",
+            "Peer id: cursor, claude, codex, chatgpt, slack, github, railway, vercel, supabase, stripe, linear, ideation-hq",
           ),
         action: z
           .enum(["consult", "launch", "handoff", "api", "inbox"])
           .describe(
-            "consult = round-trip, launch = start a job/post, handoff = open IDE UI, api = raw method, inbox = status",
+            "consult = round-trip (opens the extension for agent peers), launch = start a job/post, handoff = open IDE UI, api = raw method, inbox = status",
           ),
         runtime: z.enum(["local", "cloud", "ide"]).optional(),
         transport: z.enum(["mcp", "cli", "api"]).optional(),
         prompt: z.string().optional(),
-        params: z.record(z.string(), z.unknown()).optional(),
+        params: z
+          .record(z.string(), z.unknown())
+          .optional()
+          .describe(
+            "promptId (catalog, e.g. chatgpt.plan), memoryPacket (shared MEMORY text), project_id (HQ job link), plus peer-specific fields.",
+          ),
       },
     },
     async ({ peer, action, runtime, transport, prompt, params }) =>
@@ -63,7 +68,7 @@ export function createMcpServer(router: AgentRouter): McpServer {
     "call_cli",
     {
       description:
-        "Run an allowlisted CLI for a catalog peer (gh, railway, vercel, supabase, stripe, slack, claude, codex). argv[0] must be in the peer allowlist.",
+        "Run an allowlisted CLI for a catalog platform peer (gh, railway, vercel, supabase, stripe, slack). Rejected for claude/codex/chatgpt — open the extension instead.",
       inputSchema: {
         peer: z.string(),
         argv: z.array(z.string()).min(1),

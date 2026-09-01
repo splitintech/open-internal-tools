@@ -17,7 +17,8 @@ describe("peer catalog", () => {
         "vercel",
         "supabase",
         "stripe",
-        "linear",
+        "chatgpt",
+        "ideation-hq",
       ]),
     );
     expect(catalog.transportPreference).toEqual(["mcp", "cli", "api"]);

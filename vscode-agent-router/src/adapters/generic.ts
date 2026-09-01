@@ -101,7 +101,12 @@ async function routeApi(
     );
   }
   const res = await callHttpApi(
-    api,
+    peer.id === "ideation-hq"
+      ? {
+          ...api,
+          baseUrl: ctx.settings.hqUrl || ctx.env.AGENT_ROUTER_HQ_URL || api.baseUrl,
+        }
+      : api,
     {
       method,
       path,

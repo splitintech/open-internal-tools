@@ -1,6 +1,9 @@
 import { adapterFor, createGenericAdapter } from "../adapters/index";
+import { IDE_ONLY_ERROR } from "../adapters/ideLaunch";
 import { extractJobRef, JobStore } from "./jobs";
+import { postHqJob } from "./hqJobs";
 import { probePeer } from "./probe";
+import { composeRoutePrompt, resolvePromptsDir } from "./prompts";
 import { PeerRegistry } from "./registry";
 import type {
   Action,
@@ -94,14 +97,31 @@ export class AgentRouter {
     }
 
     const adapter = adapterFor(this.registry, peer.id);
-    const result = await adapter.route(req, this.ctx);
+    const promptsDir = resolvePromptsDir(this.ctx.cwd, this.ctx.settings.promptsDir);
+    let prompt = req.prompt;
+    try {
+      const composed = composeRoutePrompt(req, promptsDir);
+      if (composed) prompt = composed;
+    } catch (err) {
+      if (req.params?.promptId) {
+        return {
+          ok: false,
+          peer: peer.id,
+          action: req.action,
+          runtime: req.runtime ?? "ide",
+          transport: req.transport ?? "cli",
+          error: (err as Error).message,
+        };
+      }
+    }
+    const result = await adapter.route({ ...req, prompt }, this.ctx);
 
-    if (req.runtime === "cloud" && req.action === "launch") {
+    if (req.action === "launch") {
       const extracted = extractJobRef(`${result.stdout ?? ""}\n${result.stderr ?? ""}`);
       const job = this.jobs.recordLaunch({
         peer: peer.id,
-        runtime: "cloud",
-        prompt: req.prompt,
+        runtime: result.runtime,
+        prompt,
         remoteId: result.jobId || extracted.jobId,
         url: result.url || extracted.url,
         stdout: result.stdout,
@@ -110,12 +130,27 @@ export class AgentRouter {
       });
       result.jobId = job.id;
       if (!result.url && job.url) result.url = job.url;
+      const projectId =
+        typeof req.params?.project_id === "string"
+          ? req.params.project_id
+          : this.ctx.settings.projectId;
+      void postHqJob(this.ctx, job, projectId);
     }
 
     return result;
   }
 
   async callCli(peerId: string, argv: string[], runtime: Runtime = "local"): Promise<RouteResult> {
+    if (peerId === "claude" || peerId === "codex" || peerId === "chatgpt") {
+      return {
+        ok: false,
+        peer: peerId,
+        action: "api",
+        runtime,
+        transport: "cli",
+        error: IDE_ONLY_ERROR,
+      };
+    }
     const peer = this.registry.get(peerId);
     return createGenericAdapter(peer).route(
       { peer: peerId, action: "api", runtime, transport: "cli", params: { argv } },

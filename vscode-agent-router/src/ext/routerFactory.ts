@@ -35,6 +35,10 @@ export function readSettings(extensionPath: string) {
           config.get("cursorCloudRepoUrl") || process.env.CURSOR_CLOUD_REPO_URL,
         notifySlackOnJobComplete: config.get("notifySlackOnJobComplete") ?? false,
         pollIntervalMs: config.get("pollIntervalMs") ?? 15_000,
+        hqUrl: config.get("hqUrl") || process.env.AGENT_ROUTER_HQ_URL,
+        hqJobsSecret: process.env.AGENT_ROUTER_JOBS_SECRET,
+        projectId: config.get("projectId") || process.env.AGENT_ROUTER_PROJECT_ID,
+        promptsDir: config.get("promptsDir") || process.env.AGENT_ROUTER_PROMPTS_DIR,
       },
     }),
   };
@@ -73,5 +77,10 @@ export function mcpEnv(context: vscode.ExtensionContext): NodeJS.ProcessEnv {
     CODEX_CLOUD_ENV_ID: ctx.settings.codexCloudEnvId ?? "",
     CURSOR_CLOUD_REPO_URL: ctx.settings.cursorCloudRepoUrl ?? "",
     AGENT_ROUTER_NOTIFY_SLACK: ctx.settings.notifySlackOnJobComplete ? "1" : "0",
+    AGENT_ROUTER_HQ_URL: ctx.settings.hqUrl ?? "",
+    AGENT_ROUTER_JOBS_SECRET: ctx.settings.hqJobsSecret ?? process.env.AGENT_ROUTER_JOBS_SECRET ?? "",
+    AGENT_ROUTER_PROJECT_ID: ctx.settings.projectId ?? "",
+    AGENT_ROUTER_PROMPTS_DIR: ctx.settings.promptsDir ?? "",
+    AGENT_ROUTER_EXTENSION_IDS: ctx.extensionIds?.join(",") ?? "",
   };
 }

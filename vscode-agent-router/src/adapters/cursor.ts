@@ -1,22 +1,16 @@
-import type {
-  PeerAdapter,
-  RouteRequest,
-  RouteResult,
-} from "../core/types";
+import type { PeerAdapter, RouteRequest, RouteResult } from "../core/types";
 import { callHttpApi } from "../transports/http";
 import { probePeer } from "../core/probe";
 import { loadMergedCatalog, PeerRegistry } from "../core/registry";
+import { launchIdePeer } from "./ideLaunch";
 
-function result(
-  req: RouteRequest,
-  extra: Partial<RouteResult>,
-): RouteResult {
+function result(req: RouteRequest, extra: Partial<RouteResult>): RouteResult {
   return {
     ok: extra.ok ?? !extra.error,
     peer: "cursor",
     action: req.action,
-    runtime: req.runtime ?? "cloud",
-    transport: req.transport ?? "api",
+    runtime: req.runtime ?? "ide",
+    transport: req.transport ?? "cli",
     ...extra,
   };
 }
@@ -24,27 +18,25 @@ function result(
 export const cursorAdapter: PeerAdapter = {
   id: "cursor",
   async route(req, ctx) {
-    const runtime = req.runtime ?? "cloud";
+    const runtime = req.runtime ?? "ide";
     if (runtime === "local" || runtime === "ide") {
-      return result(req, {
-        ok: false,
-        runtime,
-        error:
-          "Local Cursor is the calling agent. Use runtime=cloud to launch a Cursor Cloud Agent.",
-      });
+      const prompt = String(req.prompt ?? req.params?.prompt ?? "");
+      return launchIdePeer("cursor", req, prompt);
     }
 
     const apiKey = ctx.settings.cursorApiKey || ctx.env.CURSOR_API_KEY;
     if (!apiKey) {
       return result(req, {
         ok: false,
+        runtime: "cloud",
+        transport: "api",
         error: "CURSOR_API_KEY is required to launch Cursor Cloud Agents",
       });
     }
 
     const prompt = String(req.prompt ?? req.params?.prompt ?? "");
     if (!prompt) {
-      return result(req, { ok: false, error: "prompt is required" });
+      return result(req, { ok: false, runtime: "cloud", error: "prompt is required" });
     }
 
     const repoUrl = String(

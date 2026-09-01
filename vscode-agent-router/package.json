@@ -2,7 +2,7 @@
   "name": "agent-router",
   "displayName": "Agent Router",
   "version": "0.1.0",
-  "description": "Route Cursor agents to Claude, Codex, Slack, and any catalog peer over MCP, CLI, or API — including cloud runtimes.",
+  "description": "Route Cursor agents to Claude Code, Codex, ChatGPT, Slack, and catalog peers — extensions first, CLI/API for platform tools.",
   "publisher": "splitin",
   "license": "MIT",
   "author": "SplitInTech, @ojchavan",
@@ -29,7 +29,8 @@
     "node": ">=20"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onUri"
   ],
   "contributes": {
     "viewsContainers": {
@@ -198,6 +199,21 @@
           "type": "number",
           "default": 120000,
           "description": "CLI/API timeout in milliseconds"
+        },
+        "agentRouter.promptsDir": {
+          "type": "string",
+          "default": "",
+          "description": "Prompt catalog directory (defaults to sibling ../ideation-loop-system/prompts or ~/.agent-router/prompts)"
+        },
+        "agentRouter.hqUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Ideation HQ base URL for POST /hooks/jobs (e.g. http://127.0.0.1:8787)"
+        },
+        "agentRouter.projectId": {
+          "type": "string",
+          "default": "",
+          "description": "Default HQ project_id when posting Agent Router jobs into a Slack thread"
         }
       }
     }

@@ -8,6 +8,9 @@ const router = new AgentRouter(
   new PeerRegistry(loadMergedCatalog(process.env.AGENT_ROUTER_CATALOG)),
   createContext({
     cwd: process.env.AGENT_ROUTER_CWD || process.cwd(),
+    extensionIds: process.env.AGENT_ROUTER_EXTENSION_IDS
+      ? process.env.AGENT_ROUTER_EXTENSION_IDS.split(",").filter(Boolean)
+      : undefined,
     settings: {
       timeoutMs: Number(process.env.AGENT_ROUTER_TIMEOUT_MS ?? 120_000),
       cursorApiKey: process.env.CURSOR_API_KEY,
@@ -17,6 +20,10 @@ const router = new AgentRouter(
       codexCloudEnvId: process.env.CODEX_CLOUD_ENV_ID,
       cursorCloudRepoUrl: process.env.CURSOR_CLOUD_REPO_URL,
       notifySlackOnJobComplete: process.env.AGENT_ROUTER_NOTIFY_SLACK === "1",
+      hqUrl: process.env.AGENT_ROUTER_HQ_URL,
+      hqJobsSecret: process.env.AGENT_ROUTER_JOBS_SECRET,
+      projectId: process.env.AGENT_ROUTER_PROJECT_ID,
+      promptsDir: process.env.AGENT_ROUTER_PROMPTS_DIR,
     },
   }),
 );

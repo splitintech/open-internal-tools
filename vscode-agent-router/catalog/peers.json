@@ -66,6 +66,18 @@
       }
     },
     {
+      "id": "chatgpt",
+      "title": "ChatGPT",
+      "kind": "agent",
+      "runtimes": ["local", "cloud", "ide"],
+      "capabilities": ["consult", "launch", "handoff"],
+      "transports": {},
+      "ide": {
+        "extensionId": "openai.chatgpt",
+        "commands": ["chatgpt.addToThread", "chatgpt.addFileToThread"]
+      }
+    },
+    {
       "id": "slack",
       "title": "Slack",
       "kind": "comms",
@@ -199,6 +211,19 @@
         },
         "mcp": {
           "configName": "linear"
+        }
+      }
+    },
+    {
+      "id": "ideation-hq",
+      "title": "Ideation HQ",
+      "kind": "platform",
+      "runtimes": ["local", "cloud"],
+      "capabilities": ["api"],
+      "transports": {
+        "api": {
+          "baseUrl": "http://127.0.0.1:8787",
+          "authEnv": "AGENT_ROUTER_JOBS_SECRET"
         }
       }
     }

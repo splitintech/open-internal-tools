@@ -26,6 +26,9 @@ function authHeader(transport: ApiTransport, env: NodeJS.ProcessEnv): Record<str
       "anthropic-version": "2023-06-01",
     };
   }
+  if (transport.authEnv === "AGENT_ROUTER_JOBS_SECRET") {
+    return { "x-agent-router-secret": token };
+  }
   return { Authorization: `Bearer ${token}` };
 }
 

@@ -3,7 +3,7 @@ import type { Job } from "./core/jobs";
 import { upsertUserPeer } from "./core/registry";
 import type { PeerManifest } from "./core/types";
 import { SLACK_CLI_INSTALL_HINT } from "./transports/cli";
-import { handoffClaude, handoffCodex, handoffCodexFile, probeCursorHandoff } from "./ext/handoff";
+import { handoffClaude, handoffCodex, handoffCodexFile, handleRouterUri, probeCursorHandoff, handoffCursorPrompt } from "./ext/handoff";
 import { JobsTreeProvider } from "./ext/jobsTree";
 import { startMcpHost } from "./ext/mcpHost";
 import { PeersTreeProvider, PeerItem } from "./ext/peersTree";
@@ -45,6 +45,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.window.registerTreeDataProvider("agentRouter.jobs", jobsTree),
     startMcpHost(context, output),
     startJobPoller(getRouter, jobsTree, output),
+    vscode.window.registerUriHandler({
+      handleUri: (uri) => handleRouterUri(uri),
+    }),
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration("agentRouter")) rebuild();
     }),
@@ -177,7 +180,7 @@ export function activate(context: vscode.ExtensionContext): void {
       const cmd = await probeCursorHandoff();
       if (!cmd) {
         vscode.window.showInformationMessage(
-          "No Cursor prompt-injection command on this build. Local Cursor is the calling agent — use runtime=cloud to launch a Cloud Agent.",
+          "You are already the agent in this window. No Composer injection command on this build.",
         );
         return;
       }
@@ -186,11 +189,7 @@ export function activate(context: vscode.ExtensionContext): void {
         prompt: `Will run ${cmd} (does not auto-submit unless the command does).`,
       });
       if (!prompt) return;
-      try {
-        await vscode.commands.executeCommand(cmd, prompt);
-      } catch (err) {
-        vscode.window.showErrorMessage((err as Error).message);
-      }
+      await handoffCursorPrompt(prompt);
     }),
   );
 

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { encodeClaudeHandoffUri } from "../adapters/claude";
+import { encodeClaudeHandoffUri, parseRouterLaunchQuery } from "../core/launchUri";
 
 const CLAUDE_EXT = "anthropic.claude-code";
 const CODEX_EXT = "openai.chatgpt";
@@ -80,4 +80,45 @@ export async function probeCursorHandoff(): Promise<string | undefined> {
       name === "cursor.startComposerPrompt" ||
       name === "workbench.action.chat.open",
   );
+}
+
+export async function handoffCursorPrompt(prompt: string): Promise<void> {
+  const cmd = await probeCursorHandoff();
+  if (!cmd) {
+    void vscode.window.showInformationMessage(
+      "You are already the agent in this window. No Composer injection command on this build — keep working here.",
+    );
+    return;
+  }
+  try {
+    await vscode.commands.executeCommand(cmd, prompt);
+  } catch (err) {
+    vscode.window.showErrorMessage((err as Error).message);
+  }
+}
+
+export async function handleRouterUri(uri: vscode.Uri): Promise<void> {
+  const parsed = parseRouterLaunchQuery(uri.query);
+  if (!parsed) {
+    vscode.window.showErrorMessage("Agent Router launch URI is missing peer=.");
+    return;
+  }
+  const { peer, prompt } = parsed;
+  if (!prompt) {
+    vscode.window.showErrorMessage("Agent Router launch URI is missing prompt=.");
+    return;
+  }
+  if (peer === "claude") {
+    await handoffClaude(prompt);
+    return;
+  }
+  if (peer === "codex" || peer === "chatgpt") {
+    await handoffCodex(prompt);
+    return;
+  }
+  if (peer === "cursor") {
+    await handoffCursorPrompt(prompt);
+    return;
+  }
+  vscode.window.showErrorMessage(`Unknown Agent Router peer "${peer}".`);
 }
