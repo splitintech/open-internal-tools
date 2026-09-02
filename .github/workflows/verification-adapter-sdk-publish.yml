@@ -1,0 +1,44 @@
+name: verification-adapter-sdk-publish
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "verification-adapter-sdk-v*"
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    working-directory: verification-adapter-sdk
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run boundaries
+      - run: npm run pack:inspect
+      - run: npm run release:verify
+      - name: Publish packages with OIDC provenance
+        run: |
+          for dir in packages/*; do
+            [ -f "$dir/package.json" ] || continue
+            private=$(node -p "Boolean(require('./$dir/package.json').private)")
+            name=$(node -p "require('./$dir/package.json').name")
+            if [ "$private" != "true" ]; then
+              npm publish --workspace "$name" --access public --provenance
+            fi
+          done

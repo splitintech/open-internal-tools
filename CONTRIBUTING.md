@@ -11,7 +11,7 @@ See the hub [README tech stack](README.md#tech-stack) before you add a dependenc
 ## How to work
 
 1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `slack-agent-hq`, `ideation-loop-system`, `in-app-otp`, `react-mobile-interactions`, or `vscode-agent-router`).
+2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `slack-agent-hq`, `ideation-loop-system`, `in-app-otp`, `verification-adapter-sdk`, `react-mobile-interactions`, or `vscode-agent-router`).
 3. Follow that folder's README. Keep PRs inside that one folder. Match the language already used there unless the job needs a different one.
 4. Coordinate in the same loop as other contributors and agents — do not silo the work.
 5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.

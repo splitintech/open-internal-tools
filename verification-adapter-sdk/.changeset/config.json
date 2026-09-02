@@ -1,0 +1,25 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@splitin/verification-adapter-sdk",
+      "@splitin/verification-engine",
+      "@splitin/verification-postgres",
+      "@splitin/verification-server",
+      "@splitin/verification-web",
+      "@splitin/verification-react",
+      "@splitin/verification-adapter-stripe-identity",
+      "@splitin/verification-adapter-persona",
+      "@splitin/verification-adapter-plaid-idv",
+      "@splitin/verification-cli",
+      "@splitin/verification-compat-splitin-v2"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

@@ -1,0 +1,60 @@
+name: verification-adapter-sdk-compat
+
+on:
+  push:
+    paths:
+      - "verification-adapter-sdk/**"
+      - ".github/workflows/verification-adapter-sdk-compat.yml"
+  pull_request:
+    paths:
+      - "verification-adapter-sdk/**"
+      - ".github/workflows/verification-adapter-sdk-compat.yml"
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: verification-adapter-sdk
+
+jobs:
+  import-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: npm ci
+      - run: npm run build --workspace @splitin/verification-adapter-sdk
+      - name: Deno 2 import smoke
+        working-directory: verification-adapter-sdk/packages/verification-adapter-sdk
+        run: deno eval "import { VERIFICATION_ADAPTER_CONTRACT_VERSION, createFakeAdapterForScenario } from './dist/index.js'; if (VERIFICATION_ADAPTER_CONTRACT_VERSION !== '1.0.0') Deno.exit(1); const adapter = createFakeAdapterForScenario('input_required'); console.log(adapter.provider);"
+      - name: Bun import smoke
+        working-directory: verification-adapter-sdk/packages/verification-adapter-sdk
+        run: bun -e "import { VERIFICATION_ADAPTER_CONTRACT_VERSION, createFakeAdapterForScenario } from './dist/index.js'; if (VERIFICATION_ADAPTER_CONTRACT_VERSION !== '1.0.0') process.exit(1); const adapter = createFakeAdapterForScenario('input_required'); console.log(adapter.provider);"
+
+  hono-worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+      - run: npm ci
+      - run: npm run build --workspace @splitin/verification-adapter-sdk
+      - run: npm run build --workspace @splitin/verification-engine
+      - run: npm run build --workspace @splitin/verification-server
+      - name: Hono worker smoke
+        working-directory: verification-adapter-sdk/examples/hono-worker
+        run: node --experimental-strip-types smoke.mjs

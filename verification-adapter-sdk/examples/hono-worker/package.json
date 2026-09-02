@@ -1,0 +1,16 @@
+{
+  "name": "@splitin/verification-example-hono-worker",
+  "private": true,
+  "version": "0.1.0-beta.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Hono worker example with an injected durable store. Production routes disabled.",
+  "scripts": {
+    "start": "node --experimental-strip-types src/worker.ts",
+    "build": "node --experimental-strip-types smoke.mjs",
+    "smoke": "node --experimental-strip-types smoke.mjs"
+  },
+  "dependencies": {
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.0"
+  }
+}

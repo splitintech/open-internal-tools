@@ -1,0 +1,19 @@
+{
+  "id": "evt_identity_verified",
+  "type": "identity.verification_session.verified",
+  "created": 1767225600,
+  "livemode": false,
+  "account": "acct_12345678",
+  "data": {
+    "object": {
+      "id": "vs_identity1",
+      "status": "verified",
+      "created": 1767225600,
+      "livemode": false,
+      "client_secret": null,
+      "url": null,
+      "last_error": null,
+      "redaction": null
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "contractVersion": "2.0.0",
+  "provider": "stripe_identity",
+  "displayName": "Stripe Identity",
+  "adapterVersion": "2.0.0",
+  "supportedPackages": [
+    "human_idv"
+  ],
+  "supportedCountries": [
+    "US"
+  ],
+  "environments": [
+    "sandbox",
+    "production"
+  ],
+  "capabilities": {
+    "presentations": [
+      "embedded",
+      "hosted"
+    ],
+    "canResume": true,
+    "canRetry": true,
+    "canCancel": true,
+    "canRedact": true
+  },
+  "launcherKeys": [
+    "stripe_identity",
+    "hosted"
+  ],
+  "requiredSecretNames": [
+    "STRIPE_IDENTITY_RESTRICTED_KEY",
+    "STRIPE_IDENTITY_WEBHOOK_SECRET"
+  ],
+  "optionalSecretNames": [
+    "STRIPE_IDENTITY_WEBHOOK_SECRET_PREVIOUS"
+  ],
+  "configurationSchemaVersion": "splitin.provider.stripe-identity.v2",
+  "configurationSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "STRIPE_IDENTITY_ENVIRONMENT",
+      "STRIPE_IDENTITY_RESTRICTED_KEY",
+      "STRIPE_IDENTITY_WEBHOOK_SECRET",
+      "STRIPE_IDENTITY_API_VERSION",
+      "STRIPE_IDENTITY_CONFIG_REFERENCE",
+      "STRIPE_IDENTITY_ACCOUNT_ID",
+      "STRIPE_IDENTITY_RETURN_URL",
+      "STRIPE_IDENTITY_WEBHOOK_TOLERANCE_SECONDS"
+    ],
+    "properties": {
+      "STRIPE_IDENTITY_ENVIRONMENT": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "STRIPE_IDENTITY_RESTRICTED_KEY": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "STRIPE_IDENTITY_WEBHOOK_SECRET": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "STRIPE_IDENTITY_WEBHOOK_SECRET_PREVIOUS": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "STRIPE_IDENTITY_WEBHOOK_TOLERANCE_SECONDS": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "STRIPE_IDENTITY_API_VERSION": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "STRIPE_IDENTITY_CONFIG_REFERENCE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "STRIPE_IDENTITY_ACCOUNT_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "STRIPE_IDENTITY_RETURN_URL": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      }
+    }
+  },
+  "webhook": {
+    "authentication": "stripe_v1_hmac",
+    "eventTypes": [
+      "identity.verification_session.processing",
+      "identity.verification_session.verified",
+      "identity.verification_session.requires_input",
+      "identity.verification_session.canceled",
+      "identity.verification_session.redacted"
+    ],
+    "toleranceSeconds": 300
+  },
+  "dataPolicy": {
+    "prefillAllowlist": [
+      "email"
+    ],
+    "persistedDataClasses": [
+      "provider_resource_id",
+      "normalized_status",
+      "reason_codes"
+    ],
+    "rawPayloadPersistence": false,
+    "browserSecretPersistence": false
+  },
+  "retry": {
+    "sameResourceWhenResumable": true,
+    "newAttemptAfterTerminal": true
+  }
+}

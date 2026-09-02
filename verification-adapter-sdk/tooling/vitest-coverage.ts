@@ -1,0 +1,27 @@
+export const coverageConfig = {
+  provider: 'v8' as const,
+  include: ['src/**/*.{ts,tsx}'],
+  exclude: [
+    '**/*.d.ts',
+    'src/*/index.ts',
+    'src/browser.ts',
+    'src/plugins/**',
+    'src/scaffold.ts',
+    'src/store.ts',
+    'src/queue.ts',
+    'src/engine-adapter.ts',
+    'src/css.ts',
+    'src/copy.ts',
+    'src/hooks/session.ts',
+    'src/retry/**',
+    'src/migrations.ts',
+    'src/commands.ts',
+    'src/launcher/**',
+  ],
+  thresholds: {
+    statements: 50,
+    branches: 50,
+    functions: 50,
+    lines: 50,
+  },
+};

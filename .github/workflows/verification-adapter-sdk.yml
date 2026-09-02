@@ -1,0 +1,95 @@
+name: verification-adapter-sdk
+
+on:
+  push:
+    paths:
+      - "verification-adapter-sdk/**"
+      - ".github/workflows/verification-adapter-sdk.yml"
+  pull_request:
+    paths:
+      - "verification-adapter-sdk/**"
+      - ".github/workflows/verification-adapter-sdk.yml"
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: verification-adapter-sdk
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run boundaries
+      - run: npm run pack:inspect
+      - run: npm run release:verify
+      - run: npm run secrets
+      - run: npm run licenses
+      - run: npm run sbom
+      - run: npm run dts-maps
+      - run: npm run api-extractor
+      - run: npm run size
+      - run: npm run perf:bench
+      - run: npm run openapi:check
+
+  postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres: ["15", "16"]
+    services:
+      postgres:
+        image: postgres:${{ matrix.postgres }}
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: verification
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+      - run: npm ci
+      - run: npm test --workspace @splitin/verification-postgres
+        env:
+          VERIFICATION_DATABASE_URL: postgres://postgres:postgres@localhost:5432/verification
+
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+      - run: npm ci
+      - run: npm run coverage

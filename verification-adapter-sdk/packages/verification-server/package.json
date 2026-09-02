@@ -1,0 +1,69 @@
+{
+  "name": "@splitin/verification-server",
+  "version": "0.1.0-beta.0",
+  "description": "Standard Web API handlers for self-hosted verification sessions, webhooks, workers, and operations.",
+  "license": "MIT",
+  "author": "SplitInTech, @ojchavan",
+  "homepage": "https://github.com/splitintech/open-internal-tools/tree/main/verification-adapter-sdk/packages/verification-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/splitintech/open-internal-tools.git",
+    "directory": "verification-adapter-sdk/packages/verification-server"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": { "node": ">=20" },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "import": "./dist/express.js",
+      "require": "./dist/express.cjs"
+    },
+    "./hono": {
+      "types": "./dist/hono.d.ts",
+      "import": "./dist/hono.js",
+      "require": "./dist/hono.cjs"
+    },
+    "./supabase": {
+      "types": "./dist/supabase.d.ts",
+      "import": "./dist/supabase.js",
+      "require": "./dist/supabase.cjs"
+    },
+    "./openapi/openapi.v1.json": "./openapi/openapi.v1.json"
+  },
+  "files": ["dist", "openapi", "LICENSE", "NOTICE", "README.md", "package.json"],
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.0",
+    "@splitin/verification-engine": "0.1.0-beta.0"
+  },
+  "peerDependencies": {
+    "express": "^4.19.0 || ^5.0.0",
+    "hono": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "hono": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "express": "^4.21.2",
+    "hono": "^4.7.11",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@splitin/verification-adapter-sdk",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./conformance": "./src/conformance.ts",
+    "./manifests": "./src/manifests.ts"
+  },
+  "files": [
+    "src",
+    "manifests",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "ajv": "8.18.0"
+  }
+}

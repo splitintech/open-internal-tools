@@ -1,0 +1,54 @@
+{
+  "contractVersion": "2.0.0",
+  "provider": "test_fake",
+  "displayName": "SplitIn Test Provider",
+  "adapterVersion": "2.0.0",
+  "supportedPackages": [
+    "human_idv"
+  ],
+  "supportedCountries": [
+    "US"
+  ],
+  "environments": [
+    "sandbox"
+  ],
+  "capabilities": {
+    "presentations": [
+      "embedded",
+      "hosted"
+    ],
+    "canResume": true,
+    "canRetry": true,
+    "canCancel": true,
+    "canRedact": true
+  },
+  "launcherKeys": [
+    "test_embedded",
+    "hosted"
+  ],
+  "requiredSecretNames": [],
+  "optionalSecretNames": [],
+  "configurationSchemaVersion": "splitin.provider.test-fake.v2",
+  "webhook": {
+    "authentication": "none",
+    "eventTypes": []
+  },
+  "dataPolicy": {
+    "prefillAllowlist": [],
+    "persistedDataClasses": [
+      "normalized_status"
+    ],
+    "rawPayloadPersistence": false,
+    "browserSecretPersistence": false
+  },
+  "retry": {
+    "sameResourceWhenResumable": true,
+    "newAttemptAfterTerminal": true
+  },
+  "configurationSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {}
+  }
+}

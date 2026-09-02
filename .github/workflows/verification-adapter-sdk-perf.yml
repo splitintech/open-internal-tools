@@ -1,0 +1,26 @@
+name: verification-adapter-sdk-perf
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "verification-adapter-sdk-v*"
+
+defaults:
+  run:
+    working-directory: verification-adapter-sdk
+
+jobs:
+  soak:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: verification-adapter-sdk/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run perf:soak

@@ -1,0 +1,41 @@
+{
+  "name": "@splitin/verification-engine",
+  "version": "0.1.0-beta.0",
+  "description": "Self-hosted verification orchestration: routing, attempts, webhooks, protected actions, and governance.",
+  "license": "MIT",
+  "author": "SplitInTech, @ojchavan",
+  "homepage": "https://github.com/splitintech/open-internal-tools/tree/main/verification-adapter-sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/splitintech/open-internal-tools.git",
+    "directory": "verification-adapter-sdk/packages/verification-engine"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": { "node": ">=20" },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "LICENSE", "NOTICE", "README.md", "package.json"],
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

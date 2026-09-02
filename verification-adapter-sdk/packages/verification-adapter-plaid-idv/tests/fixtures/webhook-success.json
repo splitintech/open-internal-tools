@@ -1,0 +1,7 @@
+{
+  "webhook_type": "IDENTITY_VERIFICATION",
+  "webhook_code": "STATUS_UPDATED",
+  "identity_verification_id": "idv_plaid_1",
+  "environment": "sandbox",
+  "status": "success"
+}

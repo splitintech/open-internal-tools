@@ -1,0 +1,53 @@
+{
+  "name": "verification-adapter-sdk",
+  "private": true,
+  "version": "0.1.0-beta.0",
+  "description": "MIT-licensed, self-hosted verification adapter SDK workspace.",
+  "license": "MIT",
+  "author": "SplitInTech, @ojchavan",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "node scripts/build-packages.mjs",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint packages examples scripts",
+    "openapi": "node scripts/generate-openapi.mjs",
+    "//openapi:check": "CI should run openapi:check with test/typecheck/boundaries. Fails if catalog.ts V1_ROUTES drift from packages/verification-server/openapi/openapi.v1.json.",
+    "openapi:check": "node scripts/check-openapi.mjs",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release:verify": "node scripts/release-verify.mjs",
+    "pack:inspect": "node scripts/pack-inspect.mjs",
+    "sbom": "node scripts/generate-sbom.mjs",
+    "boundaries": "node scripts/check-package-boundaries.mjs",
+    "coverage": "node scripts/check-coverage.mjs",
+    "size": "node scripts/check-package-size.mjs",
+    "licenses": "node scripts/check-licenses.mjs",
+    "secrets": "node scripts/scan-secrets.mjs",
+    "api-extractor": "node scripts/api-extractor.mjs",
+    "dts-maps": "node scripts/check-declaration-maps.mjs",
+    "perf:bench": "node scripts/perf-bench.mjs",
+    "perf:soak": "node scripts/perf-soak.mjs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.5",
+    "@eslint/js": "^9.28.0",
+    "@microsoft/api-extractor": "^7.52.8",
+    "@types/node": "^22.15.29",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.28.0",
+    "fast-check": "^4.1.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1",
+    "vitest": "^3.2.4"
+  }
+}

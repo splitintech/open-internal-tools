@@ -1,0 +1,214 @@
+{
+  "contractVersion": "2.0.0",
+  "provider": "persona",
+  "displayName": "Persona",
+  "adapterVersion": "2.0.0",
+  "supportedPackages": [
+    "human_idv",
+    "ownership_review",
+    "business_kyb",
+    "associated_person_idv"
+  ],
+  "supportedCountries": [
+    "US"
+  ],
+  "environments": [
+    "sandbox",
+    "production"
+  ],
+  "capabilities": {
+    "presentations": [
+      "embedded",
+      "hosted",
+      "qr",
+      "none"
+    ],
+    "canResume": true,
+    "canRetry": true,
+    "canCancel": true,
+    "canRedact": true
+  },
+  "launcherKeys": [
+    "persona_embedded",
+    "hosted"
+  ],
+  "requiredSecretNames": [
+    "PERSONA_API_KEY",
+    "PERSONA_WEBHOOK_SECRET_CURRENT"
+  ],
+  "optionalSecretNames": [
+    "PERSONA_WEBHOOK_SECRET_PREVIOUS"
+  ],
+  "configurationSchemaVersion": "splitin.provider.persona.v2",
+  "configurationSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "PERSONA_ENVIRONMENT",
+      "PERSONA_CONFIG_REFERENCE",
+      "PERSONA_API_KEY",
+      "PERSONA_ENVIRONMENT_ID",
+      "PERSONA_WEBHOOK_SECRET_CURRENT",
+      "PERSONA_API_VERSION",
+      "PERSONA_IDV_TEMPLATE_ID",
+      "PERSONA_IDV_TEMPLATE_VERSION",
+      "PERSONA_ASSOCIATED_PERSON_TEMPLATE_ID",
+      "PERSONA_ASSOCIATED_PERSON_TEMPLATE_VERSION",
+      "PERSONA_KYB_TRANSACTION_TYPE_ID",
+      "PERSONA_KYB_WORKFLOW_ID",
+      "PERSONA_KYB_WORKFLOW_VERSION",
+      "PERSONA_CASE_TEMPLATE_ID",
+      "PERSONA_CASE_TYPE",
+      "PERSONA_PROPERTY_OWNERSHIP_CASE_TYPE",
+      "PERSONA_BUSINESS_AUTHORITY_CASE_TYPE",
+      "PERSONA_KYB_FIELD_MAP_JSON"
+    ],
+    "properties": {
+      "PERSONA_ENVIRONMENT": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_CONFIG_REFERENCE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_API_KEY": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PERSONA_ENVIRONMENT_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_WEBHOOK_SECRET_CURRENT": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PERSONA_WEBHOOK_SECRET_PREVIOUS": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PERSONA_WEBHOOK_TOLERANCE_SECONDS": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_API_VERSION": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_IDV_TEMPLATE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_IDV_TEMPLATE_VERSION": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_ASSOCIATED_PERSON_TEMPLATE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_ASSOCIATED_PERSON_TEMPLATE_VERSION": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_KYB_TRANSACTION_TYPE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_KYB_WORKFLOW_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_KYB_WORKFLOW_VERSION": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_CASE_TEMPLATE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_CASE_TYPE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_PROPERTY_OWNERSHIP_CASE_TYPE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_BUSINESS_AUTHORITY_CASE_TYPE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_KYB_CASE_MODE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_KYB_FIELD_MAP_JSON": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_STATUS_MAPPINGS_JSON": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PERSONA_ALLOWED_ORIGINS": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      }
+    }
+  },
+  "webhook": {
+    "authentication": "persona_hmac_sha256",
+    "eventTypes": [
+      "inquiry",
+      "transaction",
+      "case",
+      "report",
+      "verification"
+    ],
+    "toleranceSeconds": 300
+  },
+  "dataPolicy": {
+    "prefillAllowlist": [
+      "legal_first_name",
+      "legal_last_name",
+      "email"
+    ],
+    "persistedDataClasses": [
+      "provider_resource_id",
+      "normalized_status",
+      "reason_codes",
+      "evidence_reference"
+    ],
+    "rawPayloadPersistence": false,
+    "browserSecretPersistence": false
+  },
+  "retry": {
+    "sameResourceWhenResumable": true,
+    "newAttemptAfterTerminal": true
+  }
+}

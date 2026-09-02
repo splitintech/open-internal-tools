@@ -1,0 +1,19 @@
+{
+  "id": "evt_identity_declined",
+  "type": "identity.verification_session.requires_input",
+  "created": 1767225600,
+  "livemode": false,
+  "account": "acct_12345678",
+  "data": {
+    "object": {
+      "id": "vs_identity1",
+      "status": "requires_input",
+      "created": 1767225600,
+      "livemode": false,
+      "client_secret": "vs_identity1_secret_abc",
+      "url": "https://verify.stripe.com/start/test",
+      "last_error": { "code": "under_supported_age" },
+      "redaction": null
+    }
+  }
+}

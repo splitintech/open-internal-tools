@@ -1,0 +1,8 @@
+{
+  "id": "idv_plaid_1",
+  "client_user_id": "sub_opaque_plaid01",
+  "status": "success",
+  "created_at": "2026-01-01T00:00:00.000Z",
+  "completed_at": "2026-01-01T00:05:00.000Z",
+  "shareable_url": "https://verify.plaid.com/verify/test"
+}

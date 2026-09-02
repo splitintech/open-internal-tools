@@ -1,0 +1,32 @@
+Verification Adapter SDK
+Copyright (c) 2026 SplitInTech
+
+This product is licensed under the MIT License. See LICENSE.
+
+Third-party notices
+===================
+
+This project redistributes no vendor identity SDKs in its core or server
+packages. Optional peer dependencies used by browser plugins:
+
+- `@stripe/stripe-js` — Stripe, Inc. (MIT). Used only by the Stripe Identity
+  browser plugin via dynamic import. Stripe is a trademark of Stripe, Inc.
+- `persona` — Persona Identities, Inc. Used only by the Persona browser plugin
+  via dynamic import.
+- `react-plaid-link` — Plaid Inc. (MIT). Used only by the Plaid Identity
+  Verification browser plugin via dynamic import. Plaid is a trademark of
+  Plaid Inc.
+
+Server adapters speak HTTPS to provider APIs with an injected Fetch
+implementation. They do not bundle Stripe, Persona, or Plaid Node SDKs.
+
+Runtime and tooling (declared in package.json; not vendored):
+
+- `ajv` — MIT
+- `jose` — MIT (Plaid webhook JWT verification)
+- `pg` — MIT (optional PostgreSQL executor)
+- TypeScript, tsup, vitest, Changesets — Apache-2.0 / MIT as published by
+  their authors
+
+This project provides engineering primitives. It is not a legal, KYC, KYB, or
+regulatory compliance certification.

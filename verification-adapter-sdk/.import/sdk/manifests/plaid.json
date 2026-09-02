@@ -1,0 +1,119 @@
+{
+  "contractVersion": "2.0.0",
+  "provider": "plaid",
+  "displayName": "Plaid Identity Verification",
+  "adapterVersion": "2.0.0",
+  "supportedPackages": [
+    "human_idv"
+  ],
+  "supportedCountries": [
+    "US"
+  ],
+  "environments": [
+    "sandbox",
+    "production"
+  ],
+  "capabilities": {
+    "presentations": [
+      "embedded",
+      "hosted"
+    ],
+    "canResume": true,
+    "canRetry": true,
+    "canCancel": true,
+    "canRedact": false
+  },
+  "launcherKeys": [
+    "plaid_link",
+    "hosted"
+  ],
+  "requiredSecretNames": [
+    "PLAID_CLIENT_ID"
+  ],
+  "optionalSecretNames": [
+    "PLAID_PRODUCTION_SECRET",
+    "PLAID_SANDBOX_SECRET",
+    "PLAID_SECRET"
+  ],
+  "configurationSchemaVersion": "splitin.provider.plaid-idv.v2",
+  "configurationSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "PLAID_CLIENT_ID",
+      "PLAID_ENVIRONMENT"
+    ],
+    "properties": {
+      "PLAID_CLIENT_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PLAID_PRODUCTION_SECRET": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PLAID_SANDBOX_SECRET": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PLAID_SECRET": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": true
+      },
+      "PLAID_ENVIRONMENT": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PLAID_CONFIG_REFERENCE": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PLAID_IDV_TEMPLATE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PLAID_SANDBOX_TEMPLATE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PLAID_TEMPLATE_ID": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      },
+      "PLAID_IDV_WEBHOOK_URL": {
+        "type": "string",
+        "minLength": 1,
+        "sensitive": false
+      }
+    }
+  },
+  "webhook": {
+    "authentication": "plaid_es256_jwk",
+    "eventTypes": [
+      "IDENTITY_VERIFICATION"
+    ]
+  },
+  "dataPolicy": {
+    "prefillAllowlist": [],
+    "persistedDataClasses": [
+      "provider_resource_id",
+      "normalized_status",
+      "reason_codes"
+    ],
+    "rawPayloadPersistence": false,
+    "browserSecretPersistence": false
+  },
+  "retry": {
+    "sameResourceWhenResumable": true,
+    "newAttemptAfterTerminal": true
+  }
+}

@@ -1,0 +1,70 @@
+import {
+  VERIFICATION_ADAPTER_CONTRACT_VERSION,
+  defineProviderManifest,
+  plainStringProperty,
+  secretStringProperty,
+  type ProviderManifestV1,
+} from '@splitin/verification-adapter-sdk';
+
+import { STRIPE_IDENTITY_API_VERSION } from './constants.ts';
+
+export const stripeIdentityProviderManifest: Readonly<ProviderManifestV1> = defineProviderManifest({
+  contractVersion: VERIFICATION_ADAPTER_CONTRACT_VERSION,
+  adapterVersion: '1.0.0',
+  engineCompatibility: '1.0.0',
+  provider: 'stripe_identity',
+  displayName: 'Stripe Identity',
+  description: 'Human document identity verification via Stripe Identity. Connect, Payments, banks, and payouts are out of scope.',
+  supportedPackages: ['human_idv'],
+  supportedCountries: ['US'],
+  environments: ['sandbox', 'production'],
+  capabilities: {
+    presentations: ['embedded', 'hosted', 'none'],
+    canResume: true,
+    canRetry: true,
+    canCancel: true,
+    canRedact: true,
+  },
+  launcherKeys: ['stripe_identity', 'hosted'],
+  launchPresentations: ['embedded', 'hosted', 'none'],
+  configurationSchemaVersion: 'urn:splitin:verification:config:stripe-identity:v1',
+  configurationSchema: {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    type: 'object',
+    additionalProperties: false,
+    required: ['restrictedKey', 'accountId', 'webhookSecret', 'apiVersion'],
+    properties: {
+      restrictedKey: secretStringProperty(),
+      accountId: plainStringProperty(),
+      webhookSecret: secretStringProperty(),
+      webhookSecretPrevious: { type: 'string', minLength: 1, 'x-secret': true },
+      apiVersion: { type: 'string', const: STRIPE_IDENTITY_API_VERSION },
+      returnUrl: { type: 'string', format: 'uri', 'x-secret': false },
+      webhookToleranceSeconds: { type: 'integer', minimum: 60, maximum: 900 },
+      requireMatchingSelfie: { type: 'boolean' },
+    },
+  },
+  webhook: {
+    protocol: 'stripe_v1_hmac',
+    eventFamilies: [
+      'identity.verification_session.processing',
+      'identity.verification_session.verified',
+      'identity.verification_session.requires_input',
+      'identity.verification_session.canceled',
+      'identity.verification_session.redacted',
+    ],
+    toleranceSeconds: 300,
+  },
+  dataPolicy: {
+    classifications: ['provider_resource_id', 'normalized_status', 'reason_codes'],
+    prohibitedPersistence: ['raw_webhook', 'launch_secret', 'document', 'selfie', 'client_secret'],
+    rawPayloadPersistence: false,
+    browserSecretPersistence: false,
+    governmentIdentifierPersistence: false,
+  },
+  retry: { sameResourceWhenResumable: true, newAttemptAfterTerminal: true },
+  cancellation: { supported: true, terminal: true },
+  redaction: { supported: true, asynchronous: true },
+  apiHosts: ['api.stripe.com'],
+  testedApiVersions: [STRIPE_IDENTITY_API_VERSION],
+});

@@ -1,0 +1,14 @@
+{
+  "@splitin/verification-adapter-sdk": {
+    "file": "dist/index.js",
+    "gzipBytes": 81920
+  },
+  "@splitin/verification-web": {
+    "file": "dist/index.js",
+    "gzipBytes": 40960
+  },
+  "@splitin/verification-react": {
+    "file": "dist/index.js",
+    "gzipBytes": 81920
+  }
+}

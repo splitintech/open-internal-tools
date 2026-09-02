@@ -1,0 +1,2876 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SplitIn Verification Server API",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT"
+    },
+    "description": "Provider-neutral verification session, webhook, worker, and operations API. Every path is generated from packages/verification-server/src/catalog.ts V1_ROUTES."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Host-mounted verification fetch handler"
+    }
+  ],
+  "tags": [
+    {
+      "name": "sessions"
+    },
+    {
+      "name": "appeals"
+    },
+    {
+      "name": "support"
+    },
+    {
+      "name": "webhooks"
+    },
+    {
+      "name": "protected-actions"
+    },
+    {
+      "name": "admin"
+    },
+    {
+      "name": "workers"
+    }
+  ],
+  "paths": {
+    "/v1/sessions": {
+      "post": {
+        "operationId": "sessions.create",
+        "tags": [
+          "sessions"
+        ],
+        "summary": "sessions create",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEnvelopeV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartSessionInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/resume": {
+      "post": {
+        "operationId": "sessions.resume",
+        "tags": [
+          "sessions"
+        ],
+        "summary": "sessions resume",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEnvelopeV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}": {
+      "get": {
+        "operationId": "sessions.get",
+        "tags": [
+          "sessions"
+        ],
+        "summary": "sessions get",
+        "description": "Auth: actor. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEnvelopeV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/retry": {
+      "post": {
+        "operationId": "sessions.retry",
+        "tags": [
+          "sessions"
+        ],
+        "summary": "sessions retry",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEnvelopeV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/pause": {
+      "post": {
+        "operationId": "sessions.pause",
+        "tags": [
+          "sessions"
+        ],
+        "summary": "sessions pause",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionMutationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/cancel": {
+      "post": {
+        "operationId": "sessions.cancel",
+        "tags": [
+          "sessions"
+        ],
+        "summary": "sessions cancel",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionMutationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appeals": {
+      "post": {
+        "operationId": "appeals.create",
+        "tags": [
+          "appeals"
+        ],
+        "summary": "appeals create",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppealResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppealInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/support/escalations": {
+      "post": {
+        "operationId": "support.escalations",
+        "tags": [
+          "support"
+        ],
+        "summary": "support escalations",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupportEscalationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupportEscalationInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks/{provider}": {
+      "post": {
+        "operationId": "webhooks.ingest",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "webhooks ingest",
+        "description": "Auth: none. CSRF is not required. Idempotency-Key is not required.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Webhook accepted for reconciliation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookAccepted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/protected-actions/evaluate": {
+      "post": {
+        "operationId": "protectedActions.evaluate",
+        "tags": [
+          "protected-actions"
+        ],
+        "summary": "protectedActions evaluate",
+        "description": "Auth: actor. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "actor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtectedActionDecision"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProtectedActionInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/health": {
+      "get": {
+        "operationId": "admin.health",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin health",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminHealthSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/routes": {
+      "get": {
+        "operationId": "admin.routes.get",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin routes get",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminRoutesSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "admin.routes.mutate",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin routes mutate",
+        "description": "Auth: operator. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeAdminRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteChangeInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/circuits": {
+      "get": {
+        "operationId": "admin.circuits.get",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin circuits get",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCircuitsSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "admin.circuits.mutate",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin circuits mutate",
+        "description": "Auth: operator. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeAdminRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CircuitInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/attempts": {
+      "get": {
+        "operationId": "admin.attempts",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin attempts",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAttemptsSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/review": {
+      "get": {
+        "operationId": "admin.review.get",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin review get",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReviewSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "admin.review.mutate",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin review mutate",
+        "description": "Auth: operator. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeAdminRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/audit": {
+      "get": {
+        "operationId": "admin.audit",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin audit",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAuditSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/reconciliation": {
+      "get": {
+        "operationId": "admin.reconciliation.get",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin reconciliation get",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReconciliationSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "admin.reconciliation.mutate",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin reconciliation mutate",
+        "description": "Auth: operator. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeAdminRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/redaction": {
+      "get": {
+        "operationId": "admin.redaction.get",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin redaction get",
+        "description": "Auth: operator. CSRF is not required. Idempotency-Key is not required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminRedactionSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "admin.redaction.mutate",
+        "tags": [
+          "admin"
+        ],
+        "summary": "admin redaction mutate",
+        "description": "Auth: operator. Cookie-authenticated mutations require Origin/CSRF. Idempotency-Key is required.",
+        "security": [
+          {
+            "operator": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeAdminRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedactionInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/workers/claim": {
+      "post": {
+        "operationId": "workers.claim",
+        "tags": [
+          "workers"
+        ],
+        "summary": "workers claim",
+        "description": "Auth: system. CSRF is not required. Idempotency-Key is required.",
+        "security": [
+          {
+            "system": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerClaimResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerClaimInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/workers/process": {
+      "post": {
+        "operationId": "workers.process",
+        "tags": [
+          "workers"
+        ],
+        "summary": "workers process",
+        "description": "Auth: system. CSRF is not required. Idempotency-Key is required.",
+        "security": [
+          {
+            "system": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerProcessResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SafeErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerProcessInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "actor": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Host-authenticated actor. Cookie sessions require Origin/CSRF."
+      },
+      "operator": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Operations operator. Cookie sessions require Origin/CSRF."
+      },
+      "system": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Worker/system credential. CSRF is not used."
+      }
+    },
+    "schemas": {
+      "CanonicalStatus": {
+        "type": "string",
+        "enum": [
+          "created",
+          "pending_user_input",
+          "paused",
+          "processing",
+          "manual_review_required",
+          "verified",
+          "declined",
+          "failed",
+          "expired",
+          "canceled",
+          "provider_unavailable",
+          "redacted"
+        ]
+      },
+      "SessionContinuationV1": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "token",
+          "expiresAt"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProviderLaunchEnvelope": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attemptId",
+          "canonicalStatus",
+          "launcherKey",
+          "presentation"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string"
+          },
+          "canonicalStatus": {
+            "type": "string",
+            "enum": [
+              "created",
+              "pending_user_input",
+              "paused",
+              "processing",
+              "manual_review_required",
+              "verified",
+              "declined",
+              "failed",
+              "expired",
+              "canceled",
+              "provider_unavailable",
+              "redacted"
+            ]
+          },
+          "launcherKey": {
+            "type": "string"
+          },
+          "presentation": {
+            "type": "string",
+            "enum": [
+              "embedded",
+              "hosted",
+              "qr",
+              "none"
+            ]
+          },
+          "providerDisclosure": {
+            "type": "string"
+          },
+          "transientSecret": {
+            "type": "string"
+          },
+          "transientSecretExpiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "hostedUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "hostedFallbackExpiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "safeErrorCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "retryAfter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supportPath": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "continuationReference": {
+            "type": "string"
+          }
+        }
+      },
+      "SessionEnvelopeV1": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contractVersion",
+          "attemptId",
+          "packageCode",
+          "status",
+          "presentation",
+          "launch",
+          "launcherKey",
+          "providerDisclosure",
+          "safeErrorCode",
+          "retryAfter",
+          "supportPath",
+          "expiresAt",
+          "canResume",
+          "canRetry",
+          "continuation"
+        ],
+        "properties": {
+          "contractVersion": {
+            "const": "1.0.0"
+          },
+          "attemptId": {
+            "type": "string"
+          },
+          "packageCode": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "created",
+              "pending_user_input",
+              "paused",
+              "processing",
+              "manual_review_required",
+              "verified",
+              "declined",
+              "failed",
+              "expired",
+              "canceled",
+              "provider_unavailable",
+              "redacted"
+            ]
+          },
+          "presentation": {
+            "type": "string",
+            "enum": [
+              "embedded",
+              "hosted",
+              "qr",
+              "none"
+            ]
+          },
+          "launch": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProviderLaunchEnvelope"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "launcherKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "providerDisclosure": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "safeErrorCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "retryAfter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supportPath": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "canResume": {
+            "type": "boolean"
+          },
+          "canRetry": {
+            "type": "boolean"
+          },
+          "continuation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionContinuationV1"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SessionMutationResult": {
+        "type": "object",
+        "required": [
+          "attemptId",
+          "status"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "created",
+              "pending_user_input",
+              "paused",
+              "processing",
+              "manual_review_required",
+              "verified",
+              "declined",
+              "failed",
+              "expired",
+              "canceled",
+              "provider_unavailable",
+              "redacted"
+            ]
+          },
+          "paused": {
+            "type": "boolean"
+          },
+          "canceled": {
+            "type": "boolean"
+          },
+          "canResume": {
+            "type": "boolean"
+          },
+          "canRetry": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StartSessionInput": {
+        "type": "object",
+        "required": [
+          "packageCode"
+        ],
+        "properties": {
+          "packageCode": {
+            "type": "string"
+          },
+          "countryCode": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "action": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string"
+          },
+          "resourceReference": {
+            "type": "string"
+          },
+          "subjectReference": {
+            "type": "string"
+          },
+          "continuationToken": {
+            "type": "string"
+          },
+          "continuationKey": {
+            "type": "string"
+          },
+          "legalFirstName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "legalLastName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "organization": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "relationship": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "associatedPerson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "evidenceReferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      "ProtectedActionDenial": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "action",
+          "resourceHash",
+          "requiredPackages",
+          "continuation"
+        ],
+        "properties": {
+          "code": {
+            "const": "VERIFICATION_REQUIRED"
+          },
+          "action": {
+            "type": "string"
+          },
+          "resourceHash": {
+            "type": "string"
+          },
+          "requiredPackages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "continuation": {
+            "$ref": "#/components/schemas/SessionContinuationV1"
+          },
+          "retryAfter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supportPath": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ProtectedActionAllow": {
+        "type": "object",
+        "required": [
+          "allowed"
+        ],
+        "properties": {
+          "allowed": {
+            "const": true
+          },
+          "enforcementActive": {
+            "type": "boolean"
+          },
+          "policyVersionId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ProtectedActionDecision": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ProtectedActionAllow"
+          },
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "required": [
+                  "allowed"
+                ],
+                "properties": {
+                  "allowed": {
+                    "const": false
+                  }
+                }
+              },
+              {
+                "$ref": "#/components/schemas/ProtectedActionDenial"
+              }
+            ]
+          }
+        ]
+      },
+      "ProtectedActionInput": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string"
+          },
+          "resourceReference": {
+            "type": "string"
+          }
+        }
+      },
+      "WebhookAccepted": {
+        "type": "object",
+        "required": [
+          "accepted",
+          "duplicate"
+        ],
+        "properties": {
+          "accepted": {
+            "type": "boolean"
+          },
+          "duplicate": {
+            "type": "boolean"
+          },
+          "providerEventKey": {
+            "type": "string"
+          }
+        }
+      },
+      "AppealInput": {
+        "type": "object",
+        "required": [
+          "reasonCode"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string"
+          },
+          "reasonCode": {
+            "type": "string"
+          },
+          "nonBiometricPathRequested": {
+            "type": "boolean"
+          },
+          "details": {
+            "type": "string"
+          }
+        }
+      },
+      "AppealResult": {
+        "type": "object",
+        "required": [
+          "appealId",
+          "status"
+        ],
+        "properties": {
+          "appealId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "in_review",
+              "resolved",
+              "rejected"
+            ]
+          }
+        }
+      },
+      "SupportEscalationInput": {
+        "type": "object",
+        "required": [
+          "reasonCode"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string"
+          },
+          "appealId": {
+            "type": "string"
+          },
+          "reasonCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "SupportEscalationResult": {
+        "type": "object",
+        "required": [
+          "escalationId",
+          "status"
+        ],
+        "properties": {
+          "escalationId": {
+            "type": "string"
+          },
+          "status": {
+            "const": "open"
+          }
+        }
+      },
+      "SafeAdminRecord": {
+        "type": "object",
+        "additionalProperties": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminHealthSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "runtime",
+          "health",
+          "alerts"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "runtime": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "health": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "alerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "AdminRoutesSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "routes",
+          "routeChanges"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "routeChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "AdminCircuitsSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "circuits"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "circuits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "AdminAttemptsSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "attempts"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "AdminReviewSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "appeals",
+          "manualExceptions",
+          "policyVersions"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "appeals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "manualExceptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "policyVersions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "AdminAuditSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "audit"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "audit": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "AdminReconciliationSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "jobs",
+          "queues"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "queues": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "AdminRedactionSnapshot": {
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "privacyRequests",
+          "jobs"
+        ],
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "privacyRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SafeAdminRecord"
+            }
+          }
+        }
+      },
+      "RouteChangeInput": {
+        "type": "object",
+        "required": [
+          "operation"
+        ],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "propose",
+              "approve",
+              "apply"
+            ]
+          },
+          "targetRoutePolicyId": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "activate",
+              "drain",
+              "rollback"
+            ]
+          },
+          "reasonCode": {
+            "type": "string"
+          }
+        }
+      },
+      "CircuitInput": {
+        "type": "object",
+        "required": [
+          "provider",
+          "providerEnvironment",
+          "status"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "providerEnvironment": {
+            "type": "string",
+            "enum": [
+              "sandbox",
+              "production"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "degraded",
+              "unavailable",
+              "circuit_open"
+            ]
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "circuitOpenUntil": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReviewInput": {
+        "type": "object",
+        "required": [
+          "operation"
+        ],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "begin_appeal_review",
+              "propose_manual_exception",
+              "approve_manual_exception",
+              "apply_manual_exception"
+            ]
+          },
+          "appealId": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "packageCode": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "deny",
+              "revoke",
+              "request_more_information"
+            ]
+          },
+          "reasonCode": {
+            "type": "string"
+          },
+          "policyVersionId": {
+            "type": "string"
+          },
+          "evidenceReferenceHash": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReconciliationInput": {
+        "type": "object",
+        "required": [
+          "attemptId"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string"
+          }
+        }
+      },
+      "RedactionInput": {
+        "type": "object",
+        "required": [
+          "privacyRequestId"
+        ],
+        "properties": {
+          "privacyRequestId": {
+            "type": "string"
+          }
+        }
+      },
+      "WorkerClaimInput": {
+        "type": "object",
+        "required": [
+          "queue"
+        ],
+        "properties": {
+          "queue": {
+            "type": "string",
+            "enum": [
+              "webhook",
+              "reconciliation",
+              "redaction",
+              "dead_letter"
+            ]
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "WorkerClaimResult": {
+        "type": "object",
+        "required": [
+          "leases"
+        ],
+        "properties": {
+          "leases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "leaseId",
+                "jobId",
+                "queue"
+              ],
+              "properties": {
+                "leaseId": {
+                  "type": "string"
+                },
+                "jobId": {
+                  "type": "string"
+                },
+                "queue": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "WorkerProcessInput": {
+        "type": "object",
+        "required": [
+          "leaseId",
+          "jobId"
+        ],
+        "properties": {
+          "leaseId": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string"
+          }
+        }
+      },
+      "WorkerProcessResult": {
+        "type": "object",
+        "required": [
+          "processed",
+          "disposition"
+        ],
+        "properties": {
+          "processed": {
+            "type": "boolean"
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "retryable",
+              "dead_letter",
+              "duplicate"
+            ]
+          }
+        }
+      },
+      "SafeErrorEnvelope": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contractVersion",
+          "error",
+          "safeErrorCode",
+          "retryAfter",
+          "supportPath"
+        ],
+        "properties": {
+          "contractVersion": {
+            "const": "1.0.0"
+          },
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            }
+          },
+          "safeErrorCode": {
+            "type": "string"
+          },
+          "retryAfter": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "supportPath": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

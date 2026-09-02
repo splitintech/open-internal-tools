@@ -1,0 +1,15 @@
+{
+  "name": "@splitin/verification-example-fourth-provider",
+  "private": true,
+  "version": "0.1.0-beta.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Custom fourth-party provider plugin for com.example.employee_check.",
+  "scripts": {
+    "start": "node --experimental-strip-types src/index.ts",
+    "conformance": "node --experimental-strip-types src/conformance.ts"
+  },
+  "dependencies": {
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.0"
+  }
+}

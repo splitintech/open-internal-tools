@@ -1,0 +1,14 @@
+{
+  "name": "@splitin/verification-example-protected-action",
+  "private": true,
+  "version": "0.1.0-beta.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Human IDV / KYB interruption example. Production routes disabled.",
+  "scripts": {
+    "start": "node --experimental-strip-types src/gate.ts"
+  },
+  "dependencies": {
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.0"
+  }
+}
