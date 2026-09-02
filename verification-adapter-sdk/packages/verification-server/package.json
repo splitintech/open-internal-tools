@@ -59,8 +59,8 @@
     "hono": { "optional": true }
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
-    "express": "^4.21.2",
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1",
     "hono": "^4.7.11",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
