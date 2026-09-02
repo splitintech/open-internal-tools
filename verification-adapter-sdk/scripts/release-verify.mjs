@@ -22,6 +22,12 @@ if (existsSync(workflowsDir)) {
     if (name.includes('publish') && !/id-token:\s*write/.test(source)) {
       failures.push(`${name} must request id-token: write for OIDC trusted publishing.`);
     }
+    if (name.includes('publish') && !/npm install -g npm@11\.5\.1/.test(source)) {
+      failures.push(`${name} must install npm@11.5.1 for OIDC trusted publishing.`);
+    }
+    if (name.includes('publish') && /registry-url:/.test(source)) {
+      failures.push(`${name} must not set setup-node registry-url (it injects NODE_AUTH_TOKEN and blocks OIDC).`);
+    }
   }
 }
 

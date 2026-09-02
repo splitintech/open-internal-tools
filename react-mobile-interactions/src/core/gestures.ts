@@ -159,11 +159,6 @@ export function isAtScrollBoundary(
   return element.scrollLeft + element.clientWidth >= element.scrollWidth - 1;
 }
 
-export function triggerHaptic(pattern: number | number[] = 8): void {
-  const vibrate = globalThis.navigator?.vibrate;
-  if (typeof vibrate !== "function") {
-    return;
-  }
-
-  vibrate.call(globalThis.navigator, pattern);
+export function triggerHaptic(pattern: VibratePattern = 8): void {
+  globalThis.navigator?.vibrate?.(pattern);
 }

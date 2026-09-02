@@ -19,6 +19,8 @@
   ·
   <a href="#getting-started">Docs</a>
   ·
+  <a href="docs/publishing.md">Publishing</a>
+  ·
   <a href="#server-usage">Server</a>
   ·
   <a href="#use-cases">Use cases</a>

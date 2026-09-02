@@ -1,0 +1,62 @@
+name: react-mobile-interactions-publish
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "react-mobile-interactions-v*"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: react-mobile-interactions
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: react-mobile-interactions/package-lock.json
+      - name: Install npm for OIDC trusted publishing
+        run: npm install -g npm@11.5.1
+        working-directory: .
+      - run: npm --version
+        working-directory: .
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Assert release tag matches package version
+        if: github.ref_type == 'tag'
+        working-directory: .
+        run: |
+          node scripts/assert-release-tag.mjs \
+            --tag "${{ github.ref_name }}" \
+            --prefix react-mobile-interactions-v \
+            --package react-mobile-interactions/package.json
+      - name: Publish with OIDC provenance
+        working-directory: .
+        run: node scripts/oidc-npm-publish.mjs --cwd react-mobile-interactions
+      - name: Create GitHub Release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        working-directory: .
+        run: |
+          if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            echo "Release ${{ github.ref_name }} already exists."
+          else
+            gh release create "${{ github.ref_name }}" \
+              --verify-tag \
+              --generate-notes \
+              --title "react-mobile-interactions ${{ github.ref_name }}"
+          fi

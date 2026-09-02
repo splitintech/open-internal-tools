@@ -16,6 +16,28 @@ See the hub [README tech stack](README.md#tech-stack) before you add a dependenc
 4. Coordinate in the same loop as other contributors and agents — do not silo the work.
 5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
 
+## npm releases
+
+Public `@splitin/*` packages publish from GitHub Actions with OIDC (no npm
+token in the repo). Create a **signed** tag from a clean `main`:
+
+```bash
+scripts/create-release-tag.sh in-app-otp
+scripts/create-release-tag.sh react-mobile-interactions
+scripts/create-release-tag.sh verification-adapter-sdk
+git push origin in-app-otp-v0.1.0
+```
+
+| Product | Tag | Workflow filename on npm Trusted Publisher |
+|---|---|---|
+| `@splitin/in-app-otp` | `in-app-otp-v*` | `in-app-otp-publish.yml` |
+| `@splitin/react-mobile-interactions` | `react-mobile-interactions-v*` | `react-mobile-interactions-publish.yml` |
+| `@splitin/verification-*` | `verification-adapter-sdk-v*` | `verification-adapter-sdk-publish.yml` |
+
+Attach the trusted publisher on each npm package **before** pushing a tag
+for a version that is not already on the registry. Already-published
+versions are skipped; the workflow still opens a GitHub Release.
+
 ## Maintainers
 
 Each **domain specialist** or **tool specialist** owns everything for that tool or domain: scope, architecture, docs, versions, out-of-the-box apps, and supporting internals. They are the SplitIn tech-career CTO for that project. They ship in sync with other specialists and agents.
