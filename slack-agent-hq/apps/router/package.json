@@ -1,0 +1,14 @@
+{
+  "name": "@slack-agent-hq/router",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@slack-agent-hq/protocol": "*",
+    "@slack/bolt": "^4.4.0",
+    "@slack/web-api": "^7.9.3"
+  }
+}

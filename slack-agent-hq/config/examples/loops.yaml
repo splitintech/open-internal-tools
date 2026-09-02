@@ -1,0 +1,77 @@
+# Document every wake path so coding automations and specialist bots do not double-fire.
+
+triage:
+  cron: "0 9 * * *"
+  stale_hours: 24
+  timezone: "America/New_York"
+
+watchdog:
+  max_bot_posts_per_minute: 12
+
+ideate:
+  enabled: true
+  first_agent: chatgpt
+  require_chatgpt_then_codex: true
+  classifier_on_top_level_messages: true
+  duplicate_window_hours: 12
+  vendor_sla_minutes: 45
+  max_retries_per_wave: 3
+  max_cursor_subagents: 4
+  prd_token_threshold: 8000
+
+budgets:
+  default_usd: 15
+  heavy_usd: 75
+  ideate_daily_usd: 40
+  image_cap_per_thread: 8
+
+specialist_loops:
+  - language_picker
+  - oss_tool_picker
+  - seo_route_adder
+  - backend_picker
+  - pwa_maintainer
+  - pwa_desktop_deno
+  - video_live_maintainer
+
+nags:
+  memory_hours: 2
+  log_hours: 4
+
+crons:
+  memory_nag: "0 */2 * * *"
+  log_nag: "0 */4 * * *"
+  budget_sweep: "0 * * * *"
+  seo_drift: "0 8 * * 1-5"
+  pwa_contract: "0 3 * * *"
+  desktop_deno_smoke: "0 3 * * *"
+  video_pipeline_health: "*/15 * * * *"
+  retention: "0 4 * * *"
+  retention_days: 90
+
+# Wake paths for specialists. Webhooks for GitHub/Railway/inbox live in integrations.yaml.
+# Add a new MCP/CLI/API there — do not hardcode it in loops.yaml.
+
+# Cursor Slack automations live in the Cursor dashboard, not in this process.
+# List them here so @ci / GitHub webhooks / #ideate classifier do not duplicate the same job.
+cursor_automations:
+  - name: example-channel-defaults
+    where: "Per domain channel, run @Cursor settings and set the default repo."
+    trigger: "Anyone in the channel"
+    note: "Automations will not @Codex for you. Use NEXT: @agent in the project thread."
+  - name: pwa-contract
+    where: "Cursor 2.5 nightly on PWA contract tests. Post results in the open project thread."
+    trigger: "Cron 03:00 (see crons.pwa_contract)"
+    note: "Do not open a sibling thread. Link the job with /job."
+  - name: desktop-deno-smoke
+    where: "Cursor 2.5 nightly Deno smoke. Same thread as pwa_desktop_deno loops."
+    trigger: "Cron 03:00"
+    note: "Unsubscribe on /done or watchdog budget trip."
+  - name: video-pipeline-health
+    where: "Cursor /loop 15m while a video_live_maintainer run is open."
+    trigger: "Every 15 minutes while MEMORY §8 lists it"
+    note: "Human /ack live_video before live/PII. Do not @mention xAI."
+  - name: seo-drift
+    where: "@ci weekday 08:00 check:sitemap reminder on threads tagged seo_route_adder."
+    trigger: "Weekdays 08:00"
+    note: "CI must fail check:sitemap on a half-written public route. This automation only nags."

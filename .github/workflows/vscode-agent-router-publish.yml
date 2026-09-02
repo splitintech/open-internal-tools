@@ -1,0 +1,32 @@
+name: Publish vscode-agent-router
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "agent-router-v*"
+
+defaults:
+  run:
+    working-directory: vscode-agent-router
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: vscode-agent-router/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Publish to VS Marketplace and Open VSX
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: npm run publish:marketplaces

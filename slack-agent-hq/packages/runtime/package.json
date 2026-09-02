@@ -1,0 +1,13 @@
+{
+  "name": "@slack-agent-hq/runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@slack-agent-hq/protocol": "*",
+    "@slack/bolt": "^4.4.0"
+  }
+}

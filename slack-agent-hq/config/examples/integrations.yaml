@@ -1,0 +1,76 @@
+# First-class registry. Add a row when you add an MCP, CLI, or API.
+# Webhooks open (or append) a project thread. MCP/CLI/API attach to coding agents —
+# they are not Slack members unless you wrap them in their own Slack app.
+#
+# Copy to ../integrations.yaml and edit. Do not commit secrets.
+
+integrations:
+  - id: github
+    kind: webhook
+    enabled: true
+    path: /hooks/github
+    auth: github_hmac
+    secret_env: GITHUB_WEBHOOK_SECRET
+    domain: eng
+    first_agent: ci
+    next_agent: cursor
+    mapper: github_workflow_failure
+    keywords: [github, gh, actions, ci]
+    attach_to: [cursor, claude, codex]
+    note: "GitHub MCP stays on Cursor/Claude. This webhook is only for workflow_run failures."
+
+  - id: github-mcp
+    kind: mcp
+    enabled: true
+    domain: eng
+    first_agent: cursor
+    keywords: [github-mcp]
+    attach_to: [cursor, claude, codex]
+    note: "Install the GitHub MCP on those coding agents. Follow up in the project thread."
+
+  - id: railway
+    kind: webhook
+    enabled: true
+    path: /hooks/railway
+    auth: shared_secret
+    secret_env: RAILWAY_WEBHOOK_SECRET
+    secret_header: x-railway-secret
+    domain: eng
+    first_agent: cursor
+    mapper: generic_json
+    goal_fields: [type, status, message, title, service, environment]
+    keywords: [railway, deploy]
+    attach_to: [cursor]
+    note: "Point a Railway notification/webhook at POST /hooks/railway. MCP for Railway stays on Cursor."
+
+  - id: railway-mcp
+    kind: mcp
+    enabled: true
+    domain: eng
+    first_agent: cursor
+    keywords: [railway-mcp]
+    attach_to: [cursor]
+    note: "Add the Railway MCP/CLI to Cursor. Do not create a @railway Slack member unless you need a taggable specialist."
+
+  - id: pencil
+    kind: mcp
+    enabled: true
+    domain: eng
+    first_agent: cursor
+    keywords: [pencil, design, .pen]
+    attach_to: [cursor, claude]
+    note: "Pencil MCP is a tool on coding agents. Post design follow-up in the same project thread."
+
+  - id: inbox
+    kind: webhook
+    enabled: true
+    path: /hooks/inbox
+    auth: none
+    domain: inbox
+    first_agent: inbox
+    mapper: inbox
+    keywords: [gmail, zoho, email]
+    attach_to: []
+    allowlist: [127.0.0.1, "::1"]
+    allowlist_env: INBOX_WEBHOOK_ALLOWLIST
+    note: "Gmail/Zoho MCP via Slackbot. POST /hooks/inbox to open an inbox-domain thread. auth: none requires IP allowlist."

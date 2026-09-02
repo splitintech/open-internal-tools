@@ -27,6 +27,7 @@ We let open source build the tech side of the small community little capitalists
 - Build as many **supporting internal tools** as other projects need.
 - Every **domain specialist** and **tool specialist** maintains that tool or domain end to end.
 - Every contributor works with other contributors **and agents synchronously**.
+- Contributors pick the **right tool/language for the job**, compose **existing open source**, keep **indie cost**, **can write without AI**, and use **LLMs plus multi-agent workflows** to ship more.
 - Every new folder is the **tech part of a product**, not a random gist.
 - Careers for SplitIn live at https://www.splitin.net/careers-requests
 - Never commit webhooks, tokens, or `~/.config` secrets.

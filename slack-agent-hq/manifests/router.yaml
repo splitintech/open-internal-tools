@@ -1,0 +1,87 @@
+display_information:
+  name: Agent HQ Router
+  description: Opens one Slack thread per project and hands work off with NEXT @mentions.
+  background_color: "#1d1c1d"
+features:
+  bot_user:
+    display_name: router
+    always_online: true
+  slash_commands:
+    - command: /project
+      description: Open a project thread in a domain channel
+      usage_hint: "[domain] [title]"
+      should_escape: false
+    - command: /loop
+      description: Open an #ideate LOOP (ChatGPT → Codex → Cursor → Claude)
+      usage_hint: "[auto|kinds] [title]"
+      should_escape: false
+    - command: /handoff
+      description: Mention the next agent in this project thread
+      usage_hint: "[@agent]"
+      should_escape: false
+    - command: /audit
+      description: Post MEMORY/logs/DoD audit in this project thread
+      usage_hint: ""
+      should_escape: false
+    - command: /done
+      description: Mark this project done after definition-of-done checks
+      usage_hint: ""
+      should_escape: false
+    - command: /ack
+      description: Human ACK for SEO index, live video, payments, or migrate
+      usage_hint: "[seo_index|live_video|payments|production_migrate]"
+      should_escape: false
+    - command: /job
+      description: Link an agent-router job id into this thread (not a new thread)
+      usage_hint: "[job_id] [peer] [runtime]"
+      should_escape: false
+    - command: /budget
+      description: Show, bump, or switch this thread to local_only
+      usage_hint: "[bump <usd>|local]"
+      should_escape: false
+    - command: /spend
+      description: Record a model spend against this thread budget
+      usage_hint: "[usd] [model] [reason]"
+      should_escape: false
+    - command: /image
+      description: Record a ChatGPT image against the per-thread cap
+      usage_hint: "[note]"
+      should_escape: false
+    - command: /integration
+      description: Record an integrations.yaml row on this thread
+      usage_hint: "[id|none]"
+      should_escape: false
+  shortcuts:
+    - name: Create project thread
+      type: message
+      callback_id: create_project_thread
+      description: Promote this message into a domain project thread
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - channels:history
+      - channels:join
+      - channels:manage
+      - channels:read
+      - chat:write
+      - commands
+      - files:write
+      - groups:history
+      - groups:read
+      - groups:write
+      - reactions:read
+      - reactions:write
+      - users:read
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.channels
+      - message.groups
+      - reaction_added
+  interactivity:
+    is_enabled: true
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false

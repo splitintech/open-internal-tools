@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+data/
+*.sqlite
+*.sqlite-journal
+config/*.yaml
+!config/examples/
+!config/examples/**
+.DS_Store

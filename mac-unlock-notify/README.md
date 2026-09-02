@@ -177,6 +177,8 @@ Logs: `~/Library/Logs/mac-unlock-notify.log`
 
 ## Careers
 
+This folder is product-tech an individual contributor owns end to end. SplitIn engineering: **Tech 51%. Business 50.** We invest **45% as R&D** back to the open-source tools SplitIn uses. MVP first, then merge with tests, trust-me-bro benchmarks, and live user tests. We build fast and then refine — every contributor brings an acquaintance after building the building blocks of the architecture. Every project would be allotted funds. Full mission and stack: [splitin.net/tech-stack](https://www.splitin.net/tech-stack). Hub: [open-internal-tools](../README.md).
+
 Own this product-tech end to end — or explore SplitIn tech careers — at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**.
 
 <p align="center">

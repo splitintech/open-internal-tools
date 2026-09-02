@@ -1,0 +1,38 @@
+{
+  "name": "slack-agent-hq",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Slack project-thread router plus taggable specialist bots. Install from this folder only.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "install-product": "npm install",
+    "start": "tsx scripts/start-all.ts",
+    "start:router": "npm run start -w @slack-agent-hq/router",
+    "start:triage": "npm run start -w @slack-agent-hq/triage",
+    "start:ci": "npm run start -w @slack-agent-hq/ci",
+    "start:inbox": "npm run start -w @slack-agent-hq/inbox",
+    "start:watchdog": "npm run start -w @slack-agent-hq/watchdog",
+    "inventory": "tsx scripts/inventory.ts",
+    "bootstrap": "tsx scripts/bootstrap-workspace.ts",
+    "phase0": "tsx scripts/phase0.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/node-cron": "^3.0.11",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.9.3"
+  }
+}

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="media/icon.svg" alt="Agent Router" width="64" height="64">
+  <img src="media/icon.png" alt="Agent Router" width="64" height="64">
 </p>
 
 <h1 align="center">vscode-agent-router</h1>
@@ -9,6 +9,8 @@
 </p>
 
 <p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=splitin.agent-router"><img src="https://img.shields.io/visual-studio-marketplace/v/splitin.agent-router?label=VS%20Marketplace" alt="Visual Studio Marketplace"></a>
+  <a href="https://open-vsx.org/extension/splitin/agent-router"><img src="https://img.shields.io/open-vsx/v/splitin/agent-router?label=Open%20VSX" alt="Open VSX"></a>
   <a href="https://github.com/splitintech/open-internal-tools/blob/main/vscode-agent-router/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
   <a href="https://github.com/splitintech/open-internal-tools/tree/main/vscode-agent-router"><img src="https://img.shields.io/badge/product-open--internal-tools-orange" alt="Open Internal Tools"></a>
 </p>
@@ -41,7 +43,7 @@ Built internally at SplitIn as the tech side of a product, then packaged so othe
 
 - **Compose, do not rebuild**: Slack CLI, Claude Code / Codex / ChatGPT **extensions**, Cursor Cloud Agents API (opt-in), `@modelcontextprotocol/sdk`, `tsup`, vitest, `@vscode/vsce`.
 - **Indie-cheap**: no extra daemon, no extra cloud, no extra seat. Secrets in env / `~/.agent-router`, never in git.
-- **Out of the box**: F5 or a VSIX, sidebar Peers + Jobs, Command Palette, editor/explorer handoff menus, URI handler.
+- **Out of the box**: Marketplace / Open VSX install, F5, or a VSIX. Sidebar Peers + Jobs, Command Palette, editor/explorer handoff menus, URI handler.
 - **Version by version**: catalog JSON adds peers without a new adapter class.
 
 This does **not** merge Composer, Claude’s sidebar, and Codex into one transcript. It is a dispatcher, the same way [ideation-loop-system](https://github.com/splitintech/open-internal-tools/tree/main/ideation-loop-system) routes Slack threads instead of inventing a new bot per vendor.
@@ -125,19 +127,35 @@ Ten ways developers integrate Agent Router:
 
 ## Install
 
-**Option A — Extension Development Host**
+**VS Code Marketplace** — search **SplitIn Agent Router**, or:
 
-1. `npm run build` in this folder.
-2. Open this folder in Cursor or VS Code and F5 **Run Agent Router Extension** (`.vscode/launch.json`).
-3. Command Palette → **Agent Router: Probe Transports**.
+```sh
+code --install-extension splitin.agent-router
+```
 
-**Option B — VSIX**
+<https://marketplace.visualstudio.com/items?itemName=splitin.agent-router>
+
+**Cursor (Open VSX)** — Extensions panel → search **SplitIn Agent Router** (`splitin.agent-router`), or:
+
+```sh
+cursor --install-extension splitin.agent-router
+```
+
+<https://open-vsx.org/extension/splitin/agent-router>
+
+**From this folder (VSIX / F5)**
 
 ```sh
 npm run package
 ```
 
-In Cursor: **Extensions: Install from VSIX…** → `agent-router-0.1.0.vsix`. Reload.
+In Cursor: **Extensions: Install from VSIX…** → `agent-router-0.1.0.vsix`. Reload. Or F5 **Run Agent Router Extension** (`.vscode/launch.json`).
+
+Publish a release (needs `VSCE_PAT` + `OVSX_PAT` in the environment):
+
+```sh
+npm run publish:marketplaces
+```
 
 On activate the extension registers MCP via Cursor `cursor.mcp.registerServer` when that API exists, otherwise it spawns `dist/mcp.js`. After install, a Cursor agent of any model can call the tools without a project `mcp.json`.
 
