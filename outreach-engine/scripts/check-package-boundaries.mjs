@@ -89,7 +89,7 @@ for (const dir of dirs) {
   for (const file of sourceFiles(join(dir, 'src'))) {
     const fileRel = relative(root, file);
     // Tests may compose any workspace package declared in devDependencies (fakes, store).
-    const isTest = /\.test\.[cm]?[jt]sx?$/.test(file);
+    const isTest = /\.test(-util)?\.[cm]?[jt]sx?$/.test(file);
     const source = readFileSync(file, 'utf8');
     for (const match of source.matchAll(IMPORT_RE)) {
       const spec = match[1] ?? match[2] ?? match[3];
