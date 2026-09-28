@@ -1,0 +1,63 @@
+<p align="center">
+  <img src="../docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
+</p>
+
+# Outreach Engine
+
+MIT-licensed, provider-neutral outreach orchestration. It imports contacts, turns
+versioned playbooks into per-contact scheduled actions, executes each action at most
+once through capability-checked provider adapters, stops on reply, bounce, opt-out or
+pause, and records every transition in an append-only audit log.
+
+The engine is the product. The CLI, HTTP API, MCP server, Slack and the Papr Work app
+are thin clients of it.
+
+> **Status: M0 (scaffold).** No outreach logic exists yet. The full specification is
+> [BUILD_PLAN.md](BUILD_PLAN.md); milestones are in §14.
+
+## Guarantees it is being built to
+
+- **At most once without confirmation.** A send whose outcome is unknown is never
+  repeated until the provider confirms it did not happen ([ADR 0002](docs/adr/0002-at-most-once-without-confirmation.md)).
+- **Fail closed.** Unhealthy account, engaged kill switch, expired approval, suppressed
+  recipient or unrenderable template all mean no send, with a recorded reason.
+- **No social-network automation.** Social steps are manual tasks a human completes on
+  the native site ([ADR 0003](docs/adr/0003-no-social-automation.md)).
+- **No LLM in the send path.** Models may draft and suggest; deterministic code decides.
+
+## Packages
+
+| Package | Milestone | What it is |
+| --- | --- | --- |
+| `@splitin/outreach-contracts` | M0 seed, M1 | Types, schemas, action transition table, error taxonomy, provider ports |
+| `@splitin/outreach-fakes` | M1 | Fake providers with failure modes + provider conformance kit |
+| `@splitin/outreach-store-sqlite` | M2 | Migrations, repositories, audit hash chain |
+| `@splitin/outreach-core` | M3–M4, M6 | Execution core, campaign domain, policy, inbound processing |
+| `@splitin/outreach-import` | M5 | Inert HTML/CSV/XLSX/JSON importer |
+| `@splitin/outreach-server`, `-cli`, `-mcp` | M7, M9 | Surfaces |
+| `@splitin/outreach-notify-slack`, `-provider-email-*` | M8 | Adapters |
+
+## Develop
+
+Requires Node ≥ 22.13.
+
+```zsh
+cd open-internal-tools/outreach-engine
+npm install
+npm run check   # lint, typecheck, test, package boundaries, secret scan, line limit
+npm run build
+```
+
+`npm run boundaries` enforces the dependency direction in BUILD_PLAN.md §3: the core,
+importer and adapters depend on `@splitin/outreach-contracts` only, and storage, HTTP,
+MCP, Slack and file-parsing libraries are confined to the packages that own them. A new
+package fails the check until it is given a rule.
+
+## Decisions
+
+Architecture decisions live in [docs/adr/](docs/adr/). Change a decision by adding a new
+ADR that supersedes the old one, not by editing it.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

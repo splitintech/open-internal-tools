@@ -82,7 +82,7 @@ outreach-engine/
   README.md                     quick start (M0)
   package.json                  npm workspaces, private
   tsconfig.base.json
-  vitest.workspace.ts
+  vitest.config.ts
   eslint.config.js
   packages/
     outreach-contracts/         types, zod schemas, state tables, error taxonomy, capability model
@@ -908,7 +908,7 @@ Each milestone is one PR inside `outreach-engine/`, is independently green, and 
 
 | # | Milestone | Size | Contents | Acceptance |
 |---|---|---|---|---|
-| M0 | Scaffold + ADRs | S | Workspace, tsconfig, lint, vitest, boundaries script, CI workflow, README, ADR 0001 (architecture), 0002 (at-most-once-without-confirmation), 0003 (no social automation) | CI green on an empty package set; ADRs merged. |
+| M0 | Scaffold + ADRs | S | Workspace, tsconfig, lint, vitest, boundaries/secret/line-limit scripts, CI workflow, README, ADR 0001 (architecture), 0002 (at-most-once-without-confirmation), 0003 (no social automation), and a seed `outreach-contracts` package so the pipeline builds and tests real code | CI green; each check proven to fail on a planted violation; ADRs merged. |
 | M1 | Contracts + fakes | M | §5 types and zod schemas, `ACTION_TRANSITIONS`, error taxonomy, capability/purpose model, fake email/notify/manual providers with failure modes, conformance kit | Fakes pass their own conformance; transition property test green. |
 | M2 | SQLite store | M | Driver port with `node:sqlite` + `better-sqlite3` adapters, migrations §4, repositories, audit chain, `audit verify` | Store suite green on both drivers. |
 | M3 | Execution core | L | Claim, preflight, execute, result, lease sweeper, reconciler, review queue, rate buckets, kill switches, `worker --once/--loop` | Full failure-injection and concurrency suites green. **This is the milestone that must not be rushed.** |
