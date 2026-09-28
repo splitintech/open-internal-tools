@@ -3,7 +3,8 @@ import { runExecutionPass, type ExecutionPassReport } from './execution/executor
 import { setKillSwitch, type KillSwitchScope } from './execution/kill-switches';
 import { resolveReviewAction, type ReviewResolution } from './execution/review';
 import type { ActionRow, CrashHooks, ExecutionConfig, ExecutionDeps, SendGate } from './execution/types';
-import { actorOf, audit, requireRole, type AuthContext, type Role } from './domain/auth';
+import { readSendGate } from './domain/access';
+import { NotFoundError, actorOf, audit, requireRole, type AuthContext, type Role } from './domain/auth';
 import type { DomainEnv, UnsubscribeConfig } from './domain/env';
 import { domainChecks, domainEffects, domainRatePolicy } from './domain/wiring';
 import { pollDueMailboxes } from './inbound/ingest';
@@ -14,7 +15,10 @@ export interface EngineConfig {
   readonly adapters: readonly ProviderAdapter[];
   readonly secrets: SecretResolver;
   readonly workerId: string;
-  /** Defaults to an allowlist with no entries: nothing is emailed until an admin opens the gate. */
+  /**
+   * Defaults to the workspace's audited setting (see setSendGate), which itself defaults to an empty
+   * allowlist: nothing is emailed until an admin opens the gate.
+   */
   readonly sendGate?: SendGate;
   readonly unsubscribe?: UnsubscribeConfig;
   readonly now?: () => number;
@@ -50,7 +54,7 @@ export function createEngine(config: EngineConfig): Engine {
     secrets: config.secrets,
     now,
     workerId: config.workerId,
-    sendGate: config.sendGate ?? { mode: 'allowlist', allow: [] },
+    sendGate: config.sendGate ?? readSendGate,
     checks: domainChecks(),
     ratePolicy: domainRatePolicy,
     // Effects need the domain env, which needs exec: resolve lazily.
@@ -109,8 +113,21 @@ export function listReview(env: DomainEnv, ctx: AuthContext): ActionRow[] {
 export function resolveReview(env: DomainEnv, ctx: AuthContext, actionId: string, resolution: ReviewResolution): void {
   requireRole(ctx, 'approver');
   const owned = env.db.prepare('SELECT 1 FROM scheduled_actions WHERE workspace_id = ? AND id = ?').get(ctx.workspaceId, actionId);
-  if (!owned) throw new Error(`action ${actionId} not found`);
+  if (!owned) throw new NotFoundError(`action ${actionId}`);
   resolveReviewAction(env.exec, actionId, resolution, actorOf(ctx));
+}
+
+export interface CampaignSummary {
+  readonly id: string;
+  readonly name: string;
+  readonly purpose: string;
+  readonly status: string;
+  readonly created_at: number;
+}
+
+export function listCampaigns(env: DomainEnv, ctx: AuthContext): CampaignSummary[] {
+  requireRole(ctx, 'viewer');
+  return env.db.prepare('SELECT id, name, purpose, status, created_at FROM campaigns WHERE workspace_id = ? ORDER BY created_at DESC').all<CampaignSummary>(ctx.workspaceId);
 }
 
 export interface CampaignStatus {
@@ -124,7 +141,7 @@ export interface CampaignStatus {
 export function campaignStatus(env: DomainEnv, ctx: AuthContext, campaignId: string): CampaignStatus {
   requireRole(ctx, 'viewer');
   const campaign = env.db.prepare('SELECT status FROM campaigns WHERE workspace_id = ? AND id = ?').get<{ status: string }>(ctx.workspaceId, campaignId);
-  if (!campaign) throw new Error(`campaign ${campaignId} not found`);
+  if (!campaign) throw new NotFoundError(`campaign ${campaignId}`);
   const count = (sql: string) =>
     Object.fromEntries(env.db.prepare(sql).all<{ k: string; n: number }>(ctx.workspaceId, campaignId).map((row) => [row.k, row.n]));
   return {

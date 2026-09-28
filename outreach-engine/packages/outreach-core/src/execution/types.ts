@@ -147,7 +147,8 @@ export interface ExecutionDeps {
   readonly secrets: SecretResolver;
   readonly now: () => number;
   readonly workerId: string;
-  readonly sendGate: SendGate;
+  /** A fixed gate, or a resolver read inside preflight (e.g. from workspace settings). */
+  readonly sendGate: SendGate | ((db: SqlDatabase, workspaceId: string) => SendGate);
   readonly config?: Partial<ExecutionConfig>;
   /** Extra checks (enrollment status, suppression, approval, send window), run after the built-ins. */
   readonly checks?: readonly PreflightCheck[];

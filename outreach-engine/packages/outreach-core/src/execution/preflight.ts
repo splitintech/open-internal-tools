@@ -79,7 +79,7 @@ function builtInChecks(deps: ExecutionDeps): { before: PreflightCheck[]; after: 
     return { kind: 'pass' };
   };
   const gate: PreflightCheck = ({ action }) =>
-    isEmail(action) && !recipientAllowed(deps.sendGate, action.recipient_norm)
+    isEmail(action) && !recipientAllowed(typeof deps.sendGate === 'function' ? deps.sendGate(deps.db, action.workspace_id) : deps.sendGate, action.recipient_norm)
       ? { kind: 'review', reason: 'not_in_live_allowlist' }
       : { kind: 'pass' };
   return { before: [killSwitch, expiry], after: [account, gate] };

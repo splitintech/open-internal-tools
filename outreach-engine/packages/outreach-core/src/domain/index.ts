@@ -10,3 +10,4 @@ export * from './campaigns';
 export * from './materialize';
 export * from './wiring';
 export * from './operations';
+export * from './access';
