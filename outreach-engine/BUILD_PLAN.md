@@ -85,10 +85,10 @@ outreach-engine/
   vitest.config.ts
   eslint.config.js
   packages/
-    outreach-contracts/         types, zod schemas, state tables, error taxonomy, capability model
+    outreach-contracts/         types, state tables, error taxonomy, capability model, SqlDatabase port, audit chain
     outreach-fakes/             fake email/notify/manual providers + provider conformance suite
-    outreach-store-sqlite/      migrations, repositories, driver port (node:sqlite, better-sqlite3)
-    outreach-core/              application services, policy, calendar, workers
+    outreach-store-sqlite/      migrations + drivers implementing the SqlDatabase port (node:sqlite, better-sqlite3)
+    outreach-core/              repositories (SQL against the port), services, policy, calendar, workers
     outreach-import/            HTML/CSV/XLSX/JSON staging importer
     outreach-notify-slack/      Slack incoming-webhook / chat.postMessage notifier
     outreach-provider-email-*/  reference email adapter (after decision D1)

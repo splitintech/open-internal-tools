@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { OUTREACH_API_VERSION, isSupportedApiVersion } from './index';
+import { OUTREACH_API_VERSION, isSupportedApiVersion } from './version';
 
 describe('isSupportedApiVersion', () => {
   it('accepts the current API version', () => {

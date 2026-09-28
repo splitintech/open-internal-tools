@@ -22,6 +22,7 @@ const internalRules = [
   [/^@splitin\/outreach-provider-[a-z0-9-]+$/, ['@splitin/outreach-contracts']],
   [/^@splitin\/outreach-(server|mcp|cli)$/, ANY],
   [/^@splitin\/outreach-app-[a-z0-9-]+$/, ANY],
+  [/^@splitin\/outreach-e2e$/, ANY],
 ];
 
 // External modules that only specific packages may import.
@@ -84,8 +85,11 @@ for (const dir of dirs) {
     if (INTERNAL.test(dep) && !permits(dep)) violations.push(`${rel}/package.json: ${name} may not depend on ${dep}`);
   }
 
+  const devDeps = new Set(Object.keys(pkg.devDependencies ?? {}));
   for (const file of sourceFiles(join(dir, 'src'))) {
     const fileRel = relative(root, file);
+    // Tests may compose any workspace package declared in devDependencies (fakes, store).
+    const isTest = /\.test\.[cm]?[jt]sx?$/.test(file);
     const source = readFileSync(file, 'utf8');
     for (const match of source.matchAll(IMPORT_RE)) {
       const spec = match[1] ?? match[2] ?? match[3];
@@ -99,7 +103,7 @@ for (const dir of dirs) {
       }
       const bare = spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec;
       if (INTERNAL.test(bare)) {
-        if (bare !== name && !permits(bare)) violations.push(`${fileRel}: ${name} may not import ${bare}`);
+        if (bare !== name && !permits(bare) && !(isTest && devDeps.has(bare))) violations.push(`${fileRel}: ${name} may not import ${bare}`);
         continue;
       }
       for (const [modulePattern, ownerPattern] of externalOwners) {
