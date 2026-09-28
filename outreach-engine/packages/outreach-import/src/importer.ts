@@ -183,11 +183,13 @@ function organizationFor(db: SqlDatabase, workspaceId: string, contact: Normaliz
   return id;
 }
 
-function addPoint(db: SqlDatabase, workspaceId: string, contactId: string, kind: string, value: string, profile: MappingProfile, source: string, now: number): void {
+function addPoint(db: SqlDatabase, workspaceId: string, contactId: string, kind: string, value: string, profile: MappingProfile, country: string | null, source: string, now: number): void {
   db.prepare(
     `INSERT INTO contact_points (id, workspace_id, contact_id, kind, value_norm, value_raw, source, consent_basis, consent_evidence, consent_at, jurisdiction, permitted_channels)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT (workspace_id, kind, value_norm) DO NOTHING`,
-  ).run(ulid(now), workspaceId, contactId, kind, value, value, source, profile.consent.basis, profile.consent.evidence ?? null, now, profile.jurisdiction, JSON.stringify(kind === 'email' ? ['email'] : []));
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+     ON CONFLICT (workspace_id, kind, value_norm) DO UPDATE SET jurisdiction = excluded.jurisdiction
+       WHERE coalesce(contact_points.jurisdiction, 'unknown') = 'unknown' AND excluded.jurisdiction <> 'unknown'`,
+  ).run(ulid(now), workspaceId, contactId, kind, value, value, source, profile.consent.basis, profile.consent.evidence ?? null, now, country ?? profile.jurisdiction, JSON.stringify(kind === 'email' ? ['email'] : []));
 }
 
 function createContact(db: SqlDatabase, workspaceId: string, contact: NormalizedContact, profile: MappingProfile, batchId: string, now: number): string {
@@ -196,9 +198,9 @@ function createContact(db: SqlDatabase, workspaceId: string, contact: Normalized
     `INSERT INTO contacts (id, workspace_id, organization_id, full_name, first_name, title, timezone, locale, attributes, created_at, updated_at)
      VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
   ).run(id, workspaceId, organizationFor(db, workspaceId, contact, now), contact.full_name ?? contact.email ?? contact.profile_url ?? 'Unknown', contact.first_name, contact.title, contact.timezone, contact.locale, JSON.stringify(contact.attributes), now, now);
-  if (contact.email) addPoint(db, workspaceId, id, 'email', contact.email, profile, `import:${batchId}`, now);
-  if (contact.profile_url) addPoint(db, workspaceId, id, 'social_profile', contact.profile_url, profile, `import:${batchId}`, now);
-  if (contact.phone) addPoint(db, workspaceId, id, 'phone', contact.phone, profile, `import:${batchId}`, now);
+  if (contact.email) addPoint(db, workspaceId, id, 'email', contact.email, profile, contact.country, `import:${batchId}`, now);
+  if (contact.profile_url) addPoint(db, workspaceId, id, 'social_profile', contact.profile_url, profile, contact.country, `import:${batchId}`, now);
+  if (contact.phone) addPoint(db, workspaceId, id, 'phone', contact.phone, profile, contact.country, `import:${batchId}`, now);
   return id;
 }
 
@@ -210,6 +212,6 @@ function updateContact(db: SqlDatabase, workspaceId: string, contactId: string, 
     `UPDATE contacts SET first_name = COALESCE(first_name, ?), title = COALESCE(title, ?), timezone = COALESCE(timezone, ?),
        locale = COALESCE(locale, ?), organization_id = COALESCE(organization_id, ?), attributes = ?, updated_at = ? WHERE id = ?`,
   ).run(contact.first_name, contact.title, contact.timezone, contact.locale, organizationFor(db, workspaceId, contact, now), JSON.stringify(attributes), now, contactId);
-  if (contact.email) addPoint(db, workspaceId, contactId, 'email', contact.email, profile, `import:${batchId}`, now);
-  if (contact.profile_url) addPoint(db, workspaceId, contactId, 'social_profile', contact.profile_url, profile, `import:${batchId}`, now);
+  if (contact.email) addPoint(db, workspaceId, contactId, 'email', contact.email, profile, contact.country, `import:${batchId}`, now);
+  if (contact.profile_url) addPoint(db, workspaceId, contactId, 'social_profile', contact.profile_url, profile, contact.country, `import:${batchId}`, now);
 }

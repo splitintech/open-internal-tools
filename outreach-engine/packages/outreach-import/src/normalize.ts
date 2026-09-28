@@ -1,4 +1,5 @@
 import type { RawRow } from './detect';
+import { normalizeCountry } from './country';
 import type { CanonicalField, MappingProfile } from './profile';
 
 export interface NormalizedContact {
@@ -13,6 +14,7 @@ export interface NormalizedContact {
   timezone: string | null;
   locale: string | null;
   phone: string | null;
+  country: string | null;
   attributes: Record<string, string>;
 }
 
@@ -97,6 +99,7 @@ export function normalizeRow(row: RawRow, profile: MappingProfile): NormalizeRes
     timezone: null,
     locale: collapse(get('locale')),
     phone: collapse(get('phone')),
+    country: null,
     attributes: {},
   };
   const rawEmail = get('email');
@@ -127,6 +130,11 @@ export function normalizeRow(row: RawRow, profile: MappingProfile): NormalizeRes
   if (rawZone) {
     if (isValidZone(rawZone)) contact.timezone = rawZone;
     else errors.push(`unknown time zone "${rawZone.slice(0, 60)}"`);
+  }
+  const rawCountry = collapse(get('country'));
+  if (rawCountry) {
+    contact.country = normalizeCountry(rawCountry);
+    if (!contact.country) errors.push(`unknown country "${rawCountry.slice(0, 60)}"`);
   }
   if (!contact.full_name && (contact.first_name || contact.last_name)) {
     contact.full_name = [contact.first_name, contact.last_name].filter(Boolean).join(' ');

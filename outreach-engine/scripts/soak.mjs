@@ -36,6 +36,7 @@ try {
   cli('init', '--fake');
   const { providerAccountId } = cli('account', 'add', '--fake', '--provider', 'fake-email', '--external-id', 'soak@example.com', '--sender-name', 'Soak',
     '--sender-email', 'soak@example.com', '--purposes', 'automated_outreach', '--secret', 'env:SOAK_SECRET');
+  cli('jurisdiction', 'set', '--default', 'allow', '--unknown', 'allow', '--signed-off-by', 'soak', '--reference', 'fake providers only');
   cli('gate', 'open', '--reason', 'soak test against fake providers only');
 
   const { openSqliteDatabase } = await import(join(root, 'packages/outreach-store-sqlite/dist/index.js'));

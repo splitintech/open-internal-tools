@@ -7,6 +7,7 @@ import { durationMs, nextSlot, resolveZone } from './calendar';
 import { loadEnrollment, loadVersion, type DomainEnv } from './env';
 import { loadStepContext, materializeNext, stepIndex } from './materialize';
 import type { Policy } from './playbook';
+import { contactPointVerdict } from './jurisdictions';
 import { addSuppression, isSuppressed, stopEnrollment } from './suppressions';
 
 const PAUSED_DEFER_MS = 15 * 60_000;
@@ -43,6 +44,12 @@ export function domainChecks(): PreflightCheck[] {
     const hit = isSuppressed(db, action.workspace_id, action.recipient_norm, action.provider_account_id);
     return hit ? { kind: 'cancel', reason: `suppressed:${hit}` } : { kind: 'pass' };
   };
+  // Re-checked at send time: the policy may have changed since the audience was snapshotted.
+  const lawfulBasis: PreflightCheck = ({ db, action }) => {
+    if (action.kind !== 'email.send' && action.kind !== 'email.reply') return { kind: 'pass' };
+    const verdict = contactPointVerdict(db, action.workspace_id, action.contact_point_id);
+    return verdict.ok ? { kind: 'pass' } : { kind: 'cancel', reason: verdict.reason };
+  };
   const approved: PreflightCheck = ({ db, action, now }) => approvalVerdict(db, action, now);
   const inWindow: PreflightCheck = ({ db, action, now }) => {
     if (action.kind !== 'email.send' && action.kind !== 'email.reply') return { kind: 'pass' };
@@ -54,7 +61,7 @@ export function domainChecks(): PreflightCheck[] {
     const slot = nextSlot(now, policy.window, resolveZone(policy.window, contact?.timezone));
     return slot > now ? { kind: 'defer', until: slot, reason: 'outside_send_window' } : { kind: 'pass' };
   };
-  return [enrollmentLive, campaignLive, notSuppressed, approved, inWindow];
+  return [enrollmentLive, campaignLive, notSuppressed, lawfulBasis, approved, inWindow];
 }
 
 /** Per-campaign budgets from the playbook policy; notifications and manual tasks are not budgeted. */
@@ -93,7 +100,7 @@ export function domainEffects(env: DomainEnv): ActionEffects {
     },
     onCancelled(db, action, reason, now) {
       if (!action.enrollment_id) return;
-      if (reason.startsWith('suppressed')) stopEnrollment(db, action.enrollment_id, 'stopped', reason, engineActor(action), now);
+      if (reason.startsWith('suppressed') || reason.startsWith('jurisdiction_')) stopEnrollment(db, action.enrollment_id, 'stopped', reason, engineActor(action), now);
       else if (reason === 'expired') stopEnrollment(db, action.enrollment_id, 'stopped', 'step_expired', engineActor(action), now);
     },
     onErrorEffects(db, action, effects: readonly ErrorEffect[], now) {

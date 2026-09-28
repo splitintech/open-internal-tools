@@ -93,6 +93,16 @@ spec:
     const w = workspace();
     await w.run('init');
     expect((await w.run('gate', 'open', '--reason', 'yolo')).stderr).toMatch(/written reason/);
+    expect((await w.run('gate', 'open', '--reason', 'provider chosen, going live')).stderr).toMatch(/jurisdiction policy/);
+    expect((await w.run('jurisdiction', 'set', '--allow', 'US,GB', '--consent', 'de', '--block', 'DE', '--default', 'block', '--unknown', 'allow',
+      '--signed-off-by', 'Counsel', '--reference', 'LEGAL-12')).stderr).toMatch(/DE is listed under more than one rule/);
+    expect((await w.run('jurisdiction', 'set', '--allow', 'US', '--default', 'maybe', '--unknown', 'allow', '--signed-off-by', 'Counsel', '--reference', 'LEGAL-12')).stderr)
+      .toMatch(/--default must be one of/);
+    const policy = await w.run('jurisdiction', 'set', '--allow', 'US,GB', '--consent', 'DE,CA', '--default', 'block', '--unknown', 'allow',
+      '--signed-off-by', 'Counsel', '--reference', 'LEGAL-12 outreach memo', '--json');
+    expect(policy.json()).toMatchObject({ rules: { US: 'allow', GB: 'allow', DE: 'consent_required', CA: 'consent_required' }, default: 'block', signoff: { by: 'Counsel' } });
+    expect((await w.run('jurisdiction', 'show', '--json')).json()).toMatchObject({ unknown: 'allow' });
+    expect((await w.run('gate', 'open', '--reason', 'provider chosen, going live')).code).toBe(0);
     await w.run('principal', 'add', 'http:dashboard', '--roles', 'viewer');
     const token = (await w.run('token', 'create', 'http:dashboard', '--name', 'dash', '--json')).json();
     expect(token.token).toMatch(/^oet_[0-9A-Z]{26}\.[A-Za-z0-9_-]{43}$/);

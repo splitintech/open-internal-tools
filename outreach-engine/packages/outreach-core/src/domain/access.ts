@@ -3,6 +3,7 @@ import { safeEqualHex, sha256Hex, ulid, type SqlDatabase } from '@splitin/outrea
 import type { SendGate } from '../execution/types';
 import { ForbiddenError, NotFoundError, ROLES, audit, requireRole, type AuthContext, type Role, type Surface } from './auth';
 import type { DomainEnv } from './env';
+import { readJurisdictionPolicy } from './jurisdictions';
 
 const TOKEN_RE = /^oet_([0-9A-HJKMNP-TV-Z]{26})\.([A-Za-z0-9_-]{43})$/;
 
@@ -93,6 +94,10 @@ export function readSendGate(db: SqlDatabase, workspaceId: string): SendGate {
 export function setSendGate(env: DomainEnv, ctx: AuthContext, gate: SendGate, reason: string): void {
   requireRole(ctx, 'admin');
   if (gate.mode === 'open' && reason.trim().length < 10) throw new ForbiddenError('opening the live-send gate needs a written reason (at least 10 characters)');
+  // Decision D5: nothing goes to arbitrary recipients until someone has signed off where it may go.
+  if (gate.mode === 'open' && !readJurisdictionPolicy(env.db, ctx.workspaceId)) {
+    throw new ForbiddenError('opening the live-send gate needs a signed-off jurisdiction policy first (outreach jurisdiction set)');
+  }
   env.db.transaction(() => {
     const now = env.now();
     const row = env.db.prepare('SELECT settings FROM workspaces WHERE id = ?').get<{ settings: string }>(ctx.workspaceId);

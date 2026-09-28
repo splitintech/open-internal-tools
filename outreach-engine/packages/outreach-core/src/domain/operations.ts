@@ -5,6 +5,7 @@ import { ConflictError, NotFoundError, actorOf, audit, requireRole, type AuthCon
 import type { DomainEnv, EnrollmentRow } from './env';
 import { loadStepContext, materializeNext, stepIndex } from './materialize';
 import { actionApprover } from './campaigns';
+import { JurisdictionCode } from './jurisdictions';
 import { addSuppression, normalizeEmail, stopEnrollment, type SuppressionInput } from './suppressions';
 
 export function addPrincipal(env: DomainEnv, ctx: AuthContext, input: { externalRef: string; displayName: string; roles: Role[] }): string {
@@ -68,6 +69,8 @@ export interface ContactInput {
   readonly timezone?: string;
   readonly organization?: { name: string; domain?: string };
   readonly consentBasis: 'consent' | 'legitimate_interest' | 'existing_relationship' | 'unknown';
+  /** ISO 3166 alpha-2 country of the recipient, when known (decision D5). */
+  readonly jurisdiction?: string;
   readonly attributes?: Record<string, string>;
 }
 
@@ -93,9 +96,9 @@ export function addContact(env: DomainEnv, ctx: AuthContext, input: ContactInput
        VALUES (?,?,?,?,?,?,?,?,?,?)`,
     ).run(contactId, ctx.workspaceId, organizationId, input.fullName, input.firstName ?? null, input.title ?? null, input.timezone ?? null, JSON.stringify(input.attributes ?? {}), now, now);
     env.db.prepare(
-      `INSERT INTO contact_points (id, workspace_id, contact_id, kind, value_norm, value_raw, source, consent_basis, consent_at, permitted_channels)
-       VALUES (?,?,?,'email',?,?,'manual',?,?,'["email"]')`,
-    ).run(ulid(now), ctx.workspaceId, contactId, email, input.email, input.consentBasis, now);
+      `INSERT INTO contact_points (id, workspace_id, contact_id, kind, value_norm, value_raw, source, consent_basis, consent_at, jurisdiction, permitted_channels)
+       VALUES (?,?,?,'email',?,?,'manual',?,?,?,'["email"]')`,
+    ).run(ulid(now), ctx.workspaceId, contactId, email, input.email, input.consentBasis, now, input.jurisdiction === undefined ? 'unknown' : JurisdictionCode.parse(input.jurisdiction.trim().toUpperCase()));
     audit(env.db, ctx, now, 'contact', contactId, 'created', { source: 'manual' });
     return contactId;
   });

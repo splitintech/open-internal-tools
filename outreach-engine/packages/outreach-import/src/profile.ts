@@ -13,6 +13,8 @@ export const CANONICAL_FIELDS = [
   'timezone',
   'locale',
   'phone',
+  /** ISO 3166 code or English country name; overrides the profile-wide `jurisdiction` for that row. */
+  'country',
 ] as const;
 export type CanonicalField = (typeof CANONICAL_FIELDS)[number];
 

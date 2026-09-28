@@ -12,7 +12,7 @@ pause, and records every transition in an append-only audit log.
 The engine is the product. The CLI, HTTP API, MCP server, Slack and the Papr Work app
 are thin clients of it.
 
-> **Status: M0–M7 complete.** Contracts, fakes, SQLite store, the durable execution core,
+> **Status: M0–M7 complete, plus the D5 jurisdiction policy.** Contracts, fakes, SQLite store, the durable execution core,
 > the campaign domain, the importer, inbound processing, the `outreach` CLI, the HTTP API
 > and the Papr Work console are built and tested on fake providers. Real provider adapters
 > and Slack are M8, MCP is M9.

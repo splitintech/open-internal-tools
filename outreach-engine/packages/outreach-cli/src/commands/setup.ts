@@ -5,10 +5,14 @@ import {
   bootstrapWorkspace,
   configureNotifications,
   createApiToken,
+  JURISDICTION_RULES,
+  readJurisdictionPolicy,
   readSendGate,
   registerProviderAccount,
   revokeApiToken,
+  setJurisdictionPolicy,
   setSendGate,
+  type JurisdictionRule,
   type Role,
 } from '@splitin/outreach-core';
 import { principalRef } from '../runtime';
@@ -19,6 +23,24 @@ function parseRoles(value: string): Role[] {
   const bad = roles.filter((role) => !(ROLES as readonly string[]).includes(role));
   if (bad.length) throw new Error(`unknown roles: ${bad.join(', ')} (use ${ROLES.join(', ')})`);
   return roles as Role[];
+}
+
+function parseRule(value: string, name: string): JurisdictionRule {
+  if (!(JURISDICTION_RULES as readonly string[]).includes(value)) throw new Error(`--${name} must be one of ${JURISDICTION_RULES.join(', ')}`);
+  return value as JurisdictionRule;
+}
+
+/** `--allow US,GB --consent DE,CA --block FR` into a rules map; a country listed twice is an error. */
+function parseRules(flags: Readonly<Record<string, string | boolean | undefined>>): Record<string, JurisdictionRule> {
+  const rules: Record<string, JurisdictionRule> = {};
+  const lists: [string, JurisdictionRule][] = [['allow', 'allow'], ['consent', 'consent_required'], ['block', 'block']];
+  for (const [name, rule] of lists) {
+    for (const country of (flag(flags, name) ?? '').split(',').map((c) => c.trim().toUpperCase()).filter(Boolean)) {
+      if (rules[country]) throw new Error(`${country} is listed under more than one rule`);
+      rules[country] = rule;
+    }
+  }
+  return rules;
 }
 
 function parsePurposes(value: string): ProviderPurpose[] {
@@ -136,6 +158,34 @@ export const setupCommands: Command[] = [
       const rt = await runtime();
       setSendGate(rt.engine, rt.ctx(), { mode: 'open' }, required(flags, 'reason'));
       out.result({ mode: 'open' });
+    },
+  },
+  {
+    name: 'jurisdiction show',
+    usage: 'outreach jurisdiction show',
+    summary: 'Show where email may go and who signed that off (decision D5).',
+    async run({ out, runtime, options }) {
+      const rt = await runtime();
+      rt.ctx();
+      out.result(readJurisdictionPolicy(rt.db, options.workspace) ?? { policy: null, note: 'no policy recorded; the live-send gate cannot open' });
+    },
+  },
+  {
+    name: 'jurisdiction set',
+    usage:
+      'outreach jurisdiction set [--allow US,GB] [--consent DE,CA] [--block FR] --default <allow|consent_required|block> ' +
+      '--unknown <allow|consent_required|block> --signed-off-by <name> --reference <memo or ticket>',
+    summary: 'Record per-country sending rules and their legal sign-off (admin, audited). Replaces the whole policy.',
+    flags: { allow: 'string', consent: 'string', block: 'string', default: 'string', unknown: 'string', 'signed-off-by': 'string', reference: 'string' },
+    async run({ flags, out, runtime }) {
+      const rt = await runtime();
+      const saved = setJurisdictionPolicy(
+        rt.engine,
+        rt.ctx(),
+        { rules: parseRules(flags), default: parseRule(required(flags, 'default'), 'default'), unknown: parseRule(required(flags, 'unknown'), 'unknown') },
+        { by: required(flags, 'signed-off-by'), reference: required(flags, 'reference') },
+      );
+      out.result(saved);
     },
   },
   {

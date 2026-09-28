@@ -16,7 +16,7 @@ The outreach engine is a separate, MIT-licensed service (`outreach` CLI + `outre
 
 ## What you must never do
 
-- Never run `outreach campaign activate`, `outreach approvals approve`, `outreach import commit`, `outreach gate open`, `outreach review resolve --as sent`, or `outreach kill release` yourself. These are human decisions; ask the user to run them or to click them in the Outreach Console.
+- Never run `outreach campaign activate`, `outreach approvals approve`, `outreach import commit`, `outreach gate open`, `outreach jurisdiction set`, `outreach review resolve --as sent`, or `outreach kill release` yourself. These are human decisions; ask the user to run them or to click them in the Outreach Console.
 - Never invent contacts or email addresses, and never edit an import file to add people who were not in it.
 - Never automate LinkedIn or any social network (connection requests, messages, scraping, browser clicks). Social steps in a playbook are `manual.task` only; the human performs them on the native site and records the outcome.
 - Never bypass suppressions, the live-send gate, rate limits or send windows, and never try to "unstick" an uncertain send by re-sending it. Uncertain sends are resolved by reconciliation or by a human in the review queue.

@@ -93,6 +93,37 @@ describe('preview', () => {
   });
 });
 
+describe('country column (decision D5)', () => {
+  const COUNTRY_CSV = ['Name,Email,Country', 'Ada,ada@example.org,US', 'Hans,hans@example.de,Germany', 'Kim,kim@example.kr,south korea',
+    'Nobody,nobody@example.org,', 'Bad,bad@example.org,Atlantis', 'Pseudo,eu@example.org,EU'].join('\n');
+
+  it('maps codes and English names per row, falls back to the profile, and rejects what it cannot resolve', async () => {
+    const { db, profileId } = setup({ columns: { email: 'Email', full_name: 'Name', country: 'Country' }, jurisdiction: 'unknown' });
+    const result = await preview(db, profileId, COUNTRY_CSV);
+    expect(result.samples.reject.map((r) => r.note)).toEqual(['unknown country "Atlantis"', 'unknown country "EU"']);
+    commitImport(db, actor, { batchId: result.batchId, previewHash: result.previewHash, idempotencyKey: 'c1', now: NOW });
+    const rows = db.prepare(`SELECT value_norm, jurisdiction FROM contact_points ORDER BY value_norm`).all();
+    expect(rows).toEqual([
+      { value_norm: 'ada@example.org', jurisdiction: 'US' },
+      { value_norm: 'hans@example.de', jurisdiction: 'DE' },
+      { value_norm: 'kim@example.kr', jurisdiction: 'KR' },
+      { value_norm: 'nobody@example.org', jurisdiction: 'unknown' },
+    ]);
+  });
+
+  it('fills in an unknown country on re-import but never overwrites a known one', async () => {
+    const { db, profileId } = setup({ columns: { email: 'Email', full_name: 'Name', country: 'Country' }, jurisdiction: 'unknown' });
+    const first = await preview(db, profileId, 'Name,Email,Country\nAda,ada@example.org,\nHans,hans@example.de,DE');
+    commitImport(db, actor, { batchId: first.batchId, previewHash: first.previewHash, idempotencyKey: 'c1', now: NOW });
+    const second = await preview(db, profileId, 'Name,Email,Country\nAda,ada@example.org,GB\nHans,hans@example.de,AT');
+    commitImport(db, actor, { batchId: second.batchId, previewHash: second.previewHash, idempotencyKey: 'c2', now: NOW });
+    expect(db.prepare(`SELECT value_norm, jurisdiction FROM contact_points ORDER BY value_norm`).all()).toEqual([
+      { value_norm: 'ada@example.org', jurisdiction: 'GB' },
+      { value_norm: 'hans@example.de', jurisdiction: 'DE' },
+    ]);
+  });
+});
+
 describe('commit', () => {
   it('creates contacts with provenance and consent, merges duplicates, and is idempotent', async () => {
     const { db, profileId } = setup();

@@ -874,7 +874,7 @@ Controls:
 - **Isolation:** every repository function takes `workspaceId` from context and includes it in its `WHERE` clause. A test fixture with two workspaces asserts zero cross-reads on every service method.
 - **Untrusted text:** contact attributes and inbound bodies are data. They go into templates only through escaping, and into MCP results only inside marked untrusted fields.
 - **PII minimization:** inbound bodies are not stored by default (headers, ids and classification only). A configurable retention period prunes contact data for opted-out contacts, keeping only the suppression hash.
-- **Live-send gate:** until decision D1 and legal sign-off are recorded, the executor refuses any recipient not in `OUTREACH_LIVE_ALLOWLIST` (exact addresses or domains). This is enforced in preflight, not in the UI.
+- **Live-send gate:** until decision D1 and legal sign-off are recorded, the executor refuses any recipient not in the workspace allowlist (exact addresses or domains). This is enforced in preflight, not in the UI. The gate cannot open until a signed-off jurisdiction policy exists (D5).
 
 ---
 
@@ -916,7 +916,7 @@ Each milestone is one PR inside `outreach-engine/`, is independently green, and 
 | M5 | Importer | M | §10 in full, mapping profiles, CLI import commands | Import suite + performance budget. |
 | M6 | Inbound | M | Provider event inbox, poll cursor, classification, correlation, atomic stop, unsubscribe token + `/u/:token` | Inbound suite; full fake E2E including reply stop. |
 | M7 | Surfaces | M | CLI complete, HTTP server + tokens, M7.0 Papr spike → `apps/papr` jobs + skill + minimal UI | CLI/HTTP suites; Papr app runs the fake E2E on a desktop install. |
-| M8 | Real providers | M | Reference email adapter (per D1) + conformance against sandbox; Slack notifier; the Slack control app lands separately in `slack-agent-hq` | Adapter passes conformance; live opt-in run to the allowlist. |
+| M8 | Real providers | M | Mailbox adapters per D1 (Gmail, then Graph, then Zoho Mail) behind a `TokenSource` port + conformance against a test mailbox; Papr unsubscribe app (D3); Slack notifier (Socket Mode); the Slack control app lands separately in `slack-agent-hq`. Done: jurisdiction policy (D5). | Adapter passes conformance; live opt-in run to the allowlist. |
 | M9 | MCP | M | Stage 1 stdio; Stage 2 remote once D3/D4 are settled | MCP suite; handshake verified in Claude Code, and in ChatGPT for Stage 2. |
 | M10 | Release | S | Publish workflow, versioned docs, runbook, threat model, hub README row, `splitin.net/tech-stack` entry | Signed tag publishes `@splitin/outreach-*` through OIDC. |
 
@@ -965,7 +965,7 @@ It consumes the published `@splitin/outreach-*` packages through their CLI, API 
 | `MailConnector` single interface | Split into ports (§5.2) |
 | Tick + insert-before-send dedupe | Replaced by the claimed/executing split and reconciliation (§6) |
 | Subject/from reply search | Replaced by thread/RFC correlation (§8.3) |
-| Zoho + SMTP as v1 adapters | One reference adapter chosen by D1; Zoho Mail limited to `manual_correspondence` |
+| Zoho + SMTP as v1 adapters | Mailbox adapters per D1 (Gmail, Graph, Zoho Mail); each adapter declares `automated_outreach` only after a review of that provider's terms, otherwise `manual_correspondence`. Zoho Campaigns excluded for cold outreach. |
 | LinkedIn connect/DM workers, warm-up caps | Dropped; `manual.task` only |
 | Slack incoming webhook digest | Kept as the notifier; control moves to a signed Slack app |
 | Optional MCP client | Dropped for now; an MCP **server** is what ChatGPT needs (§11.3) |
@@ -1005,27 +1005,32 @@ The runbook covers:
 
 ---
 
-## 19. Open decisions
+## 19. Decisions
 
-| ID | Decision | Owner | Blocks |
+Principle (2026-09-28): **build on what Papr Work already provides wherever its guarantees are enough, and own only what they are not.** Evidence for every Papr claim below: `Papr-ai/paprwork@faf6de5`, read-only review.
+
+| ID | Decision | Status | Blocks |
 |---|---|---|---|
-| D1 | Email provider whose terms permit `automated_outreach` for SplitIn's audience and volume. Criteria: API + OAuth or scoped keys, thread/Message-ID exposure, custom headers, inbound webhook or polling, sent-search for reconciliation, EU/US data residency as needed. | SplitIn business + legal | M8 live sends |
-| D2 | Production host: standalone worker (recommended) vs Papr jobs only | Engineering | M7 docs, pilot |
-| D3 | Public URL for webhooks and one-click unsubscribe (e.g. a small VM or Cloudflare Tunnel) | Engineering | M6 unsubscribe, M8 webhooks, M9 stage 2 |
-| D4 | OAuth provider for remote MCP / HTTP tokens (self-issued vs an existing IdP) | Engineering | M9 stage 2 |
-| D5 | Jurisdictions and message class for the first campaign; legal sign-off | Legal | Pilot |
+| D1 | **Mailbox adapters: Gmail API, then Microsoft Graph (Outlook), then Zoho Mail.** Send as the rep, from a secondary warmed domain, 30-50 cold emails per inbox per day. Replies are polled from the same mailbox; "did it send?" reconciliation searches Sent by `Message-ID`. Graph sends via draft-then-send so a message id exists. **Zoho Campaigns is rejected for cold outreach:** its anti-spam policy requires permission-based lists (fine for opted-in audiences only). Each adapter declares `automated_outreach` only after a review of that provider's acceptable-use terms; otherwise it is limited to `manual_correspondence`. Adapters take access tokens from a `TokenSource` port so the grant can later come from Papr's planned server-side connectors (`docs/CONNECTORS_PLUGINS_ROADMAP.md`, not shipped; Papr removed desktop Google OAuth in 2026-09). Until then: our own Google Cloud app, user type **Internal** to the Workspace (no Google verification). | Decided | M8 |
+| D2 | **Worker runs as a Papr job, `local-only`.** Papr's cloud scheduler is live (`SYNC_V3_DISPATCH_PUSH`; `cloud-preferred` jobs run in a cloud sandbox), but the engine cannot use it yet: a cloud job's durable storage is Papr's synced databases, whose atomic `write-batch` appends to a workspace log and reports `changes: 1` per statement without executing guards (`TursoDbAdapter.ts`), at most 25 statements, no reads inside. The engine's claim step needs to know whether its guarded `UPDATE` matched; without that, at-most-once (ADR 0002) cannot hold. Cloud placement becomes possible if Papr confirms single-flight per job with fencing and read-after-write on the log (Appendix A, Q3), or exposes a transactional endpoint. A standalone `worker --loop` remains the option for teams that need sending while the Mac sleeps. | Decided for pilot; cloud pending Papr | Pilot |
+| D3 | **No tunnel or VM.** Inbound is mailbox polling (D1). Unsubscribe: `reply STOP` plus a footer link served by a small public Papr app on apps.papr.ai whose backend action writes one `INSERT` (token only) into a Papr database; the engine reads that table and applies each token after verifying its HMAC, so forged rows are inert. RFC 8058 machine one-click (`List-Unsubscribe-Post`) needs Papr to pass query parameters to backend actions (Appendix A, Q4); Google only mandates it above 5,000 messages/day to Gmail. Slack uses Socket Mode (no public URL). | Decided; unsubscribe app to verify on a live install | M8 |
+| D4 | **Identity: Papr's Auth0 tenant.** Papr login (desktop and apps.papr.ai) is Auth0 PKCE. Papr has no MCP server or MCP client in this repo (an MCP bridge is optional milestone 4B, not built), so on Papr the agent path is the skill + CLI + backend actions already shipped in M7. Remote MCP (M9 stage 2, for Claude/ChatGPT clients) validates JWTs from Papr's Auth0 tenant if Papr registers the API (Appendix A, Q2); otherwise a separate Auth0 tenant. Stage 1 (stdio) needs neither. | Decided; stage 2 pending Papr | M9 stage 2 |
+| D5 | **Per-country rules with recorded sign-off, enforced by the engine** (Papr has no compliance code). Built: `outreach jurisdiction set` records `allow` / `consent_required` / `block` per ISO country plus rules for unlisted and unknown countries, with who signed it off and where; admin-only and audited. Enforced at activation (excluded from the audience) and again before every send (cancelled, enrollment stopped). The live-send gate cannot open without it. Imports take a per-row `country` column (ISO code or English name). Which countries and message class the first campaign uses is still Legal's call. | Mechanism built; policy content pending Legal | Pilot |
 
 ---
 
 ## Appendix A — Upstream issue draft (U2)
 
-> **Proposal: reliable outreach sequences as a Papr app (or core primitives, if you prefer)**
+> **Building an outreach app on Papr Work: four questions**
 >
-> We are building an MIT-licensed outreach engine (`splitintech/open-internal-tools/outreach-engine`): versioned sequences, a durable action queue with leases and explicit "uncertain" states (no blind resends after timeouts), reply/bounce/opt-out stop, human approvals bound to exact content, and fake-provider tests. It runs today via Papr jobs (`worker --once`) and a registry database, with a mini-app UI.
+> We are building an MIT-licensed outreach engine (`splitintech/open-internal-tools/outreach-engine`) as a Papr app: versioned sequences, a durable action queue with leases and explicit "uncertain" states (no blind resends after timeouts), reply/bounce/opt-out stop, approvals bound to exact content. It ships a mini-app console (backend actions, server-side keys), a worker job and an agent skill. We want to use Papr's primitives rather than duplicate them, and need four answers:
 >
-> One question before we go further: would you want the durable action/outbox primitives in Papr's core (we would port them in small PRs, relicensed AGPL, bound to your existing workspace model), or do you prefer this stays an app on the extension surface and is published to the Community catalog?
+> 1. **Connectors:** will the planned server-side connectors (CONNECTORS_PLUGINS_ROADMAP.md) expose Gmail and Microsoft Graph access tokens to apps and jobs, and roughly when?
+> 2. **Identity:** can a third-party API (a remote MCP server) accept access tokens from Papr's Auth0 tenant, i.e. would you register it as an API/audience?
+> 3. **Cloud jobs:** for `cloud-preferred` jobs, does the scheduler run lease guarantee single-flight per job with fencing, and does a run see all workspace-log writes from the previous run (read-after-write)? Is there, or could there be, a write batch that returns real `changes` and aborts on a failed guard?
+> 4. **Public backend actions:** could `/api/app/backend/:action` pass URL query parameters to the handler (needed for RFC 8058 one-click unsubscribe POSTs, which carry the token only in the URL)?
 >
-> Social-network automation is out of scope for this proposal. Happy to demo.
+> Separately, we found three security issues and will report them privately first. Social-network automation is out of scope. Happy to demo.
 
 ## Appendix B — Example fixtures
 

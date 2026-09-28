@@ -5,6 +5,7 @@ import { compileIssues } from './compile';
 import { loadCampaign, type CampaignVersionRow, type DomainEnv } from './env';
 import { loadStepContext, materializeNext } from './materialize';
 import { PlaybookError, parsePlaybook, type Audience, type Policy, type Step } from './playbook';
+import { jurisdictionVerdict, readJurisdictionPolicy } from './jurisdictions';
 import { isSuppressed } from './suppressions';
 
 export interface CreateCampaignInput {
@@ -49,6 +50,7 @@ interface MemberCandidate {
   contact_point_id: string;
   email: string;
   consent_basis: string | null;
+  jurisdiction: string | null;
 }
 
 function draftVersion(env: DomainEnv, campaignId: string): CampaignVersionRow {
@@ -60,7 +62,7 @@ function draftVersion(env: DomainEnv, campaignId: string): CampaignVersionRow {
 }
 
 function candidates(env: DomainEnv, workspaceId: string, audience: Audience): MemberCandidate[] {
-  const base = `SELECT c.id AS contact_id, cp.id AS contact_point_id, cp.value_norm AS email, cp.consent_basis
+  const base = `SELECT c.id AS contact_id, cp.id AS contact_point_id, cp.value_norm AS email, cp.consent_basis, cp.jurisdiction
     FROM contacts c JOIN contact_points cp ON cp.contact_id = c.id AND cp.kind = 'email'
     WHERE c.workspace_id = ? AND c.merged_into_id IS NULL`;
   if (audience.source === 'all') return env.db.prepare(`${base} ORDER BY c.id`).all<MemberCandidate>(workspaceId);
@@ -79,7 +81,7 @@ export interface ActivationPreview {
   readonly requiresApproval: boolean;
   readonly approvalId: string | null;
   readonly audienceCount: number;
-  readonly excluded: { suppressed: number; noConsent: number; alreadyEnrolled: number; duplicateContact: number };
+  readonly excluded: { suppressed: number; noConsent: number; jurisdiction: number; alreadyEnrolled: number; duplicateContact: number };
   readonly sampleRecipients: readonly string[];
   readonly steps: readonly Pick<Step, 'id' | 'type'>[];
 }
@@ -95,7 +97,8 @@ export function prepareActivation(env: DomainEnv, ctx: AuthContext, campaignId: 
     if (campaign.status !== 'draft') throw new ConflictError(`campaign is ${campaign.status}`);
     const version = draftVersion(env, campaignId);
     const audience = JSON.parse(version.audience) as Audience;
-    const excluded = { suppressed: 0, noConsent: 0, alreadyEnrolled: 0, duplicateContact: 0 };
+    const excluded = { suppressed: 0, noConsent: 0, jurisdiction: 0, alreadyEnrolled: 0, duplicateContact: 0 };
+    const lawPolicy = readJurisdictionPolicy(db, ctx.workspaceId);
     const members: MemberCandidate[] = [];
     const seenContacts = new Set<string>();
     for (const row of candidates(env, ctx.workspaceId, audience)) {
@@ -105,6 +108,7 @@ export function prepareActivation(env: DomainEnv, ctx: AuthContext, campaignId: 
       }
       if (isSuppressed(db, ctx.workspaceId, row.email, version.provider_account_id)) excluded.suppressed += 1;
       else if (audience.eligibility.includes('consent_or_legitimate_interest') && !['consent', 'legitimate_interest', 'existing_relationship'].includes(row.consent_basis ?? '')) excluded.noConsent += 1;
+      else if (!jurisdictionVerdict(lawPolicy, row.jurisdiction, row.consent_basis).ok) excluded.jurisdiction += 1;
       else if (db.prepare(`SELECT 1 FROM enrollments WHERE workspace_id = ? AND contact_id = ? AND status IN ('active','paused') LIMIT 1`).get(ctx.workspaceId, row.contact_id)) excluded.alreadyEnrolled += 1;
       else {
         members.push(row);
@@ -113,7 +117,7 @@ export function prepareActivation(env: DomainEnv, ctx: AuthContext, campaignId: 
     }
     db.prepare('DELETE FROM audience_members WHERE campaign_version_id = ?').run(version.id);
     const insert = db.prepare('INSERT INTO audience_members (id, campaign_version_id, contact_id, contact_point_id, eligibility) VALUES (?,?,?,?,?)');
-    for (const member of members) insert.run(ulid(now), version.id, member.contact_id, member.contact_point_id, JSON.stringify({ consent: member.consent_basis }));
+    for (const member of members) insert.run(ulid(now), version.id, member.contact_id, member.contact_point_id, JSON.stringify({ consent: member.consent_basis, jurisdiction: member.jurisdiction }));
     const audienceHash = digestCanonical(members.map((member) => member.contact_point_id).sort());
     const sequence = db.prepare('SELECT spec, spec_hash FROM sequence_versions WHERE id = ?').get<{ spec: string; spec_hash: string }>(version.sequence_version_id);
     const steps = (JSON.parse(sequence?.spec ?? '{"steps":[]}') as { steps: Step[] }).steps;
