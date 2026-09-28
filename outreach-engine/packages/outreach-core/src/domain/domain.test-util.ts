@@ -61,6 +61,7 @@ export async function makeDomainEnv(options: { sendGate?: SendGate; start?: numb
     unsubscribe: { baseUrl: 'https://outreach.example.com/u/', secret: 'unsubscribe-test-secret-fixture' },
     now: () => now,
     execution: { reconcileDelayMs: 0 },
+    pollIntervalMs: 0,
     random: () => 0.5,
   });
   bootstrapWorkspace(db, { workspaceId: 'ws', name: 'Test', adminRef: 'test:admin', adminName: 'Admin' }, now);
@@ -103,7 +104,7 @@ export async function makeDomainEnv(options: { sendGate?: SendGate; start?: numb
     drain: async (passes = 5) => {
       for (let i = 0; i < passes; i += 1) {
         const report = await engine.runOnce();
-        if (report.execute.claimed === 0 && report.reconcile.found + report.reconcile.absent === 0) return;
+        if (report.execute.claimed === 0 && report.reconcile.found + report.reconcile.absent === 0 && report.inbound.processed === 0) return;
       }
     },
     contact: (email, extra = {}) =>

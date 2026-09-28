@@ -12,8 +12,11 @@ pause, and records every transition in an append-only audit log.
 The engine is the product. The CLI, HTTP API, MCP server, Slack and the Papr Work app
 are thin clients of it.
 
-> **Status: M0 (scaffold).** No outreach logic exists yet. The full specification is
-> [BUILD_PLAN.md](BUILD_PLAN.md); milestones are in §14.
+> **Status: M0–M6 complete.** Contracts, fakes, SQLite store, the durable execution core,
+> the campaign domain, the importer and inbound processing are built and tested on fake
+> providers. Surfaces (CLI, HTTP, MCP, Papr app) and real provider adapters are M7–M9.
+> Nothing is emailed until an admin opens the live-send gate. Specification:
+> [BUILD_PLAN.md](BUILD_PLAN.md), milestones in §14.
 
 ## Guarantees it is being built to
 
@@ -34,6 +37,7 @@ are thin clients of it.
 | `@splitin/outreach-store-sqlite` | M2 | Migrations, repositories, audit hash chain |
 | `@splitin/outreach-core` | M3–M4, M6 | Execution core, campaign domain, policy, inbound processing |
 | `@splitin/outreach-import` | M5 | Inert HTML/CSV/XLSX/JSON importer |
+| `@splitin/outreach-e2e` (private) | M6 | Import-to-audit end-to-end suite on fake providers |
 | `@splitin/outreach-server`, `-cli`, `-mcp` | M7, M9 | Surfaces |
 | `@splitin/outreach-notify-slack`, `-provider-email-*` | M8 | Adapters |
 

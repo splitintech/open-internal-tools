@@ -127,6 +127,18 @@ export function setEnrollmentState(env: DomainEnv, ctx: AuthContext, enrollmentI
   });
 }
 
+/** Routes inbound notifications (replies, opt-outs, bounces, complaints) to a notification account, or turns them off. */
+export function configureNotifications(env: DomainEnv, ctx: AuthContext, notifyAccountId: string | null): void {
+  requireRole(ctx, 'admin');
+  env.db.transaction(() => {
+    const now = env.now();
+    const row = env.db.prepare('SELECT settings FROM workspaces WHERE id = ?').get<{ settings: string }>(ctx.workspaceId);
+    const settings = { ...(JSON.parse(row?.settings ?? '{}') as Record<string, unknown>), notifyAccountId };
+    env.db.prepare('UPDATE workspaces SET settings = ? WHERE id = ?').run(JSON.stringify(settings), ctx.workspaceId);
+    audit(env.db, ctx, now, 'workspace', ctx.workspaceId, 'notifications_configured', { notifyAccountId });
+  });
+}
+
 export interface ManualTaskRow {
   id: string;
   action_id: string;

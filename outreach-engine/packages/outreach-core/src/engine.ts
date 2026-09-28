@@ -6,6 +6,8 @@ import type { ActionRow, CrashHooks, ExecutionConfig, ExecutionDeps, SendGate } 
 import { actorOf, audit, requireRole, type AuthContext, type Role } from './domain/auth';
 import type { DomainEnv, UnsubscribeConfig } from './domain/env';
 import { domainChecks, domainEffects, domainRatePolicy } from './domain/wiring';
+import { pollDueMailboxes } from './inbound/ingest';
+import { processInboundEvents, type ProcessReport } from './inbound/process';
 
 export interface EngineConfig {
   readonly db: SqlDatabase;
@@ -20,12 +22,22 @@ export interface EngineConfig {
   readonly manual?: ManualTaskProvider;
   readonly hooks?: CrashHooks;
   readonly random?: () => number;
+  /** How often each mailbox is polled as a webhook fallback (default 5 minutes). */
+  readonly pollIntervalMs?: number;
+}
+
+export interface WorkerPassReport extends ExecutionPassReport {
+  readonly polled: number;
+  readonly inbound: ProcessReport;
 }
 
 export interface Engine extends DomainEnv {
   readonly exec: ExecutionDeps;
-  /** One worker pass: sweep leases, reconcile, execute due actions. Idempotent and safe to run concurrently. */
-  runOnce(): Promise<ExecutionPassReport>;
+  /**
+   * One worker pass: poll due mailboxes, apply inbound events (so replies stop sequences BEFORE the next
+   * send), then sweep leases, reconcile and execute due actions. Idempotent and safe to run concurrently.
+   */
+  runOnce(): Promise<WorkerPassReport>;
 }
 
 export function createEngine(config: EngineConfig): Engine {
@@ -55,7 +67,16 @@ export function createEngine(config: EngineConfig): Engine {
   };
   const env: DomainEnv = { db: config.db, now, adapters, exec, ...(config.unsubscribe ? { unsubscribe: config.unsubscribe } : {}) };
   holder.env = env;
-  return { ...env, exec, runOnce: () => runExecutionPass(exec) };
+  const pollIntervalMs = config.pollIntervalMs ?? 5 * 60_000;
+  return {
+    ...env,
+    exec,
+    runOnce: async () => {
+      const polled = await pollDueMailboxes(env, pollIntervalMs);
+      const inbound = processInboundEvents(env);
+      return { polled, inbound, ...(await runExecutionPass(exec)) };
+    },
+  };
 }
 
 /** Creates a workspace and its first admin. The only operation that needs no existing principal. */
