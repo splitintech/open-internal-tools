@@ -1,5 +1,6 @@
 import {
   listManualTasks,
+  listUpcoming,
   listReview,
   recordManualOutcome,
   resolveReview,
@@ -18,6 +19,11 @@ const resolution = z.discriminatedUnion('kind', [
 ]);
 
 export function registerOperationRoutes(app: Hono<ServerEnv>, engine: Engine): void {
+  app.get('/v1/actions/upcoming', (c) => {
+    const hours = z.coerce.number().int().min(1).max(168).default(24).parse(c.req.query('hours') ?? undefined);
+    return c.json({ actions: listUpcoming(engine, auth(c), hours) });
+  });
+
   app.get('/v1/tasks', (c) => {
     const status = z.enum(['open', 'done', 'skipped', 'expired']).default('open').parse(c.req.query('status'));
     return c.json({ tasks: listManualTasks(engine, auth(c), status) });

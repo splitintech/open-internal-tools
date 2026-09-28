@@ -834,7 +834,7 @@ Papr is a host, not a dependency. The engine's packages never import Papr code.
 
 | Papr primitive | Use |
 |---|---|
-| Registry database (`create_database`) | Holds the engine's SQLite file. Jobs declare it in `writeDbIds`. |
+| Own SQLite file (not a registry database) | `~/Papr/outreach/outreach.db`. Papr's synced registry databases block raw multi-statement writes, so the engine keeps its own file (ADR 0004). |
 | `node` jobs | `outreach worker --once` every 1 min; `--only reconciler` every 5 min; `--only health` every 15 min. |
 | Custom keys | Provider secrets injected as env vars. `secret_ref = env:NAME`. |
 | Mini-app | Operator UI (below), calling the engine through its HTTP API bound to loopback, or directly through the app backend. |
@@ -844,7 +844,7 @@ Papr is a host, not a dependency. The engine's packages never import Papr code.
 
 UI intent: the Today view is a timeline of everything scheduled to go out in the next 24 hours. Each item shows the recipient, the frozen preview, why it is waiting (window, budget, approval), and one control that stops it. Beside it sit the approval queue, the review queue (uncertain sends, ambiguous replies, weak matches), manual tasks, imports and health. It follows Papr's mini-app design system; no parallel design language.
 
-**M7.0 spike (required before building):** confirm on Papr v2.6.18 how a job receives its registry database path (`jobDbProxyEnv.ts`, `jobSdkEnv.ts`), whether `node` jobs can run an npm binary, how custom keys arrive in the environment, and how local-only placement is declared. The findings go in ADR 0005.
+**M7.0 spike (required before building):** confirm on Papr v2.6.18 how a job receives its registry database path (`jobDbProxyEnv.ts`, `jobSdkEnv.ts`), whether `node` jobs can run an npm binary, how custom keys arrive in the environment, and how local-only placement is declared. Done: the findings are in ADR 0004 (`docs/adr/0004-papr-host-integration.md`).
 
 Papr jobs stop when the desktop sleeps. That is acceptable for a pilot. Production uses the standalone worker (`--loop` under systemd or launchd) with Papr as the UI only; both point at the same engine API.
 

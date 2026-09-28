@@ -130,6 +130,47 @@ export function listCampaigns(env: DomainEnv, ctx: AuthContext): CampaignSummary
   return env.db.prepare('SELECT id, name, purpose, status, created_at FROM campaigns WHERE workspace_id = ? ORDER BY created_at DESC').all<CampaignSummary>(ctx.workspaceId);
 }
 
+export interface UpcomingAction {
+  readonly id: string;
+  readonly kind: string;
+  readonly state: string;
+  readonly dueAt: number;
+  readonly recipient: string | null;
+  readonly subject: string | null;
+  readonly campaignId: string | null;
+  readonly campaignName: string | null;
+  /** Why it is waiting, if it is (window, approval, budget, kill switch, pause). */
+  readonly waitingOn: string | null;
+}
+
+/** What will leave the building in the next `hours`, including what is held and why. Bodies are never returned. */
+export function listUpcoming(env: DomainEnv, ctx: AuthContext, hours = 24, limit = 200): UpcomingAction[] {
+  requireRole(ctx, 'viewer');
+  const until = env.now() + Math.min(Math.max(hours, 1), 168) * 3_600_000;
+  const rows = env.db
+    .prepare(
+      `SELECT a.id, a.kind, a.state, a.due_at, a.recipient_norm, a.payload, a.campaign_id, a.state_reason, c.name AS campaign_name
+       FROM scheduled_actions a LEFT JOIN campaigns c ON c.id = a.campaign_id
+       WHERE a.workspace_id = ? AND a.state IN ('scheduled','awaiting_approval','claimed','executing') AND a.due_at <= ?
+       ORDER BY a.due_at, a.id LIMIT ?`,
+    )
+    .all<{ id: string; kind: string; state: string; due_at: number; recipient_norm: string | null; payload: string; campaign_id: string | null; state_reason: string | null; campaign_name: string | null }>(ctx.workspaceId, until, Math.min(limit, 1000));
+  return rows.map((row) => {
+    const payload = JSON.parse(row.payload) as { subject?: string; title?: string; channel?: string };
+    return {
+    id: row.id,
+    kind: row.kind,
+    state: row.state,
+    dueAt: row.due_at,
+    recipient: row.recipient_norm,
+    subject: payload.subject ?? payload.title ?? (payload.channel ? `${payload.channel} task` : null),
+    campaignId: row.campaign_id,
+    campaignName: row.campaign_name,
+    waitingOn: row.state === 'awaiting_approval' ? 'approval' : row.state_reason,
+    };
+  });
+}
+
 export interface CampaignStatus {
   readonly campaignId: string;
   readonly status: string;

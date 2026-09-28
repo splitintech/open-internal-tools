@@ -12,6 +12,21 @@ export default tseslint.config(
     },
   },
   {
+    // Papr mini-app: runs in the browser.
+    files: ['apps/papr/bundle/apps/**/app.js'],
+    languageOptions: {
+      sourceType: 'script',
+      globals: { document: 'readonly', location: 'readonly', fetch: 'readonly', navigator: 'readonly', confirm: 'readonly', prompt: 'readonly', URLSearchParams: 'readonly', Intl: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly', setInterval: 'readonly' },
+    },
+  },
+  {
+    // Papr backend handlers and jobs: run in Node.
+    files: ['apps/papr/bundle/**/*.mjs'],
+    languageOptions: {
+      globals: { process: 'readonly', console: 'readonly', fetch: 'readonly', URL: 'readonly', AbortSignal: 'readonly' },
+    },
+  },
+  {
     files: ['**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
