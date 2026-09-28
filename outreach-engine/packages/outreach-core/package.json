@@ -38,10 +38,14 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@splitin/outreach-contracts": "0.0.0"
+    "@splitin/outreach-contracts": "0.0.0",
+    "luxon": "^3.7.2",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@splitin/outreach-fakes": "0.0.0",
-    "@splitin/outreach-store-sqlite": "0.0.0"
+    "@splitin/outreach-store-sqlite": "0.0.0",
+    "@types/luxon": "^3.7.5"
   }
 }
