@@ -10,8 +10,11 @@ export interface OpenOptions {
 }
 
 function configure(db: SqlDatabase, path: string, busyTimeoutMs: number): void {
-  if (path !== ':memory:') db.exec('PRAGMA journal_mode = WAL');
+  // busy_timeout first: `journal_mode` needs a lock, and another process closing the last connection holds an
+  // exclusive one while it checkpoints. Without a timeout already in place, opening then fails at once with
+  // "database is locked" instead of waiting (seen in the multi-process soak).
   db.exec(`PRAGMA busy_timeout = ${Math.max(0, Math.floor(busyTimeoutMs))}`);
+  if (path !== ':memory:') db.exec('PRAGMA journal_mode = WAL');
   db.exec('PRAGMA foreign_keys = ON');
   db.exec('PRAGMA synchronous = NORMAL');
 }
