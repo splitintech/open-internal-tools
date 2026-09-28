@@ -7,4 +7,6 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'node22',
+  // node:sqlite exists only with the protocol prefix.
+  removeNodeProtocol: false,
 });
