@@ -41,3 +41,4 @@ jobs:
       - run: npm run boundaries
       - run: npm run secrets
       - run: npm run loc
+      - run: npm run soak

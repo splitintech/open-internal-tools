@@ -70,6 +70,8 @@ export class FakeEmailProvider {
   private readonly webhookSecret: string;
   private readonly externalIdempotency: boolean;
   private counter = 0;
+  /** Distinguishes ids across fake instances (e.g. several worker processes in the soak test). */
+  private readonly instance = Math.random().toString(36).slice(2, 8);
 
   constructor(options: FakeEmailOptions = {}) {
     this.name = options.name ?? 'fake-email';
@@ -179,8 +181,8 @@ export class FakeEmailProvider {
     this.counter += 1;
     const parent = email.inReplyTo ? this.deliveries.find((d) => d.rfcMessageId === email.inReplyTo) : undefined;
     const delivery: FakeDelivery = {
-      providerMessageId: `fake-msg-${this.counter}`,
-      providerThreadId: email.providerThreadId ?? parent?.providerThreadId ?? `fake-thread-${this.counter}`,
+      providerMessageId: `fake-msg-${this.instance}-${this.counter}`,
+      providerThreadId: email.providerThreadId ?? parent?.providerThreadId ?? `fake-thread-${this.instance}-${this.counter}`,
       rfcMessageId: email.rfcMessageId,
       idempotencyKey: email.idempotencyKey,
       actionId: email.actionId,
@@ -245,9 +247,9 @@ export class FakeEmailProvider {
     const { at, ...rest } = input;
     const event: InboundMailEvent = {
       ...rest,
-      eventId: `fake-evt-${this.counter}`,
-      providerMessageId: `fake-in-${this.counter}`,
-      rfcMessageId: rest.rfcMessageId ?? `<fake-in-${this.counter}@example.net>`,
+      eventId: `fake-evt-${this.instance}-${this.counter}`,
+      providerMessageId: `fake-in-${this.instance}-${this.counter}`,
+      rfcMessageId: rest.rfcMessageId ?? `<fake-in-${this.instance}-${this.counter}@example.net>`,
       receivedAt: at ?? Date.now(),
     };
     this.inbound.push(event);
