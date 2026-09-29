@@ -2,7 +2,7 @@ import { chmodSync, mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs'
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { FakeGmailServer } from '@splitin/outreach-fakes';
+import { FakeGmailServer, FakeGraphServer } from '@splitin/outreach-fakes';
 import { main } from './main';
 import { envSecrets } from './runtime';
 
@@ -42,6 +42,30 @@ describe('outreach account connect gmail', () => {
     expect(await envSecrets(env).get(`file:${out}`)).toContain('refresh-token-value');
     chmodSync(out, 0o644);
     await expect(envSecrets(env).get(`file:${out}`)).rejects.toThrow(/readable by other users/);
+  });
+
+  it('connects Outlook (public client, localhost redirect) and file: secrets accept rotated tokens atomically', async () => {
+    const graph = await new FakeGraphServer().start();
+    const dir = mkdtempSync(join(tmpdir(), 'outreach-connect-'));
+    cleanup.push(() => graph.stop(), () => rmSync(dir, { recursive: true, force: true }));
+    const out = join(dir, 'outlook.json');
+    const env = { HOME: dir, OUTREACH_MICROSOFT_AUTHORITY: graph.url, OUTREACH_GRAPH_API: graph.url };
+    let stdout = '';
+    const code = await main(['account', 'connect', 'outlook', '--tenant', graph.tenant, '--client-id', 'ms-client', '--out', out, '--json'], {
+      env,
+      write: (text) => (stdout += text),
+      writeError: () => {},
+      openUrl: (url) => void fetch(url),
+    });
+    expect(code).toBe(0);
+    expect(JSON.parse(stdout)).toMatchObject({ connected: 'sam@contoso.example', secretRef: `file:${out}` });
+    expect(statSync(out).mode & 0o777).toBe(0o600);
+
+    const secrets = envSecrets(env);
+    await secrets.put?.(`file:${out}`, JSON.stringify({ tenant: graph.tenant, clientId: 'ms-client', refreshToken: 'ms-refresh-2' }));
+    expect(statSync(out).mode & 0o777).toBe(0o600);
+    expect(JSON.parse(await secrets.get(`file:${out}`))).toMatchObject({ refreshToken: 'ms-refresh-2' });
+    await expect(secrets.put?.('env:NOPE', 'x')).rejects.toThrow(/cannot be updated/);
   });
 
   it('refuses to run without the client secret in the environment', async () => {

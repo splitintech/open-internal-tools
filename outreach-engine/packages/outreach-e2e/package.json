@@ -14,6 +14,7 @@
     "@splitin/outreach-fakes": "0.0.0",
     "@splitin/outreach-import": "0.0.0",
     "@splitin/outreach-provider-email-gmail": "0.0.0",
+    "@splitin/outreach-provider-email-outlook": "0.0.0",
     "@splitin/outreach-store-sqlite": "0.0.0"
   }
 }

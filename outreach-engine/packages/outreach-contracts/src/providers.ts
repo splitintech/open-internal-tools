@@ -24,6 +24,11 @@ export interface ProviderAccountRef {
 /** Resolves a secret reference ("env:NAME", "keychain:NAME") at call time. Values are never stored. */
 export interface SecretResolver {
   get(ref: string): Promise<string>;
+  /**
+   * Replaces a secret's value, for credentials the provider rotates (Microsoft refresh tokens). Optional:
+   * resolvers that cannot write (environment variables) omit it, and callers must cope.
+   */
+  put?(ref: string, value: string): Promise<void>;
 }
 
 export interface ProviderContext {

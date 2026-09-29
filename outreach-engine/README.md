@@ -12,7 +12,7 @@ pause, and records every transition in an append-only audit log.
 The engine is the product. The CLI, HTTP API, MCP server, Slack and the Papr Work app
 are thin clients of it.
 
-> **Status: M0–M7 complete, the D5 jurisdiction policy, and the Gmail adapter (M8, part 1).** Contracts, fakes, SQLite store, the durable execution core,
+> **Status: M0–M7 complete, the D5 jurisdiction policy, the Gmail and Outlook adapters and the health checker (M8).** Contracts, fakes, SQLite store, the durable execution core,
 > the campaign domain, the importer, inbound processing, the `outreach` CLI, the HTTP API
 > and the Papr Work console are built and tested on fake providers. Real provider adapters
 > and Slack are M8, MCP is M9.
@@ -44,7 +44,9 @@ are thin clients of it.
 | `apps/papr` | M7 | Papr Work bundle: Outreach Console mini-app, worker job, agent skill |
 | `@splitin/outreach-mcp` | M9 | MCP server |
 | `@splitin/outreach-provider-email-gmail` | M8 | Gmail adapter: send as the mailbox user, Sent-folder reconciliation, History API inbound, loopback OAuth |
-| `@splitin/outreach-notify-slack`, Outlook, Zoho Mail | M8 | Remaining adapters |
+| `@splitin/outreach-provider-email-outlook` | M8 | Outlook / Exchange Online adapter via Microsoft Graph: MIME draft-then-send, Sent Items reconciliation, rotating refresh tokens |
+| `@splitin/outreach-provider-kit` | M8 | Shared adapter building blocks: HTTP outcome classification, loopback OAuth (PKCE), DSN parsing |
+| `@splitin/outreach-notify-slack`, Zoho Mail | M8 | Remaining adapters |
 
 ## Develop
 

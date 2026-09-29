@@ -1,14 +1,14 @@
 {
-  "name": "@splitin/outreach-cli",
+  "name": "@splitin/outreach-provider-email-outlook",
   "version": "0.0.0",
-  "description": "The outreach command line: setup, imports, campaigns, approvals, tasks, review, worker and HTTP server.",
+  "description": "Microsoft Graph (Outlook / Exchange Online) adapter for the outreach engine: MIME draft-then-send, Sent Items reconciliation, inbox polling, rotating refresh tokens.",
   "license": "MIT",
   "author": "SplitInTech",
   "homepage": "https://github.com/splitintech/open-internal-tools/tree/main/outreach-engine#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/splitintech/open-internal-tools.git",
-    "directory": "outreach-engine/packages/outreach-cli"
+    "directory": "outreach-engine/packages/outreach-provider-email-outlook"
   },
   "type": "module",
   "sideEffects": false,
@@ -39,15 +39,9 @@
   },
   "dependencies": {
     "@splitin/outreach-contracts": "0.0.0",
-    "@splitin/outreach-core": "0.0.0",
-    "@splitin/outreach-fakes": "0.0.0",
-    "@splitin/outreach-import": "0.0.0",
-    "@splitin/outreach-provider-email-gmail": "0.0.0",
-    "@splitin/outreach-provider-email-outlook": "0.0.0",
-    "@splitin/outreach-server": "0.0.0",
-    "@splitin/outreach-store-sqlite": "0.0.0"
+    "@splitin/outreach-provider-kit": "0.0.0"
   },
-  "bin": {
-    "outreach": "./dist/bin.js"
+  "devDependencies": {
+    "@splitin/outreach-fakes": "0.0.0"
   }
 }

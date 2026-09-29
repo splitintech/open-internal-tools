@@ -51,6 +51,19 @@ export interface JsonRequest {
   readonly headers?: Readonly<Record<string, string>>;
 }
 
+/** One HTTP call whose response body is returned as text (e.g. raw MIME). */
+export async function textRequest(deps: HttpDeps, request: Omit<JsonRequest, 'json' | 'text' | 'contentType'>): Promise<{ status: number; text: string }> {
+  const headers: Record<string, string> = { ...(request.headers ?? {}) };
+  if (request.token) headers.authorization = `Bearer ${request.token}`;
+  try {
+    const response = await deps.fetch(request.url, { method: request.method, headers, signal: AbortSignal.any([request.signal, AbortSignal.timeout(deps.timeoutMs)]) });
+    return { status: response.status, text: await response.text() };
+  } catch (error) {
+    const code = failureCode(error);
+    throw new ProviderNetworkError(!CONNECT_FAILURES.has(code), `request failed (${code || (error as Error).name})`);
+  }
+}
+
 /** One HTTP call with a JSON (or empty) response; network failures carry whether the server was reached. */
 export async function jsonRequest(deps: HttpDeps, request: JsonRequest): Promise<JsonResponse> {
   const headers: Record<string, string> = { ...(request.headers ?? {}) };

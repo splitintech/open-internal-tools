@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { homedir, userInfo } from 'node:os';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -55,6 +55,14 @@ export function envSecrets(env: NodeJS.ProcessEnv = process.env): SecretResolver
         return readFileSync(path, 'utf8').trim();
       }
       throw new Error(`secret reference ${ref} is not supported by the CLI; use env:NAME or file:PATH`);
+    },
+    // Only file: secrets can be rewritten (rotated OAuth refresh tokens); the write is atomic and owner-only.
+    async put(ref, value) {
+      if (!ref.startsWith('file:')) throw new Error(`secret ${ref} cannot be updated; store it as file:PATH to keep rotated tokens`);
+      const path = resolve(expandHome(ref.slice(5), env));
+      const temp = `${path}.${process.pid}.tmp`;
+      writeFileSync(temp, `${value}\n`, { mode: 0o600 });
+      renameSync(temp, path);
     },
   };
 }
