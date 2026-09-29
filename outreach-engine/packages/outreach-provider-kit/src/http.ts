@@ -51,17 +51,31 @@ export interface JsonRequest {
   readonly headers?: Readonly<Record<string, string>>;
 }
 
-/** One HTTP call whose response body is returned as text (e.g. raw MIME). */
-export async function textRequest(deps: HttpDeps, request: Omit<JsonRequest, 'json' | 'text' | 'contentType'>): Promise<{ status: number; text: string }> {
+/**
+ * One HTTP call whose response body is returned as text (raw MIME, Slack's plain "ok"). A body cut short
+ * after the status line still counts as a response: the outcome is known from the status.
+ */
+export async function textRequest(deps: HttpDeps, request: JsonRequest): Promise<{ status: number; text: string; retryAfterMs?: number }> {
   const headers: Record<string, string> = { ...(request.headers ?? {}) };
   if (request.token) headers.authorization = `Bearer ${request.token}`;
+  let body: string | undefined;
+  if (request.json !== undefined) {
+    headers['content-type'] = 'application/json; charset=utf-8';
+    body = JSON.stringify(request.json);
+  } else if (request.text !== undefined) {
+    headers['content-type'] = request.contentType ?? 'text/plain';
+    body = request.text;
+  }
+  let response: Response;
   try {
-    const response = await deps.fetch(request.url, { method: request.method, headers, signal: AbortSignal.any([request.signal, AbortSignal.timeout(deps.timeoutMs)]) });
-    return { status: response.status, text: await response.text() };
+    response = await deps.fetch(request.url, { method: request.method, headers, ...(body === undefined ? {} : { body }), signal: AbortSignal.any([request.signal, AbortSignal.timeout(deps.timeoutMs)]) });
   } catch (error) {
     const code = failureCode(error);
     throw new ProviderNetworkError(!CONNECT_FAILURES.has(code), `request failed (${code || (error as Error).name})`);
   }
+  const text = await response.text().catch(() => '');
+  const wait = parseRetryAfter(response.headers.get('retry-after'));
+  return { status: response.status, text, ...(wait === undefined ? {} : { retryAfterMs: wait }) };
 }
 
 /** One HTTP call with a JSON (or empty) response; network failures carry whether the server was reached. */

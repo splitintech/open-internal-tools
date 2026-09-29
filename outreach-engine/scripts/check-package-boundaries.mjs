@@ -18,7 +18,7 @@ const internalRules = [
   [/^@splitin\/outreach-store-sqlite$/, ['@splitin/outreach-contracts']],
   [/^@splitin\/outreach-core$/, ['@splitin/outreach-contracts']],
   [/^@splitin\/outreach-import$/, ['@splitin/outreach-contracts']],
-  [/^@splitin\/outreach-notify-[a-z0-9-]+$/, ['@splitin/outreach-contracts']],
+  [/^@splitin\/outreach-notify-[a-z0-9-]+$/, ['@splitin/outreach-contracts', '@splitin/outreach-provider-kit']],
   [/^@splitin\/outreach-provider-kit$/, ['@splitin/outreach-contracts']],
   [/^@splitin\/outreach-provider-[a-z0-9-]+$/, ['@splitin/outreach-contracts', '@splitin/outreach-provider-kit']],
   [/^@splitin\/outreach-(server|mcp|cli)$/, ANY],
