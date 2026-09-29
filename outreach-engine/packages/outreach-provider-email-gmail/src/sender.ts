@@ -9,8 +9,9 @@ import {
   type SendResult,
   type UncertainEmail,
 } from '@splitin/outreach-contracts';
-import { classifyGmailError, gmailRequest, GmailNetworkError, type GmailResponse, type HttpDeps } from './http';
-import { buildMime, IDEMPOTENCY_HEADER, MimeError } from './mime';
+import { ProviderNetworkError } from '@splitin/outreach-provider-kit';
+import { classifyGmailError, gmailRequest, type GmailResponse, type HttpDeps } from './http';
+import { buildMime, IDEMPOTENCY_HEADER, MimeError } from '@splitin/outreach-contracts';
 
 export interface SenderOptions {
   readonly http: HttpDeps;
@@ -91,8 +92,8 @@ export function gmailSender(options: SenderOptions): EmailSender {
           response = await post(ctx, token, raw, undefined);
         }
       } catch (error) {
-        if (error instanceof GmailNetworkError && !error.reachedServer) return { kind: 'rejected', errorClass: 'transient', detail: error.message };
-        return { kind: 'unknown', detail: error instanceof GmailNetworkError ? error.message : `send failed (${(error as Error).name})` };
+        if (error instanceof ProviderNetworkError && !error.reachedServer) return { kind: 'rejected', errorClass: 'transient', detail: error.message };
+        return { kind: 'unknown', detail: error instanceof ProviderNetworkError ? error.message : `send failed (${(error as Error).name})` };
       }
       if (response.status === 200 && typeof response.body.id === 'string') {
         const threadId = typeof response.body.threadId === 'string' ? response.body.threadId : undefined;
@@ -172,7 +173,7 @@ export function gmailSender(options: SenderOptions): EmailSender {
         if (ctx.now() - email.attemptedAt < options.settleMs) return { kind: 'still_unknown', detail: 'not in Sent yet; waiting for the settle window' };
         return { kind: 'absent' };
       } catch (error) {
-        return { kind: 'still_unknown', detail: error instanceof GmailNetworkError ? error.message : `reconcile failed (${(error as Error).name})` };
+        return { kind: 'still_unknown', detail: error instanceof ProviderNetworkError ? error.message : `reconcile failed (${(error as Error).name})` };
       }
     },
   };

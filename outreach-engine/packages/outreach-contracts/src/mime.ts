@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import type { ApprovedEmail, EmailAddress } from '@splitin/outreach-contracts';
+import type { ApprovedEmail, EmailAddress } from './providers';
 
 /** The message cannot be expressed safely as MIME (header injection, reserved header, bad address). */
 export class MimeError extends Error {

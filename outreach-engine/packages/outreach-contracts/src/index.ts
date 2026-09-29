@@ -6,3 +6,4 @@ export * from './providers';
 export * from './crypto';
 export * from './sql';
 export * from './audit';
+export * from './mime';

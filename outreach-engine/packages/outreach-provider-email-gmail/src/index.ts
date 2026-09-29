@@ -1,11 +1,12 @@
 import { TokenError, type AccessTokenSource, type AccountPort, type ProviderAdapter, type ProviderPurpose } from '@splitin/outreach-contracts';
-import { GMAIL_API, GmailNetworkError, gmailRequest, type HttpDeps } from './http';
+import { ProviderNetworkError } from '@splitin/outreach-provider-kit';
+import { GMAIL_API, gmailRequest, type HttpDeps } from './http';
 import { gmailMailbox } from './mailbox';
 import { gmailSender } from './sender';
 import { googleRefreshTokenSource } from './token';
 
-export { buildMime, IDEMPOTENCY_HEADER, MimeError } from './mime';
-export { classifyGmailError, GMAIL_API, GmailNetworkError } from './http';
+export { buildMime, IDEMPOTENCY_HEADER, MimeError } from '@splitin/outreach-contracts';
+export { classifyGmailError, GMAIL_API } from './http';
 export { authorizeGoogle, GOOGLE_AUTH_URL, type GoogleAuthorization, type GoogleAuthorizeOptions } from './oauth';
 export { GOOGLE_TOKEN_URL, googleRefreshTokenSource, parseGoogleGrant, type GoogleGrant, type GoogleTokenOptions } from './token';
 
@@ -76,7 +77,7 @@ export function gmailAdapter(options: GmailAdapterOptions = {}): ProviderAdapter
         if (profile.status === 403) return { status: 'unhealthy', detail: 'Gmail refused access (scopes or account policy)' };
         return { status: 'degraded', detail: `Gmail HTTP ${profile.status}` };
       } catch (error) {
-        return { status: 'degraded', detail: error instanceof GmailNetworkError ? error.message : (error as Error).name };
+        return { status: 'degraded', detail: error instanceof ProviderNetworkError ? error.message : (error as Error).name };
       }
     },
   };

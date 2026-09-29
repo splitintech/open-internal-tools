@@ -1,4 +1,5 @@
 import type { AccessTokenSource, InboundMailEvent, MailboxReader, ProviderContext } from '@splitin/outreach-contracts';
+import { decodeHtmlEntities, looksLikeBounce as looksLikeBounceKit, parseDeliveryStatus } from '@splitin/outreach-provider-kit';
 import { gmailRequest, type HttpDeps } from './http';
 
 export interface MailboxOptions {
@@ -63,15 +64,6 @@ function decode(data: string | undefined): string {
   return data ? Buffer.from(data, 'base64url').toString('utf8') : '';
 }
 
-function decodeEntities(text: string): string {
-  return text
-    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&');
-}
-
 function walk(part: Part | undefined, visit: (part: Part) => void): void {
   if (!part) return;
   visit(part);
@@ -79,9 +71,7 @@ function walk(part: Part | undefined, visit: (part: Part) => void): void {
 }
 
 function looksLikeBounce(headers: Record<string, string>): boolean {
-  const from = find(headers, 'From') ?? '';
-  const contentType = find(headers, 'Content-Type') ?? '';
-  return /mailer-daemon@|postmaster@/i.test(from) || /report-type="?delivery-status/i.test(contentType);
+  return looksLikeBounceKit(find(headers, 'From') ?? '', find(headers, 'Content-Type') ?? '');
 }
 
 /**
@@ -95,9 +85,9 @@ function parseDsn(message: GmailMessage): InboundMailEvent['dsn'] {
   walk(message.payload, (part) => {
     const type = part.mimeType?.toLowerCase();
     if (type === 'message/delivery-status') {
-      const text = decode(part.body?.data);
-      status = /^Status:\s*(\d\.\d{1,3}\.\d{1,3})/im.exec(text)?.[1] ?? status;
-      recipient = /^Final-Recipient:\s*rfc822;\s*(\S+)/im.exec(text)?.[1]?.toLowerCase() ?? recipient;
+      const parsed = parseDeliveryStatus(decode(part.body?.data));
+      status ||= parsed.status;
+      recipient ??= parsed.recipient;
     }
     if (type === 'text/rfc822-headers' || type === 'message/rfc822') {
       const text = decode(part.body?.data);
@@ -149,7 +139,7 @@ export function gmailMailbox(options: MailboxOptions): MailboxReader {
       headers,
       ...(contentType ? { contentType } : {}),
       ...(bounce ? { dsn: parseDsn(message) } : {}),
-      ...(message.snippet ? { snippet: decodeEntities(message.snippet).slice(0, 500) } : {}),
+      ...(message.snippet ? { snippet: decodeHtmlEntities(message.snippet).slice(0, 500) } : {}),
     };
   };
 
