@@ -1,0 +1,44 @@
+name: outreach-engine
+
+on:
+  push:
+    paths:
+      - "outreach-engine/**"
+      - ".github/workflows/outreach-engine.yml"
+  pull_request:
+    paths:
+      - "outreach-engine/**"
+      - ".github/workflows/outreach-engine.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: outreach-engine
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: outreach-engine/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run boundaries
+      - run: npm run secrets
+      - run: npm run loc
+      - run: npm run soak
