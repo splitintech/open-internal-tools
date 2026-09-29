@@ -3,6 +3,7 @@ import {
   ROLES,
   addPrincipal,
   bootstrapWorkspace,
+  checkAccountHealth,
   configureNotifications,
   createApiToken,
   JURISDICTION_RULES,
@@ -126,6 +127,16 @@ export const setupCommands: Command[] = [
         ...(flag(flags, 'webhook-secret') ? { webhookSecretRef: flag(flags, 'webhook-secret') as string } : {}),
       });
       out.result({ providerAccountId: id });
+    },
+  },
+  {
+    name: 'account check',
+    usage: 'outreach account check <provider-account-id>',
+    summary: 'Ask the provider for the account health now (a revoked grant shows reauth_required).',
+    async run({ args, out, runtime }) {
+      const rt = await runtime();
+      rt.ctx();
+      out.result(await checkAccountHealth(rt.engine, arg(args, 0, 'provider-account-id')));
     },
   },
   {

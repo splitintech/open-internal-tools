@@ -7,6 +7,7 @@ import { readSendGate } from './domain/access';
 import { NotFoundError, actorOf, audit, requireRole, type AuthContext, type Role } from './domain/auth';
 import type { DomainEnv, UnsubscribeConfig } from './domain/env';
 import { domainChecks, domainEffects, domainRatePolicy } from './domain/wiring';
+import { checkDueAccountHealth } from './domain/health';
 import { pollDueMailboxes } from './inbound/ingest';
 import { processInboundEvents, type ProcessReport } from './inbound/process';
 
@@ -28,9 +29,12 @@ export interface EngineConfig {
   readonly random?: () => number;
   /** How often each mailbox is polled as a webhook fallback (default 5 minutes). */
   readonly pollIntervalMs?: number;
+  /** How often each account's health is re-checked with its provider (default 15 minutes, §6.5). */
+  readonly healthIntervalMs?: number;
 }
 
 export interface WorkerPassReport extends ExecutionPassReport {
+  readonly health: { readonly checked: number; readonly changed: number };
   readonly polled: number;
   readonly inbound: ProcessReport;
 }
@@ -38,7 +42,7 @@ export interface WorkerPassReport extends ExecutionPassReport {
 export interface Engine extends DomainEnv {
   readonly exec: ExecutionDeps;
   /**
-   * One worker pass: poll due mailboxes, apply inbound events (so replies stop sequences BEFORE the next
+   * One worker pass: re-check due account health, poll due mailboxes, apply inbound events (so replies stop sequences BEFORE the next
    * send), then sweep leases, reconcile and execute due actions. Idempotent and safe to run concurrently.
    */
   runOnce(): Promise<WorkerPassReport>;
@@ -72,13 +76,16 @@ export function createEngine(config: EngineConfig): Engine {
   const env: DomainEnv = { db: config.db, now, adapters, exec, ...(config.unsubscribe ? { unsubscribe: config.unsubscribe } : {}) };
   holder.env = env;
   const pollIntervalMs = config.pollIntervalMs ?? 5 * 60_000;
+  const healthIntervalMs = config.healthIntervalMs ?? 15 * 60_000;
   return {
     ...env,
     exec,
     runOnce: async () => {
+      // Health first: an account that recovered (or broke) since the last pass is treated accordingly now.
+      const health = await checkDueAccountHealth(env, healthIntervalMs);
       const polled = await pollDueMailboxes(env, pollIntervalMs);
       const inbound = processInboundEvents(env);
-      return { polled, inbound, ...(await runExecutionPass(exec)) };
+      return { health, polled, inbound, ...(await runExecutionPass(exec)) };
     },
   };
 }

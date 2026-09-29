@@ -5,6 +5,7 @@ import { ConflictError, NotFoundError, actorOf, audit, requireRole, type AuthCon
 import type { DomainEnv, EnrollmentRow } from './env';
 import { loadStepContext, materializeNext, stepIndex } from './materialize';
 import { actionApprover } from './campaigns';
+import { checkAccountHealth } from './health';
 import { JurisdictionCode } from './jurisdictions';
 import { addSuppression, normalizeEmail, stopEnrollment, type SuppressionInput } from './suppressions';
 
@@ -33,7 +34,9 @@ export interface RegisterAccountInput {
 /** Registers a sending account and records the adapter's capability snapshot. Secrets are references only. */
 export async function registerProviderAccount(env: DomainEnv, ctx: AuthContext, input: RegisterAccountInput): Promise<string> {
   requireRole(ctx, 'admin');
-  if (!/^(env|keychain):[A-Za-z0-9_.-]+$/.test(input.secretRef)) throw new Error('secretRef must look like env:NAME or keychain:NAME');
+  if (!/^((env|keychain):[A-Za-z0-9_.-]+|file:[^\0\r\n]+)$/.test(input.secretRef)) {
+    throw new Error('secretRef must look like env:NAME, keychain:NAME or file:PATH');
+  }
   const adapter = env.adapters.get(input.provider);
   if (!adapter) throw new NotFoundError(`adapter ${input.provider}`);
   const id = ulid(env.now());
@@ -58,6 +61,8 @@ export async function registerProviderAccount(env: DomainEnv, ctx: AuthContext, 
     ).run(id, ctx.workspaceId, input.provider, input.externalAccountId, row.sender_identity, row.purposes, JSON.stringify(capabilities), input.secretRef, row.webhook_secret_ref, now);
     audit(env.db, ctx, now, 'provider_account', id, 'registered', { provider: input.provider, purposes: input.purposes });
   });
+  // Surface a wrong mailbox or a broken grant now, not at the first send.
+  await checkAccountHealth(env, id);
   return id;
 }
 
