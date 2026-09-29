@@ -36,6 +36,28 @@ export interface ProviderContext {
   readonly now: () => number;
 }
 
+/**
+ * Supplies OAuth access tokens to adapters that act as a mailbox user. The grant may be held by the engine
+ * (a refresh token behind `secretRef`) or by a host, such as Papr's planned server-side connectors
+ * (BUILD_PLAN.md §19 D1). Adapters never see how the token was obtained.
+ */
+export interface AccessTokenSource {
+  get(ctx: ProviderContext): Promise<string>;
+  /** Called after the provider rejects a token (HTTP 401), so the next `get` fetches a fresh one. */
+  invalidate(ctx: ProviderContext): void;
+}
+
+/** A token could not be obtained; `errorClass` says whether reconnecting the account is needed. */
+export class TokenError extends Error {
+  constructor(
+    readonly errorClass: ErrorClass,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'TokenError';
+  }
+}
+
 export type AccountHealth = 'ok' | 'degraded' | 'unhealthy' | 'reauth_required';
 
 export interface AccountPort {

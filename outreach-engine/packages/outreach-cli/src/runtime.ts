@@ -1,5 +1,5 @@
-import { existsSync } from 'node:fs';
-import { userInfo } from 'node:os';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { homedir, userInfo } from 'node:os';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ulid, type ManualTaskProvider, type ProviderAdapter, type SecretResolver, type SqlDatabase } from '@splitin/outreach-contracts';
@@ -29,7 +29,15 @@ export class UsageError extends Error {
   }
 }
 
-/** Secrets come from the environment only; the database stores references ("env:NAME"). */
+export function expandHome(path: string, env: NodeJS.ProcessEnv = process.env): string {
+  return path === '~' || path.startsWith('~/') ? `${env.HOME ?? homedir()}${path.slice(1)}` : path;
+}
+
+/**
+ * Secrets are read at call time from the environment ("env:NAME") or from a file only its owner can read
+ * ("file:PATH", e.g. an OAuth grant written by `outreach account connect gmail`). The database stores the
+ * reference, never the value.
+ */
 export function envSecrets(env: NodeJS.ProcessEnv = process.env): SecretResolver {
   return {
     async get(ref) {
@@ -38,7 +46,15 @@ export function envSecrets(env: NodeJS.ProcessEnv = process.env): SecretResolver
         if (value === undefined || value === '') throw new Error(`secret ${ref} is not set in the environment`);
         return value;
       }
-      throw new Error(`secret reference ${ref} is not supported by the CLI; use env:NAME`);
+      if (ref.startsWith('file:')) {
+        const path = resolve(expandHome(ref.slice(5), env));
+        if (!existsSync(path)) throw new Error(`secret file ${path} does not exist`);
+        if (process.platform !== 'win32' && (statSync(path).mode & 0o077) !== 0) {
+          throw new Error(`secret file ${path} is readable by other users; run chmod 600 on it`);
+        }
+        return readFileSync(path, 'utf8').trim();
+      }
+      throw new Error(`secret reference ${ref} is not supported by the CLI; use env:NAME or file:PATH`);
     },
   };
 }

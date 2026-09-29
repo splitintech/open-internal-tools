@@ -10,6 +10,9 @@ export interface CommandInput {
   readonly options: GlobalOptions;
   /** The environment of this invocation (never read process.env directly). */
   readonly env: NodeJS.ProcessEnv;
+  /** Human-facing progress on stderr, shown even with --json (e.g. a sign-in URL). */
+  notice(text: string): void;
+  readonly openUrl?: (url: string) => void;
   /** Opens the database and engine lazily (some commands, like `init`, prepare it themselves). */
   runtime(): Promise<Runtime>;
 }

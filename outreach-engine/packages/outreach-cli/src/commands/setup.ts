@@ -107,7 +107,7 @@ export const setupCommands: Command[] = [
   },
   {
     name: 'account add',
-    usage: 'outreach account add --provider <adapter> --external-id <id> --sender-name <n> --sender-email <e> --purposes <p,...> --secret env:NAME [--org <o>] [--postal <address>] [--webhook-secret env:NAME]',
+    usage: 'outreach account add --provider <adapter> --external-id <id> --sender-name <n> --sender-email <e> --purposes <p,...> --secret env:NAME|file:PATH [--org <o>] [--postal <address>] [--webhook-secret env:NAME]',
     summary: 'Register a provider account; purposes are what your contract with the provider allows.',
     flags: { provider: 'string', 'external-id': 'string', 'sender-name': 'string', 'sender-email': 'string', purposes: 'string', secret: 'string', org: 'string', postal: 'string', 'webhook-secret': 'string' },
     async run({ flags, out, runtime }) {

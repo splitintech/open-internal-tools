@@ -1,5 +1,6 @@
 import { parseArgs } from 'node:util';
 import { campaignCommands } from './commands/campaigns';
+import { connectCommands } from './commands/connect';
 import { contentCommands } from './commands/content';
 import { runtimeCommands } from './commands/serve';
 import { setupCommands } from './commands/setup';
@@ -7,7 +8,7 @@ import type { Command, Flags } from './commands/types';
 import { createOutput } from './output';
 import { UsageError, openRuntime, type GlobalOptions, type Runtime } from './runtime';
 
-export const COMMANDS: readonly Command[] = [...setupCommands, ...contentCommands, ...campaignCommands, ...runtimeCommands];
+export const COMMANDS: readonly Command[] = [...setupCommands, ...connectCommands, ...contentCommands, ...campaignCommands, ...runtimeCommands];
 
 const GLOBAL_FLAGS = {
   db: { type: 'string' },
@@ -33,7 +34,7 @@ function help(): string {
 }
 
 function findCommand(positionals: readonly string[]): { command: Command; args: string[] } | null {
-  for (const words of [2, 1]) {
+  for (const words of [3, 2, 1]) {
     const name = positionals.slice(0, words).join(' ');
     const command = COMMANDS.find((c) => c.name === name);
     if (command) return { command, args: positionals.slice(words) };
@@ -45,6 +46,8 @@ export interface MainIo {
   readonly env?: NodeJS.ProcessEnv;
   readonly write?: (text: string) => void;
   readonly writeError?: (text: string) => void;
+  /** Stands in for the user's browser in tests of sign-in flows. By default URLs are only printed. */
+  readonly openUrl?: (url: string) => void;
 }
 
 /** Runs one CLI invocation. Returns the exit code: 0 ok, 1 error, 2 usage. */
@@ -91,6 +94,8 @@ export async function main(argv: readonly string[], io: MainIo = {}): Promise<nu
       out,
       options,
       env,
+      notice: (text) => writeError(`${text}\n`),
+      ...(io.openUrl ? { openUrl: io.openUrl } : {}),
       runtime: async () => (runtime ??= await openRuntime(options, env)),
     });
     return code ?? 0;
