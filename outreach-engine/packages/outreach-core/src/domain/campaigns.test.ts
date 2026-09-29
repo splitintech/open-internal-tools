@@ -51,7 +51,8 @@ describe('campaign lifecycle', () => {
     expect(env.fake.deliveries).toHaveLength(2);
     const intro = env.fake.deliveries.find((d) => d.to[0] === 'ada@example.org');
     expect(intro?.subject).toBe('Quick question, Ada');
-    expect(intro?.headers['List-Unsubscribe']).toMatch(/^<https:\/\/outreach\.example\.com\/u\/.+>$/);
+    expect(intro?.headers['List-Unsubscribe']).toMatch(/^<https:\/\/outreach\.example\.com\/u\/[^>]+>, <mailto:sender@example\.com\?subject=unsubscribe>$/);
+    expect(intro?.headers['List-Unsubscribe-Post']).toBe('List-Unsubscribe=One-Click');
 
     // Three business days later (Tue -> Fri), the threaded follow-up goes out.
     env.advance(2 * DAY);

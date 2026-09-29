@@ -6,6 +6,12 @@ export interface UnsubscribeConfig {
   readonly baseUrl: string;
   /** HMAC secret for tokens; resolved once at startup, never stored in the database. */
   readonly secret: string;
+  /**
+   * Whether `baseUrl` is this engine's own POST /u/:token endpoint, so mail may advertise RFC 8058 one-click
+   * (List-Unsubscribe-Post). Set false when the link opens a page instead (e.g. a hosted confirmation page):
+   * a mailbox provider's one-click POST to a page would silently do nothing. Default true.
+   */
+  readonly oneClick?: boolean;
 }
 
 export interface DomainEnv {

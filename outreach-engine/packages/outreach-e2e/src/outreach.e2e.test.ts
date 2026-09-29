@@ -124,7 +124,7 @@ describe('outreach end to end', () => {
     now += 60_000;
     await drain();
     expect(email.deliveries).toHaveLength(4);
-    expect(email.deliveries.every((d) => /^<https:\/\/outreach\.example\.com\/u\/.+>$/.test(d.headers['List-Unsubscribe'] ?? ''))).toBe(true);
+    expect(email.deliveries.every((d) => /^<https:\/\/outreach\.example\.com\/u\/[^>]+>, <mailto:/.test(d.headers['List-Unsubscribe'] ?? ''))).toBe(true);
 
     const to = (address: string) => {
       const delivery = email.deliveries.find((d) => d.to[0] === address);
@@ -134,7 +134,7 @@ describe('outreach end to end', () => {
     // Ada replies by webhook; Grace clicks unsubscribe; Linus hard-bounces; Margaret stays silent.
     const reply = email.reply(to('ada@analytical.example.org'), { at: now });
     expect(await ingestWebhook(engine, { providerAccountId: mailAccount, ...email.signWebhook([reply], now) })).toMatchObject({ accepted: true, stored: 1 });
-    const graceToken = /\/u\/([^>]+)>$/.exec(to('grace@navy.example.net').headers['List-Unsubscribe'] ?? '')?.[1] ?? '';
+    const graceToken = /\/u\/([^>]+)>/.exec(to('grace@navy.example.net').headers['List-Unsubscribe'] ?? '')?.[1] ?? '';
     expect(handleUnsubscribe(engine, graceToken)).toEqual({ ok: true, alreadySuppressed: false });
     email.bounce(to('linus@kernel.example.com'), '5.1.1', now);
     await drain();

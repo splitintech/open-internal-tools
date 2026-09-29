@@ -160,7 +160,7 @@ describe('webhook ingress and unsubscribe', () => {
 
   it('the List-Unsubscribe link suppresses immediately, stops the sequence and is idempotent', async () => {
     const { env, campaignId, first } = await started();
-    const url = /^<(.+)>$/.exec(first.headers['List-Unsubscribe'] ?? '')?.[1] ?? '';
+    const url = /^<(https:[^>]+)>/.exec(first.headers['List-Unsubscribe'] ?? '')?.[1] ?? '';
     const token = url.split('/u/')[1] ?? '';
     expect(handleUnsubscribe(env.engine, token)).toEqual({ ok: true, alreadySuppressed: false });
     expect(handleUnsubscribe(env.engine, token)).toEqual({ ok: true, alreadySuppressed: true });

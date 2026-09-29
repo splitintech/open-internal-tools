@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { bootstrapWorkspace, createEngine, type Engine } from '../engine';
 import type { SendGate } from '../execution/types';
 import { authenticate, type AuthContext } from './auth';
+import type { UnsubscribeConfig } from './env';
 import { addContact, addPrincipal, registerProviderAccount } from './operations';
 import { createTemplate } from './templates';
 
@@ -47,7 +48,7 @@ spec:
     - { id: close, type: email.reply, template: close@1, when: no_reply }
 `;
 
-export async function makeDomainEnv(options: { sendGate?: SendGate; start?: number } = {}): Promise<DomainTestEnv> {
+export async function makeDomainEnv(options: { sendGate?: SendGate; start?: number; unsubscribe?: UnsubscribeConfig } = {}): Promise<DomainTestEnv> {
   const db = openSqliteDatabase(':memory:');
   const fake = new FakeEmailProvider();
   const notifier = new FakeNotifier();
@@ -58,7 +59,7 @@ export async function makeDomainEnv(options: { sendGate?: SendGate; start?: numb
     secrets: staticSecrets({ 'env:FAKE_EMAIL': FAKE_EMAIL_SECRET, 'env:FAKE_WEBHOOK': 'fake-webhook-secret-value' }),
     workerId: 'worker-1',
     sendGate: options.sendGate ?? { mode: 'open' },
-    unsubscribe: { baseUrl: 'https://outreach.example.com/u/', secret: 'unsubscribe-test-secret-fixture' },
+    unsubscribe: options.unsubscribe ?? { baseUrl: 'https://outreach.example.com/u/', secret: 'unsubscribe-test-secret-fixture' },
     now: () => now,
     execution: { reconcileDelayMs: 0 },
     pollIntervalMs: 0,

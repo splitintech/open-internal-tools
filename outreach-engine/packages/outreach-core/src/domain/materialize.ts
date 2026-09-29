@@ -105,9 +105,12 @@ function buildEmail(env: DomainEnv, sc: StepContext, step: Extract<Step, { type:
     ? `${render(template.body_html, values, 'html')}<hr><p>${lines.map(escapeHtml).join('<br>')}</p>`
     : undefined;
   const headers: Record<string, string> = {};
-  if (unsubscribeUrl && caps.customHeaders) {
-    headers['List-Unsubscribe'] = `<${unsubscribeUrl}>`;
-    headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  if (caps.customHeaders) {
+    // The mailto target is the sending mailbox, which the engine polls: a mailbox provider's "Unsubscribe"
+    // button then arrives as an opt-out even with no public URL (BUILD_PLAN.md §19 D3).
+    const targets = [...(unsubscribeUrl ? [unsubscribeUrl] : []), `mailto:${sender.address}?subject=unsubscribe`];
+    headers['List-Unsubscribe'] = targets.map((target) => `<${target}>`).join(', ');
+    if (unsubscribeUrl && env.unsubscribe?.oneClick !== false) headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
   }
   let subject = template.subject ? render(template.subject, values, 'text') : '';
   const base = {
