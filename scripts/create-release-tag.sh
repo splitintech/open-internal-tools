@@ -4,6 +4,7 @@
 #   scripts/create-release-tag.sh in-app-otp
 #   scripts/create-release-tag.sh react-mobile-interactions
 #   scripts/create-release-tag.sh verification-adapter-sdk
+#   scripts/create-release-tag.sh group-share
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -11,9 +12,9 @@ cd "$root"
 
 product="${1:-}"
 case "$product" in
-  in-app-otp|react-mobile-interactions|verification-adapter-sdk) ;;
+  in-app-otp|react-mobile-interactions|verification-adapter-sdk|group-share) ;;
   *)
-    echo "Usage: $0 <in-app-otp|react-mobile-interactions|verification-adapter-sdk>" >&2
+    echo "Usage: $0 <in-app-otp|react-mobile-interactions|verification-adapter-sdk|group-share>" >&2
     exit 1
     ;;
 esac

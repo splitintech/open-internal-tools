@@ -54,6 +54,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **[verification-adapter-sdk](verification-adapter-sdk/)**: `@splitin/verification-adapter-sdk` — self-hosted verification adapter contracts, CLI, and provider plugins. No telemetry to SplitIn.
 - **[react-mobile-interactions](react-mobile-interactions/)**: `@splitin/react-mobile-interactions` — swipe, back layers, and native-feeling mobile motion.
 - **[vscode-agent-router](vscode-agent-router/)**: Cursor / VS Code dispatcher to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API.
+- **[group-share](group-share/)**: `@splitin/group-share` — private share subdomains gated by invite list and group CIDR.
 - **Careers**: SplitIn tech careers live at [splitin.net/careers-requests](https://www.splitin.net/careers-requests).
 - **Engineering**: [Mission, vision, values, and the full stack](https://www.splitin.net/tech-stack) — Tech 51%, business 50%; 45% R&D back to open source.
 
@@ -134,7 +135,7 @@ We are not looking for drive-by typo PRs as the main contribution. We want **con
 - You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product — and that every contributor would have **% equity** in that hosted service.
 - You leave every project in its **best possible condition**: fast, small, beautiful, cheap, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
 
-If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [ideation-loop-system](ideation-loop-system/), [in-app-otp](in-app-otp/), [verification-adapter-sdk](verification-adapter-sdk/), [react-mobile-interactions](react-mobile-interactions/), or [vscode-agent-router](vscode-agent-router/) as maintainer.
+If that is you, open an issue to propose a folder, or pick up [mac-unlock-notify](mac-unlock-notify/), [slack-agent-hq](slack-agent-hq/), [ideation-loop-system](ideation-loop-system/), [in-app-otp](in-app-otp/), [verification-adapter-sdk](verification-adapter-sdk/), [react-mobile-interactions](react-mobile-interactions/), [vscode-agent-router](vscode-agent-router/), or [group-share](group-share/) as maintainer.
 
 ## Tech stack
 
@@ -151,6 +152,7 @@ Use what the folder already uses unless the job clearly needs something else. Cu
 | [verification-adapter-sdk](verification-adapter-sdk/) | TypeScript on Node 20+ | tsup, vitest, AJV; CLI, V1 adapter contract, optional SplitIn V2 compat bridge |
 | [react-mobile-interactions](react-mobile-interactions/) | TypeScript + React | vitest, tsup, mobile gesture / overlay primitives |
 | [vscode-agent-router](vscode-agent-router/) | TypeScript on Node 20+ | Cursor/VS Code extension, MCP stdio, `tsup`, vitest, official Claude/Codex/Slack CLIs |
+| [group-share](group-share/) | TypeScript on Node 20+ | `tsup`, vitest, Node `http` gateway, invite list + CIDR allowlist, email-code / OIDC |
 
 Shared defaults: MIT product folders, install from that folder only, secrets in `.env` / `~/.config` never in git, OSS first, indie-cheap to run. Slack-side coding agents are official apps (`@Cursor`, `@Claude`, `@Codex`, `@ChatGPT`) plus MCP/CLI/API rows in `integrations.yaml` — not a new custom bot per vendor.
 
@@ -206,7 +208,12 @@ cd open-internal-tools/verification-adapter-sdk
 npm install && npm test
 ```
 
-Full steps: [in-app-otp/README.md](in-app-otp/README.md), [verification-adapter-sdk/README.md](verification-adapter-sdk/README.md), and [react-mobile-interactions/README.md](react-mobile-interactions/README.md).
+```zsh
+cd open-internal-tools/group-share
+npm install && npm test
+```
+
+Full steps: [in-app-otp/README.md](in-app-otp/README.md), [verification-adapter-sdk/README.md](verification-adapter-sdk/README.md), [react-mobile-interactions/README.md](react-mobile-interactions/README.md), and [group-share/README.md](group-share/README.md).
 
 Agent Router is a Cursor / VS Code extension. Install it from its own folder:
 
@@ -231,6 +238,7 @@ Each folder has a SplitIn URL that 301s to that GitHub tree: `https://www.spliti
 | Verification adapter SDK | [verification-adapter-sdk](verification-adapter-sdk/) | [tech-stack/open-internal-tools/verification-adapter-sdk](https://www.splitin.net/tech-stack/open-internal-tools/verification-adapter-sdk) | Self-hosted verification adapter contracts, CLI, and provider plugins | Open — independent contributor / project CTO |
 | React mobile interactions | [react-mobile-interactions](react-mobile-interactions/) | [tech-stack/open-internal-tools/react-mobile-interactions](https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
 | Agent Router | [vscode-agent-router](vscode-agent-router/) | [tech-stack/open-internal-tools/vscode-agent-router](https://www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router) | Route Cursor agents to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API | Open — independent contributor / project CTO |
+| Group share | [group-share](group-share/) | [tech-stack/open-internal-tools/group-share](https://www.splitin.net/tech-stack/open-internal-tools/group-share) | Private share subdomains gated by invite list and group CIDR | Open — independent contributor / project CTO |
 
 New products land as a new folder. That folder is the tech for that product.
 
