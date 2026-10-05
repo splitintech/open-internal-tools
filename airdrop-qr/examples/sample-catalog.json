@@ -1,0 +1,25 @@
+{
+  "brand": "Acme",
+  "accent": "#ee7828",
+  "background": "#f7f3ec",
+  "utm": {
+    "source": "airdrop",
+    "medium": "qr"
+  },
+  "indexTitle": "QR kit",
+  "indexBlurb": "Open a card, then scan with Camera. Offline-safe AirDrop files.",
+  "entries": [
+    {
+      "slug": "hosts",
+      "label": "Hosts",
+      "url": "https://example.com/hosts",
+      "blurb": "Scan to join"
+    },
+    {
+      "slug": "renters",
+      "label": "Renters",
+      "url": "https://example.com/renters",
+      "blurb": "Scan to join"
+    }
+  ]
+}
