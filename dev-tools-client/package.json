@@ -1,0 +1,47 @@
+{
+  "name": "@splitin/dev-tools-client",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "exports": {
+    "./web": "./web.ts",
+    "./sdk": "./sdk.ts",
+    "./launcher": "./launcher.ts",
+    "./status": "./status.ts",
+    "./retry": "./retry.ts",
+    "./operations": "./operations.ts",
+    "./styles.css": "./styles.css"
+  },
+  "dependencies": {
+    "@splitin/verification-engine": "file:vendor/splitin-verification-engine-0.1.0-beta.1.tgz",
+    "@splitin/verification-react": "file:vendor/splitin-verification-react-0.1.0-beta.1.tgz",
+    "@splitin/verification-postgres": "file:vendor/splitin-verification-postgres-0.1.0-beta.1.tgz",
+    "@splitin/verification-adapter-sdk": "file:vendor/splitin-verification-adapter-sdk-0.1.0-beta.1.tgz",
+    "@splitin/verification-adapter-stripe-identity": "file:vendor/splitin-verification-adapter-stripe-identity-0.1.0-beta.1.tgz",
+    "@splitin/verification-adapter-persona": "file:vendor/splitin-verification-adapter-persona-0.1.0-beta.1.tgz",
+    "@splitin/verification-server": "file:vendor/splitin-verification-server-0.1.0-beta.1.tgz",
+    "@splitin/verification-adapter-plaid-idv": "file:vendor/splitin-verification-adapter-plaid-idv-0.1.0-beta.1.tgz",
+    "@splitin/verification-web": "file:vendor/splitin-verification-web-0.1.0-beta.1.tgz",
+    "@splitin/verification-compat-splitin-v2": "file:vendor/splitin-verification-compat-splitin-v2-0.1.0-beta.1.tgz",
+    "@splitin/verification-cli": "file:vendor/splitin-verification-cli-0.1.0-beta.1.tgz"
+  },
+  "license": "MIT",
+  "files": [
+    "*.ts",
+    "*.css",
+    "README.md"
+  ],
+  "bundleDependencies": [
+    "@splitin/verification-engine",
+    "@splitin/verification-react",
+    "@splitin/verification-postgres",
+    "@splitin/verification-adapter-sdk",
+    "@splitin/verification-adapter-stripe-identity",
+    "@splitin/verification-adapter-persona",
+    "@splitin/verification-server",
+    "@splitin/verification-adapter-plaid-idv",
+    "@splitin/verification-web",
+    "@splitin/verification-compat-splitin-v2",
+    "@splitin/verification-cli"
+  ]
+}
