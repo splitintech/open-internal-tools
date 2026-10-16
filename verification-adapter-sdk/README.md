@@ -20,17 +20,17 @@ Five-minute path: [docs/quickstart.md](docs/quickstart.md).
 
 | Package | npm | What it is |
 | --- | --- | --- |
-| `@splitin/verification-adapter-sdk` | `0.1.0-beta.0` | V1 contracts, manifests, JSON Schema, conformance, fake provider |
-| `@splitin/verification-engine` | `0.1.0-beta.0` | Tenant routing, orchestration, protected-action, workers |
-| `@splitin/verification-postgres` | `0.1.0-beta.0` | `verification` schema, durable store and queue |
-| `@splitin/verification-server` | `0.1.0-beta.0` | Standard `/v1` Web API plus Express, Hono, Supabase bindings |
-| `@splitin/verification-web` | `0.1.0-beta.0` | Headless browser launcher and status controllers |
-| `@splitin/verification-react` | `0.1.0-beta.0` | Accessible launcher, status, appeal, operations components |
-| `@splitin/verification-adapter-stripe-identity` | `0.1.0-beta.0` | Stripe Identity server and browser plugin |
-| `@splitin/verification-adapter-persona` | `0.1.0-beta.0` | Persona IDV/KYB server and browser plugin |
-| `@splitin/verification-adapter-plaid-idv` | `0.1.0-beta.0` | Plaid Identity Verification plugin (no banking products) |
-| `@splitin/verification-cli` | `0.1.0-beta.0` | `splitin-verification` CLI (init, doctor, migrate, scaffold, conformance) |
-| `@splitin/verification-compat-splitin-v2` | `0.1.0-beta.0` | Temporary V1 ↔ SplitIn internal V2 map. SplitIn does not import this yet |
+| `@splitin/verification-adapter-sdk` | `0.1.0-beta.1` | V1 contracts, manifests, JSON Schema, conformance, fake provider |
+| `@splitin/verification-engine` | `0.1.0-beta.1` | Tenant routing, orchestration, protected-action, workers |
+| `@splitin/verification-postgres` | `0.1.0-beta.1` | `verification` schema, durable store and queue |
+| `@splitin/verification-server` | `0.1.0-beta.1` | Standard `/v1` Web API plus Express, Hono, Supabase bindings |
+| `@splitin/verification-web` | `0.1.0-beta.1` | Headless browser launcher and status controllers |
+| `@splitin/verification-react` | `0.1.0-beta.1` | Accessible launcher, status, appeal, operations components |
+| `@splitin/verification-adapter-stripe-identity` | `0.1.0-beta.1` | Stripe Identity server and browser plugin |
+| `@splitin/verification-adapter-persona` | `0.1.0-beta.1` | Persona IDV/KYB server and browser plugin |
+| `@splitin/verification-adapter-plaid-idv` | `0.1.0-beta.1` | Plaid Identity Verification plugin (no banking products) |
+| `@splitin/verification-cli` | `0.1.0-beta.1` | `splitin-verification` CLI (init, doctor, migrate, scaffold, conformance) |
+| `@splitin/verification-compat-splitin-v2` | `0.1.0-beta.1` | Temporary V1 ↔ SplitIn internal V2 map. SplitIn does not import this yet |
 
 Core and server packages have no React or vendor-browser dependency. The core package does not import PostgreSQL, Express, Hono, or vendor SDKs.
 
