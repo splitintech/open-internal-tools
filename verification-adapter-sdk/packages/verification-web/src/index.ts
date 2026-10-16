@@ -29,3 +29,5 @@ export type {
   VerificationStatusEnvelope,
   VerificationWebControllerOptions,
 } from './types.ts';
+
+export { createVerificationDemo, DEMO_SCENARIOS } from './demo.ts';

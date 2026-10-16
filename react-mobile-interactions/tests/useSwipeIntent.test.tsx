@@ -58,3 +58,16 @@ describe("useSwipeIntent", () => {
     );
   });
 });
+
+it('supports mouse dragging and ignores the duplicate touch stream', () => {
+  const onSwipe = vi.fn(); render(<SwipeProbe onSwipe={onSwipe} />);
+  const element = screen.getByTestId('swipe');
+  fireEvent(element, pointerEvent('pointerdown', {pointerId:1,pointerType:'mouse',clientX:120,clientY:40}));
+  fireEvent(element, pointerEvent('pointerup', {pointerId:1,pointerType:'mouse',clientX:20,clientY:40}));
+  expect(onSwipe).toHaveBeenCalledTimes(1);
+  fireEvent(element, pointerEvent('pointerdown', {pointerId:2,pointerType:'touch',clientX:120,clientY:40}));
+  fireEvent.touchStart(element,{touches:[{clientX:120,clientY:40}]});
+  fireEvent(element, pointerEvent('pointerup', {pointerId:2,pointerType:'touch',clientX:20,clientY:40}));
+  fireEvent.touchEnd(element,{changedTouches:[{clientX:20,clientY:40}]});
+  expect(onSwipe).toHaveBeenCalledTimes(2);
+});

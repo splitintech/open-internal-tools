@@ -5,7 +5,7 @@ import path from "node:path";
 import QRCode from "qrcode";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { CatalogError, loadCatalogFile, parseCatalog } from "../src/catalog";
+import { CatalogError, loadCatalogFile, parseCatalog } from "../src/index";
 import { buildQrUrl, generateKit } from "../src/generate";
 import { main as cliMain } from "../src/cli";
 

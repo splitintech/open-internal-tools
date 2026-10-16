@@ -800,19 +800,19 @@ export function createPostgresStore(executor: SqlExecutor, options: PostgresStor
            RETURNING *`,
           [
             input.tenantKey, input.now.toISOString(), `lease_${input.workerId}`, input.workerId,
-            new Date(input.now.getTime() + input.leaseSeconds * 1000).toISOString(), input.limit,
+            new Date(input.now.getTime() + input.leaseSeconds * 1000).toISOString(), input.limit - claimed.length,
           ],
         );
         claimed.push(...result.rows.map((row) => mapWebhookJob(row)!));
       }
-      if (input.kinds.includes('reconcile')) {
+      if (input.kinds.includes('reconcile') && claimed.length < input.limit) {
         const result = await executor.query(
           `UPDATE verification.reconciliation_jobs AS target
            SET state = 'processing', lease_id = $3, lease_expires_at = $4, attempt_count = target.attempt_count + 1
            WHERE (target.tenant_key, target.id) IN (
              SELECT tenant_key, id FROM verification.reconciliation_jobs
              WHERE tenant_key = $1
-               AND state IN ('scheduled', 'retryable')
+               AND (state IN ('scheduled', 'retryable') OR (state = 'processing' AND lease_expires_at < $2))
                AND next_attempt_at <= $2
              ORDER BY next_attempt_at, id
              FOR UPDATE SKIP LOCKED
@@ -821,19 +821,19 @@ export function createPostgresStore(executor: SqlExecutor, options: PostgresStor
            RETURNING *`,
           [
             input.tenantKey, input.now.toISOString(), `lease_${input.workerId}`,
-            new Date(input.now.getTime() + input.leaseSeconds * 1000).toISOString(), input.limit,
+            new Date(input.now.getTime() + input.leaseSeconds * 1000).toISOString(), input.limit - claimed.length,
           ],
         );
         claimed.push(...result.rows.map((row) => mapReconJob(row)!));
       }
-      if (input.kinds.includes('redact')) {
+      if (input.kinds.includes('redact') && claimed.length < input.limit) {
         const result = await executor.query(
           `UPDATE verification.redaction_jobs AS target
            SET status = 'processing', lease_id = $3, lease_expires_at = $4, attempt_count = target.attempt_count + 1
            WHERE (target.tenant_key, target.id) IN (
              SELECT tenant_key, id FROM verification.redaction_jobs
              WHERE tenant_key = $1
-               AND status IN ('scheduled', 'retryable')
+               AND (status IN ('scheduled', 'retryable') OR (status = 'processing' AND lease_expires_at < $2))
                AND next_attempt_at <= $2
              ORDER BY next_attempt_at, id
              FOR UPDATE SKIP LOCKED
@@ -842,7 +842,7 @@ export function createPostgresStore(executor: SqlExecutor, options: PostgresStor
            RETURNING *`,
           [
             input.tenantKey, input.now.toISOString(), `lease_${input.workerId}`,
-            new Date(input.now.getTime() + input.leaseSeconds * 1000).toISOString(), input.limit,
+            new Date(input.now.getTime() + input.leaseSeconds * 1000).toISOString(), input.limit - claimed.length,
           ],
         );
         claimed.push(...result.rows.map((row) => mapRedactionJob(row)!));
@@ -850,13 +850,29 @@ export function createPostgresStore(executor: SqlExecutor, options: PostgresStor
       return claimed.slice(0, input.limit);
     },
     async updateJob(job) {
-      await store.saveJob(job);
+      // Only the current lease may finish or reschedule a job. Preserve retry
+      // timestamps and error codes instead of upserting only the state.
       if (job.kind === 'webhook') {
+        if (job.state === 'completed' || job.state === 'dead_letter') {
+          await executor.query(
+            `WITH removed AS (DELETE FROM verification.webhook_leases WHERE tenant_key=$1 AND event_id=$2 AND lease_id=$3 RETURNING tenant_key,event_id)
+             UPDATE verification.webhook_events SET state=$4 WHERE (tenant_key,id) IN (SELECT tenant_key,event_id FROM removed)`,
+            [job.tenantKey, job.eventId ?? job.id, job.leaseId, job.state],
+          );
+          return;
+        }
         await executor.query(
-          `UPDATE verification.webhook_leases
-           SET lease_id = $3, expires_at = $4, next_attempt_at = $5, last_error_code = $6, attempt_count = $7
-           WHERE tenant_key = $1 AND event_id = $2`,
+          `UPDATE verification.webhook_leases SET expires_at=$4, next_attempt_at=$5, last_error_code=$6, attempt_count=$7
+           WHERE tenant_key=$1 AND event_id=$2 AND lease_id=$3`,
           [job.tenantKey, job.eventId ?? job.id, job.leaseId, job.leaseExpiresAt, job.nextAttemptAt, job.lastErrorCode, job.attemptCount],
+        );
+      } else {
+        const table = job.kind === 'redact' ? 'redaction_jobs' : 'reconciliation_jobs';
+        const stateColumn = job.kind === 'redact' ? 'status' : 'state';
+        await executor.query(
+          `UPDATE verification.${table} SET ${stateColumn}=$4, lease_expires_at=$5, next_attempt_at=$6, last_error_code=$7, attempt_count=$8
+           WHERE tenant_key=$1 AND id=$2 AND lease_id=$3`,
+          [job.tenantKey, job.id, job.leaseId, job.state, job.leaseExpiresAt, job.nextAttemptAt, job.lastErrorCode, job.attemptCount],
         );
       }
     },
@@ -874,11 +890,12 @@ export function createPostgresStore(executor: SqlExecutor, options: PostgresStor
 type Row = Record<string, unknown>;
 
 function str(row: Row | null, key: string): string {
-  return String(row?.[key] ?? '');
+  const value = row?.[key];
+  return value instanceof Date ? value.toISOString() : String(value ?? '');
 }
 function strNull(row: Row | null, key: string): string | null {
   const value = row?.[key];
-  return value == null ? null : String(value);
+  return value == null ? null : value instanceof Date ? value.toISOString() : String(value);
 }
 function num(row: Row | null, key: string): number {
   return Number(row?.[key] ?? 0);

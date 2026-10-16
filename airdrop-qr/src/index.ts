@@ -1,5 +1,5 @@
 export { generateKit, buildQrUrl } from "./generate";
-export { loadCatalogFile, parseCatalog, CatalogError } from "./catalog";
+export { parseCatalog, CatalogError } from "./catalog";
 export type {
   AirdropQrEntry,
   AirdropQrUtm,
@@ -7,3 +7,6 @@ export type {
   GenerateKitOptions,
   Theme,
 } from "./types";
+
+export { loadCatalogFile } from "./filesystem";
+export * from "./browser";
