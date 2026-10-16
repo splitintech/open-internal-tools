@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "maxListNameLength": 120,
+  "googleBatchSize": 3000,
+  "googleColumns": [
+    { "header": "First Name", "field": "name" },
+    { "header": "Organization Name", "field": "company" },
+    { "header": "Organization Title", "field": "role" },
+    { "header": "Email 1 - Label", "field": "email", "label": "Work" },
+    { "header": "Email 1 - Value", "field": "email" },
+    { "header": "Phone 1 - Label", "field": "phone", "label": "Work" },
+    { "header": "Phone 1 - Value", "field": "phone" },
+    { "header": "Address 1 - Label", "field": "address", "label": "Work" },
+    { "header": "Address 1 - Street", "field": "address" },
+    { "header": "Website 1 - Label", "field": "website", "label": "Work" },
+    { "header": "Website 1 - Value", "field": "website" },
+    { "header": "Notes", "field": "notes" },
+    { "header": "Labels", "field": "listName" }
+  ]
+}

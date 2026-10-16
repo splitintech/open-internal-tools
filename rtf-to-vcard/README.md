@@ -35,11 +35,45 @@ the contacts to your address book.
    also drag the file into the upload area.
 4. Wait for conversion to reach **100%**. Check the contact count and any notes
    about generated names or extra columns preserved in Notes.
-5. Select **Download vCard** and save the resulting `.vcf` file. If you used the
-   Python CLI, use its generated `.vcf` instead.
+5. Optionally enter a **List name** beside the download options, for example
+   `Boston Property Managers`. Then choose **Download vCard** for Apple/general
+   use, or **Download Google CSV** to import into a Google label. Downloads update
+   when you edit the name. Leaving it blank keeps the input filename as the base
+   and adds no list metadata. If you used the CLI, use its generated file instead.
 6. Follow the guide for the account where you want to save the contacts. Import
    a batch only once into that account; use account syncing to see it on your
    other devices.
+
+### Named lists and download options
+
+- **vCard:** one combined `.vcf`. A supplied list name is saved as one escaped
+  `CATEGORIES` value and appended to each contact's existing Notes as
+  `Contact list: Boston Property Managers`. Original names and notes are preserved.
+  Category support varies by importer. **Opening this file does not automatically
+  create an Apple Contacts list.** After importing, create a list and add the
+  imported contacts. In iCloud Contacts, imports initially appear in All Contacts;
+  drag the desired contacts into your new list. See Apple's
+  [list instructions](https://support.apple.com/guide/icloud/mmfba73c71/icloud).
+- **Google CSV:** uses Google's documented headers and places the list name in
+  every contact's `Labels` field. Import this file through Google Contacts on a
+  computer to apply the label. The name is not added to Notes in the CSV.
+  For more than 3,000 contacts, expand **Google CSV · N files**, download all parts,
+  and import each once into the same Google account. Every part carries the same
+  label; the browser still offers one combined VCF.
+- List names allow Unicode and punctuation, up to 120 characters. Leading/trailing
+  whitespace is trimmed. Line breaks, control characters and `:::` are rejected;
+  Google uses `:::` to separate multiple labels. Only the filename is sanitized
+  for filesystem characters; the exported list name is preserved.
+- Google labels are a Google Contacts feature. Syncing the contacts to an iPhone
+  does not guarantee that the label becomes an Apple list. Native Android VCF
+  import also does not establish Google label creation; use the Google CSV/web
+  workflow when labels matter.
+
+This remains local file generation, with no Google sign-in, address-book writes,
+or backend. Importing is a separate action. Import **one chosen format** per batch
+into an account; importing both CSV and VCF can create duplicates. Names and phone
+numbers are exported as text. Import the CSV directly into Google Contacts;
+spreadsheet apps may reformat phone numbers if you open and resave it.
 
 ### Apple on mobile: iPhone or iPad
 
@@ -100,13 +134,16 @@ and [Mac account and sync settings](https://support.apple.com/en-euro/guide/cont
 2. Check the profile icon and switch to the Google Account that should receive
    the new contacts.
 3. Select **Import** in the left sidebar, then **Select file**.
-4. Choose the downloaded `.vcf` and click **Import**.
-5. Wait for completion and check the imported names and contact details.
+4. Choose the downloaded Google `.csv` to use your named label, or the `.vcf`
+   for an ordinary contact import, and click **Import**.
+5. Wait for completion and check the imported names and contact details. For CSV,
+   check that the chosen label contains the imported contacts.
 
 For large batches, keep each import to **3,000 contacts or fewer**, as documented
-by Google. Split a larger input list into smaller files, keep the header in each,
-and convert/import each batch separately. The converter's 20,000-contact browser
-limit does not override Google's import limit.
+by Google. The browser's Google CSV option splits these batches automatically;
+download and import every numbered part. For VCF imports, split a larger input
+list and convert/import each batch separately. The converter's 20,000-contact
+browser limit does not override Google's import limit.
 
 See Google's [desktop import guide](https://support.google.com/contacts/answer/15147365?co=GENIE.Platform%3DDesktop&hl=en).
 
@@ -122,6 +159,10 @@ See Google's [desktop import guide](https://support.google.com/contacts/answer/1
 
 Contacts saved to that Google Account sync to devices signed in to the same
 account when contact syncing is enabled.
+
+For a named Google label, use the CSV import workflow on a computer, then sync
+that Google account to the phone. Downloading a CSV on the phone alone does not
+import it through the native Contacts app.
 
 See Google's [Android import guide](https://support.google.com/contacts/answer/15147365?co=GENIE.Platform%3DAndroid&hl=en)
 and [Android sync guide](https://support.google.com/contacts/answer/2753077?co=GENIE.Platform%3DAndroid&hl=en).
@@ -171,7 +212,17 @@ converter directory (`rtf-to-vcard` in open-internal-tools, `tools/rtf-to-vcard`
 python3 rtf_to_vcard.py contacts.txt -o contacts.vcf
 python3 rtf_to_vcard.py contacts.csv -o csv-contacts.vcf
 python3 rtf_to_vcard.py contacts.html -o html-contacts.vcf
+python3 rtf_to_vcard.py contacts.csv --list-name "Boston Property Managers" -o managers.vcf
+python3 rtf_to_vcard.py contacts.csv --output-format google-csv --list-name "Boston Property Managers"
 ```
+
+`--output-format google-csv` defaults to `contacts-google.csv`, avoiding overwriting
+the input CSV. The CLI accepts up to 3,000 contacts per Google CSV; for larger lists,
+split the input or use the browser's numbered exports. Repeated fields in labeled
+RTF require vCard output to avoid losing values. Validation completes before any
+output is opened, including with `--force`. The shared export rules and additional
+regression fixtures are in [export-schema.json](export-schema.json) and
+[export-fixtures.json](export-fixtures.json).
 
 The first nonblank line must contain column headers, followed by one contact per
 row. Header names are case-insensitive and columns can be reordered. Example CSV
