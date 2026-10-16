@@ -4,6 +4,15 @@ Python 3.9+ command-line app. Reads local TXT columns or a labeled RTF document 
 to one UTF-8 vCard 3.0 file. `.vcf` is the usual vCard extension; an explicit
 output ending in `.vcard` also works. Conversion runs locally.
 
+## Use online
+
+Open [SplitIn’s TXT-to-vCard converter](https://www.splitin.net/dev-tools/txt-to-vcard),
+also available under [Engineering → Dev tools](https://www.splitin.net/engineering#dev-tools).
+Add a TXT, CSV, or TSV file to convert it directly in your browser, watch the
+completion percentage, and download a `.vcf` file. Contact contents stay on your
+device. The hosted tool accepts UTF-8 files up to 5 MB and 20,000 contacts.
+For RTF files, use the Python CLI below.
+
 ## Run
 
 TXT conversion needs only Python, with no additional packages. From the
