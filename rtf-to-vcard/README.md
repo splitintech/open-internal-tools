@@ -25,15 +25,16 @@ the contacts to your address book.
 
 ### 1. Prepare and download your contacts
 
-1. Save your contact list as UTF-8 TXT, CSV, or TSV with the header
-   `Name,Company,address,email,contact,role` and one contact per row. Use the CSV
-   example in [Run](#run) for values containing commas. For HTML/HTM, save a table
-   with the same headers; see [HTML input](#html-input).
+1. Save your contact list as UTF-8 TXT, CSV, or TSV with a labeled header row
+   and one contact per row. Columns can appear in any order and fields may be
+   omitted or blank, including Name. See [Run](#run) for an example using property
+   management contact headers. For HTML/HTM, see [HTML input](#html-input).
 2. Open the [SplitIn converter](https://www.splitin.net/dev-tools/txt-to-vcard)
    on your phone or computer.
 3. Tap or click the file upload area and select your file. On desktop, you can
    also drag the file into the upload area.
-4. Wait for conversion to reach **100%** and check the displayed contact count.
+4. Wait for conversion to reach **100%**. Check the contact count and any notes
+   about generated names or extra columns preserved in Notes.
 5. Select **Download vCard** and save the resulting `.vcf` file. If you used the
    Python CLI, use its generated `.vcf` instead.
 6. Follow the guide for the account where you want to save the contacts. Import
@@ -144,6 +145,10 @@ copy there.
 See Apple's [contact account settings](https://support.apple.com/en-mt/guide/iphone/iph7edacccf9/ios)
 and Google's [iPhone/iPad sync guide](https://support.google.com/contacts/answer/2753077?co=GENIE.Platform%3DiOS&hl=en).
 
+The platform guides above were checked against Apple and Google documentation on
+2026-10-16. Automated conversion tests are separate from actual account/device
+imports; button labels can vary by OS version.
+
 ### Add another batch later
 
 1. Create a new input file containing only the new contacts, with the same header.
@@ -160,12 +165,12 @@ existing contact.
 ## Run
 
 TXT, CSV, TSV, and HTML conversion need only Python, with no additional packages. From the
-repository root:
+converter directory (`rtf-to-vcard` in open-internal-tools, `tools/rtf-to-vcard` in SplitIn):
 
 ```sh
-python3 rtf-to-vcard/rtf_to_vcard.py contacts.txt -o contacts.vcf
-python3 rtf-to-vcard/rtf_to_vcard.py contacts.csv -o csv-contacts.vcf
-python3 rtf-to-vcard/rtf_to_vcard.py contacts.html -o html-contacts.vcf
+python3 rtf_to_vcard.py contacts.txt -o contacts.vcf
+python3 rtf_to_vcard.py contacts.csv -o csv-contacts.vcf
+python3 rtf_to_vcard.py contacts.html -o html-contacts.vcf
 ```
 
 The first nonblank line must contain column headers, followed by one contact per
@@ -173,18 +178,65 @@ row. Header names are case-insensitive and columns can be reordered. Example CSV
 content (also accepted in a `.txt` file):
 
 ```csv
-Name,Company,address,email,contact,role
-Jane Doe,Example Inc.,"123 Main St, Boston, MA",jane@example.com,+1 202-555-0100,Manager
+Contact Number,Name,Property Management Company,Website,Email,Current Business Address,Notes
+001234,Jane Doe,Example Inc.,https://example.com,jane@example.com,"123 Main St, Boston, MA",Call next week
 ```
 
 For TXT, tabs, commas, or two or more spaces between columns are detected from the
-header. CSV uses commas and TSV uses tabs, including files with only a Name column.
+header outside quoted values. CSV uses commas and TSV uses tabs. Single-column
+TXT and CSV files support quoted names such as `"Morgan, Alex"`.
 Use `--delimiter tab`, `--delimiter comma`, or `--delimiter spaces` to override.
 For CSV, quote any value containing commas. Use tabs or CSV for empty cells;
 space-separated columns cannot reliably represent missing values. Single spaces
 are preserved inside names, companies, addresses, and phone numbers.
 Each cell contains one value. Malformed rows stop conversion before output is
-written. Only Name is required; the other columns may be omitted or empty.
+written. Every field, including Name, may be omitted or empty. Entirely empty
+rows are skipped. Missing values still need separators: beneath `Name,Company,Email`,
+use `Alex,,alex@example.com`. A shorter row is ambiguous and is rejected.
+Semicolon-separated exports and Markdown/pipe tables need to be exported as
+comma-separated CSV or tab-separated TXT/TSV first.
+
+### Flexible headers and contact names
+
+Headers are matched after Unicode normalization, case folding, whitespace
+normalization, and treating hyphens/underscores as spaces. Matching uses explicit
+aliases; it does not guess from substrings. The complete versioned contract is
+[field-schema.json](field-schema.json).
+
+| Field | Accepted examples | vCard property |
+| --- | --- | --- |
+| Name | Name, Full Name, Contact Name | FN and N |
+| Company | Company, Company Name, Organization, Organisation, Property Management Company, Management Company | ORG |
+| Address | Address, Business Address, Current Business Address, Mailing Address | ADR |
+| Email | Email, E-mail, Email Address, E-mail Address, Email ID | EMAIL |
+| Phone | Contact, Contact Number, Phone, Phone Number, Mobile, Mobile Number, Telephone, Tel | TEL |
+| Role | Role, Title, Job Title | TITLE and ROLE |
+| Website | Website, Web, URL, Website URL | URL |
+| Notes | Notes, Note, Comments, Comment, Additional Information | NOTE |
+
+When Name is absent or empty, the display name uses the first nonempty value in
+**Company → Email → Phone → Website → “Unnamed contact”**. Address-only, role-only,
+and notes-only rows are retained. Phone numbers stay text, including leading zeros.
+
+Other labeled columns are retained in Notes as `Original header: value`, after
+explicit Notes and in source-column order. For example, `Tag=Lead` becomes
+`Tag: Lead`. No field is silently discarded. Duplicate header labels or aliases
+for the same field (such as Phone plus Contact Number) stop conversion and identify
+both columns. Blank labels must be named before conversion.
+
+### Errors and warnings
+
+A malformed file produces no partial export. Errors identify the physical line
+(or HTML table and row), and the column where available. Independent row errors
+are collected; broken quote syntax stops immediately. The browser shows the first
+20 errors and the number remaining. Examples of stable error codes are
+`INVALID_HEADER`, `DUPLICATE_HEADER`, `ROW_WIDTH`, `MALFORMED_QUOTES`,
+`UNSUPPORTED_LAYOUT`, `INVALID_ENCODING`, `NO_CONTACTS`, and `INVALID_WEBSITE`.
+The browser additionally enforces `FILE_LIMIT` and `CONTACT_LIMIT`.
+
+Generated names and extra fields produce informational warnings, not failures.
+The CLI prints them to stderr. `--strict` continues to apply to unrecognized
+labeled RTF lines; it does not reject these informational conversion warnings.
 
 Address is stored whole in the work address street component. Role is saved as
 both vCard TITLE and ROLE for contact-app compatibility. Text defaults to UTF-8;
@@ -194,34 +246,26 @@ use `--encoding cp1252` or `--encoding utf-16` for files saved in those encoding
 
 Save a UTF-8 `.html` or `.htm` file containing a contact table. The first nonempty
 row must contain recognized column names in `<th>` or `<td>` cells. Each later
-row represents one contact. Name is required; other columns may be empty or
-omitted. Header names and aliases follow the same rules as TXT/CSV.
+row represents one contact. Any supported field can identify the table, including
+Phone or Notes; Name is optional. Header names and aliases follow the same rules
+as TXT/CSV. A table containing only unfamiliar headers is ignored; give at least
+one column a supported label such as Notes.
 
 ```html
 <!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><title>Contacts</title></head>
-<body>
-  <table>
-    <tr>
-      <th>Name</th><th>Company</th><th>address</th>
-      <th>email</th><th>contact</th><th>role</th>
-    </tr>
-    <tr>
-      <td>Jane Doe</td><td>Example Inc.</td><td>123 Main St<br>Boston, MA</td>
-      <td><a href="mailto:jane@example.com">Email Jane</a></td>
-      <td><a href="tel:+12025550100">Call Jane</a></td><td>Manager</td>
-    </tr>
-  </table>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><title>Contacts</title></head><body>
+<table>
+<tr><th>Contact Number</th><th>Name</th><th>Property Management Company</th><th>Website</th><th>Email</th><th>Current Business Address</th><th>Notes</th></tr>
+<tr><td>001234</td><td>Jane Doe</td><td>Example Inc.</td><td>https://example.com</td><td>jane@example.com</td><td>123 Main St, Boston, MA</td><td>Call next week</td></tr>
+</table>
+</body></html>
 ```
 
 Try [example.csv](example.csv) or [example.html](example.html). The online converter
 also offers downloadable TXT, CSV, and HTML samples.
 
 - Contact tables can appear inside a complete HTML document or a table fragment.
-  All tables with a Name header are combined into the same `.vcf`; unrelated
+  All tables with at least one supported header are combined into the same `.vcf`; unrelated
   tables are ignored. Invalid contact tables stop the whole conversion.
 - Text formatting tags are removed, HTML entities such as `&amp;` are decoded,
   and `<br>`/paragraph breaks are preserved inside addresses.
@@ -237,11 +281,26 @@ also offers downloadable TXT, CSV, and HTML samples.
 
 ### Run the converter tests
 
-From the repository root:
+From the converter directory (`rtf-to-vcard` in open-internal-tools, `tools/rtf-to-vcard` in SplitIn):
 
 ```sh
-python3 -m unittest discover -s rtf-to-vcard -p 'test_*.py' -v
+python3 -m unittest discover -s . -p 'test_*.py' -v
 ```
+
+### Shared contract and regression checks
+
+`field-schema.json` is the canonical field contract. Its case-fold table records
+Unicode characters whose full fold differs from lowercase, so JavaScript can
+match Python's Unicode header behavior. `fixtures.json` contains synthetic valid
+and invalid examples. `fixture_runner.py` exposes the Python results as JSON for
+SplitIn's cross-language tests. These files and the CLI are mirrored into SplitIn;
+update the mirror with the same change and run both test suites.
+
+The browser test suite compares decoded vCard properties, counts, warnings, and
+structured errors with Python. It also covers all 255 nonempty field subsets,
+20,000-contact HTML input, cancellation, and no partial exports. Text conversion
+requires no extra Python packages. Independent format validation uses optional
+test-only `vobject`; it is not a runtime dependency.
 
 ### Optional RTF support
 
