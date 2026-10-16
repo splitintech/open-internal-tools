@@ -1,16 +1,18 @@
-# TXT and RTF to vCard
+# TXT, CSV, HTML and RTF to vCard
 
-Python 3.9+ command-line app. Reads local TXT columns or a labeled RTF document and writes all contacts
+Python 3.9+ command-line app. Reads local TXT/CSV/TSV columns, HTML contact tables,
+or a labeled RTF document and writes all contacts
 to one UTF-8 vCard 3.0 file. `.vcf` is the usual vCard extension; an explicit
 output ending in `.vcard` also works. Conversion runs locally.
 
 ## Use online
 
-Open [SplitIn’s TXT-to-vCard converter](https://www.splitin.net/dev-tools/txt-to-vcard),
+Open [SplitIn’s contact-to-vCard converter](https://www.splitin.net/dev-tools/txt-to-vcard),
 also available under [Engineering → Dev tools](https://www.splitin.net/engineering#dev-tools).
-Add a TXT, CSV, or TSV file to convert it directly in your browser, watch the
+Add a TXT, CSV, TSV, HTML, or HTM file to convert it directly in your browser, watch the
 completion percentage, and download a `.vcf` file. Contact contents stay on your
 device. The hosted tool accepts UTF-8 files up to 5 MB and 20,000 contacts.
+For HTML, use a contact table with a header row as shown in [HTML input](#html-input).
 For RTF files, use the Python CLI below.
 
 ## Bulk import into Apple or Google Contacts
@@ -25,7 +27,8 @@ the contacts to your address book.
 
 1. Save your contact list as UTF-8 TXT, CSV, or TSV with the header
    `Name,Company,address,email,contact,role` and one contact per row. Use the CSV
-   example in [Run](#run) for values containing commas.
+   example in [Run](#run) for values containing commas. For HTML/HTM, save a table
+   with the same headers; see [HTML input](#html-input).
 2. Open the [SplitIn converter](https://www.splitin.net/dev-tools/txt-to-vcard)
    on your phone or computer.
 3. Tap or click the file upload area and select your file. On desktop, you can
@@ -156,11 +159,13 @@ existing contact.
 
 ## Run
 
-TXT conversion needs only Python, with no additional packages. From the
+TXT, CSV, TSV, and HTML conversion need only Python, with no additional packages. From the
 repository root:
 
 ```sh
 python3 rtf-to-vcard/rtf_to_vcard.py contacts.txt -o contacts.vcf
+python3 rtf-to-vcard/rtf_to_vcard.py contacts.csv -o csv-contacts.vcf
+python3 rtf-to-vcard/rtf_to_vcard.py contacts.html -o html-contacts.vcf
 ```
 
 The first nonblank line must contain column headers, followed by one contact per
@@ -172,7 +177,8 @@ Name,Company,address,email,contact,role
 Jane Doe,Example Inc.,"123 Main St, Boston, MA",jane@example.com,+1 202-555-0100,Manager
 ```
 
-Tabs, commas, or two or more spaces between columns are detected from the header.
+For TXT, tabs, commas, or two or more spaces between columns are detected from the
+header. CSV uses commas and TSV uses tabs, including files with only a Name column.
 Use `--delimiter tab`, `--delimiter comma`, or `--delimiter spaces` to override.
 For CSV, quote any value containing commas. Use tabs or CSV for empty cells;
 space-separated columns cannot reliably represent missing values. Single spaces
@@ -183,6 +189,59 @@ written. Only Name is required; the other columns may be omitted or empty.
 Address is stored whole in the work address street component. Role is saved as
 both vCard TITLE and ROLE for contact-app compatibility. Text defaults to UTF-8;
 use `--encoding cp1252` or `--encoding utf-16` for files saved in those encodings.
+
+### HTML input
+
+Save a UTF-8 `.html` or `.htm` file containing a contact table. The first nonempty
+row must contain recognized column names in `<th>` or `<td>` cells. Each later
+row represents one contact. Name is required; other columns may be empty or
+omitted. Header names and aliases follow the same rules as TXT/CSV.
+
+```html
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Contacts</title></head>
+<body>
+  <table>
+    <tr>
+      <th>Name</th><th>Company</th><th>address</th>
+      <th>email</th><th>contact</th><th>role</th>
+    </tr>
+    <tr>
+      <td>Jane Doe</td><td>Example Inc.</td><td>123 Main St<br>Boston, MA</td>
+      <td><a href="mailto:jane@example.com">Email Jane</a></td>
+      <td><a href="tel:+12025550100">Call Jane</a></td><td>Manager</td>
+    </tr>
+  </table>
+</body>
+</html>
+```
+
+Try [example.csv](example.csv) or [example.html](example.html). The online converter
+also offers downloadable TXT, CSV, and HTML samples.
+
+- Contact tables can appear inside a complete HTML document or a table fragment.
+  All tables with a Name header are combined into the same `.vcf`; unrelated
+  tables are ignored. Invalid contact tables stop the whole conversion.
+- Text formatting tags are removed, HTML entities such as `&amp;` are decoded,
+  and `<br>`/paragraph breaks are preserved inside addresses.
+- Email and phone columns use `mailto:` and `tel:` link values when present.
+  A Website column can use an absolute HTTP/HTTPS link. Otherwise, the cell's
+  text is used. Keep one value per cell; multiple matching links are rejected.
+- Merged cells (`rowspan`/`colspan` other than 1) and nested tables inside a
+  contact table are rejected. Use a simple rectangular table.
+- Scripts, styles, templates, and embedded content are ignored. Conversion reads
+  the uploaded file locally without running its scripts or fetching resources.
+  This is not a URL scraper: arbitrary page layouts and contacts generated only
+  by JavaScript are not supported. Export those contacts as CSV or an HTML table.
+
+### Run the converter tests
+
+From the repository root:
+
+```sh
+python3 -m unittest discover -s rtf-to-vcard -p 'test_*.py' -v
+```
 
 ### Optional RTF support
 
