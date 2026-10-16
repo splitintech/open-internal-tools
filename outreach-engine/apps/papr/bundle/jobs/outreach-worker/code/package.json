@@ -1,0 +1,9 @@
+{
+  "name": "outreach-worker-job",
+  "private": true,
+  "type": "module",
+  "description": "Papr Work job: one outreach worker pass per run (ADR 0004). Replace the version with a local path until @splitin/outreach-cli is published.",
+  "dependencies": {
+    "@splitin/outreach-cli": "^0.1.0"
+  }
+}
