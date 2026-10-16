@@ -231,3 +231,10 @@ Own this package end to end — or explore SplitIn tech careers — at **[https:
 ## License
 
 MIT. See [LICENSE](LICENSE). Program rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
+
+
+## SplitIn Dev tools integration
+
+Hosted route: `https://www.splitin.net/dev-tools/otp` (deployment qualification tracked by the host application). Build with Node 24, `npm ci`, `npm run build`, then `npm test`. Consumers install reviewed versioned tarballs; no sibling-source imports are required.
+
+The hosted playground is isolated from customer verification, onboarding and payment eligibility. Public demonstrations keep state in memory and suppress recording. Provider credentials and launch secrets must never be persisted by a browser client. Test keyboard controls, 320/390/768px layouts and reduced motion as well as physical iOS Safari and Android Chrome.

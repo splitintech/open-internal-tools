@@ -43,7 +43,7 @@ export const fakeProviderManifest: ProviderManifestV1 = defineProviderManifest({
   engineCompatibility: '1.0.0',
   provider: 'test_fake',
   displayName: 'Conformance Fake Provider',
-  supportedPackages: ['human_idv', 'com.example.employee_check'],
+  supportedPackages: ['human_idv', 'business_kyb', 'associated_person_idv', 'ownership_review', 'com.example.employee_check'],
   supportedCountries: ['US'],
   environments: ['sandbox'],
   capabilities: { presentations: ['embedded', 'hosted'], canResume: true, canRetry: true, canCancel: true, canRedact: true },

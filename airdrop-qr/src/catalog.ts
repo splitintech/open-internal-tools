@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 
 import type { AirdropQrEntry, AirdropQrUtm, CatalogFile } from "./types";
 
@@ -42,6 +41,7 @@ function normalizeUrl(raw: string, context: string): string {
   if (parsed.protocol !== "https:") {
     throw new CatalogError(`${context}: url must use https`);
   }
+  if (parsed.username || parsed.password) throw new CatalogError(`${context}: URL credentials are not allowed`);
   return parsed.href;
 }
 
@@ -97,9 +97,9 @@ export function parseCatalog(raw: unknown): CatalogFile {
 
   return {
     brand,
-    accent: optionalString(raw, "accent"),
-    background: optionalString(raw, "background"),
-    ink: optionalString(raw, "ink"),
+    accent: parseColor(raw, "accent"),
+    background: parseColor(raw, "background"),
+    ink: parseColor(raw, "ink"),
     utm: parseUtm(raw.utm),
     indexTitle: optionalString(raw, "indexTitle"),
     indexBlurb: optionalString(raw, "indexBlurb"),
@@ -107,22 +107,12 @@ export function parseCatalog(raw: unknown): CatalogFile {
   };
 }
 
-export function loadCatalogFile(filePath: string): CatalogFile {
-  let text: string;
-  try {
-    text = readFileSync(filePath, "utf8");
-  } catch {
-    throw new CatalogError(`unable to read catalog file: ${filePath}`);
-  }
-  let json: unknown;
-  try {
-    json = JSON.parse(text) as unknown;
-  } catch {
-    throw new CatalogError(`catalog file is not valid JSON: ${filePath}`);
-  }
-  return parseCatalog(json);
-}
-
 export function validateEntries(entries: AirdropQrEntry[]): AirdropQrEntry[] {
   return parseCatalog({ brand: "_", entries }).entries;
+}
+
+function parseColor(raw: Record<string, unknown>, key: string): string | undefined {
+  const value = optionalString(raw, key);
+  if (value && !/^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(value)) throw new CatalogError(`${key}: use a hex color (#RGB or #RRGGBB)`);
+  return value;
 }

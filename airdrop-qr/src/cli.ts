@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import path from "node:path";
 
-import { CatalogError, loadCatalogFile, parseCatalog } from "./catalog";
+import { CatalogError, loadCatalogFile, parseCatalog } from "./filesystem";
 import { generateKit } from "./generate";
 import type { AirdropQrEntry, CatalogFile } from "./types";
 

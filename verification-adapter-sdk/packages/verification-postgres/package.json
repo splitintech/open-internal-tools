@@ -1,6 +1,6 @@
 {
   "name": "@splitin/verification-postgres",
-  "version": "0.1.0-beta.0",
+  "version": "0.1.0-beta.1",
   "description": "PostgreSQL persistence for the self-hosted verification engine (schema verification).",
   "license": "MIT",
   "author": "SplitInTech, @ojchavan",
@@ -43,7 +43,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@splitin/verification-engine": "0.1.0-beta.0"
+    "@splitin/verification-engine": "0.1.0-beta.1"
   },
   "peerDependencies": {
     "pg": "^8.13.0"

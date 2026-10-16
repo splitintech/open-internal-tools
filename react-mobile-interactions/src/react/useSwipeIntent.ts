@@ -46,6 +46,7 @@ export function useSwipeIntent({
   onSwipeCancel,
 }: UseSwipeIntentOptions) {
   const startRef = useRef<GesturePoint | null>(null);
+  const suppressTouchUntil = useRef(0);
   const pointerIdRef = useRef<number | null>(null);
   const mergedThresholds = { ...DEFAULT_GESTURE_THRESHOLDS, ...thresholds };
 
@@ -109,42 +110,48 @@ export function useSwipeIntent({
 
   const bind = {
     onTouchStart: (event: ReactTouchEvent<HTMLElement>) => {
+      if (Date.now() < suppressTouchUntil.current) return;
       const touch = event.touches[0];
       if (touch) {
         start(pointFromTouch(touch), event.target);
       }
     },
     onTouchMove: (event: ReactTouchEvent<HTMLElement>) => {
+      if (Date.now() < suppressTouchUntil.current) return;
       const touch = event.touches[0];
       if (touch) {
         move(pointFromTouch(touch), event.cancelable ? () => event.preventDefault() : undefined);
       }
     },
     onTouchEnd: (event: ReactTouchEvent<HTMLElement>) => {
+      if (Date.now() < suppressTouchUntil.current) return;
       const touch = event.changedTouches[0];
       if (touch) {
         end(pointFromTouch(touch));
       }
     },
-    onTouchCancel: reset,
+    onTouchCancel: () => { if (Date.now() >= suppressTouchUntil.current) reset(); },
     onPointerDown: (event: ReactPointerEvent<HTMLElement>) => {
-      if (event.pointerType === "mouse") {
+      // Pointer input wins when the browser emits both pointer and touch events.
+      if (event.button != null && event.button !== 0) {
         return;
       }
 
+      if (event.pointerType === "touch") suppressTouchUntil.current = Date.now() + 1000;
       if (start(pointFromPointer(event), event.target)) {
         pointerIdRef.current = event.pointerId;
+        event.currentTarget.setPointerCapture?.(event.pointerId);
       }
     },
     onPointerMove: (event: ReactPointerEvent<HTMLElement>) => {
-      if (pointerIdRef.current !== null && event.pointerId != null && pointerIdRef.current !== event.pointerId) {
+      if (pointerIdRef.current === null || pointerIdRef.current !== event.pointerId) {
         return;
       }
 
       move(pointFromPointer(event), event.cancelable ? () => event.preventDefault() : undefined);
     },
     onPointerUp: (event: ReactPointerEvent<HTMLElement>) => {
-      if (pointerIdRef.current !== null && event.pointerId != null && pointerIdRef.current !== event.pointerId) {
+      if (pointerIdRef.current === null || pointerIdRef.current !== event.pointerId) {
         return;
       }
 
