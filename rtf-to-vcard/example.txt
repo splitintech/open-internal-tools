@@ -1,3 +1,2 @@
-Name,Company,address,email,contact,role
-Jane Doe,Example Inc.,"123 Main St, Boston, MA",jane@example.com,+1 202-555-0100,Manager
-John Smith,Sample Studio,"45 High St, London",john@sample.example,+44 20 7946 0958,Designer
+Contact Number	Name	Property Management Company	Website	Email	Current Business Address	Notes
+001234	Jane Doe	Example Inc.	https://example.com	jane@example.com	123 Main St, Boston, MA	Call next week
