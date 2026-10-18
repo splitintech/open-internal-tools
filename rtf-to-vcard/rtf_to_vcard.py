@@ -4,6 +4,7 @@
 import argparse
 import csv
 import json
+import io
 import unicodedata
 import re
 import sys
@@ -13,6 +14,7 @@ from urllib.parse import unquote
 
 
 SCHEMA = json.loads(Path(__file__).with_name("field-schema.json").read_text(encoding="utf-8"))
+EXPORT_SCHEMA = json.loads(Path(__file__).with_name("export-schema.json").read_text(encoding="utf-8"))
 
 
 def normalize_header(value):
@@ -414,7 +416,41 @@ def fold(line):
     return "\r\n".join(lines)
 
 
-def make_vcards(contacts):
+def validate_list_name(value):
+    if re.search(r"[\x00-\x1f\x7f-\x9f\u2028\u2029]", value):
+        fail("INVALID_LIST_NAME", "Use one line for the list name, without control characters.")
+    name = re.sub(r"^[\s\ufeff]+|[\s\ufeff]+$", "", value)
+    if len(name) > EXPORT_SCHEMA["maxListNameLength"]:
+        fail("INVALID_LIST_NAME", f"Use {EXPORT_SCHEMA['maxListNameLength']} characters or fewer for the list name.")
+    if ":::" in name:
+        fail("INVALID_LIST_NAME", "Choose one list name without :::, which Google uses to separate labels.")
+    return name
+
+
+def make_google_csv(contacts, list_name=""):
+    list_name = validate_list_name(list_name)
+    if len(contacts) > EXPORT_SCHEMA["googleBatchSize"]:
+        fail("GOOGLE_CONTACT_LIMIT", "Google accepts up to 3,000 contacts per import. Split the input or use the browser converter to download CSV parts.")
+    output = io.StringIO(newline="")
+    writer = csv.writer(output, lineterminator="\r\n")
+    writer.writerow([column["header"] for column in EXPORT_SCHEMA["googleColumns"]])
+    for contact in contacts:
+        if any(len(values) > 1 for field, values in contact.items() if field != "notes"):
+            fail("GOOGLE_MULTIPLE_VALUES", "Google CSV export accepts one value per field. Use vCard to preserve repeated RTF fields.")
+        values = {field: "\n".join(items) for field, items in contact.items()}
+        values["name"] = next((values[field] for field in SCHEMA["nameFallback"] if values.get(field)), SCHEMA["unnamedContact"])
+        values["listName"] = list_name
+        website = values.get("website", "")
+        if "\n" in website or "\r" in website:
+            raise ValueError("Website values must stay on one line.")
+        if website and not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", website):
+            values["website"] = "https://" + website
+        writer.writerow([column.get("label", values.get(column["field"], "")) if values.get(column["field"]) else "" for column in EXPORT_SCHEMA["googleColumns"]])
+    return output.getvalue()
+
+
+def make_vcards(contacts, list_name=""):
+    list_name = validate_list_name(list_name)
     lines = []
     for contact in contacts:
         name = escape(next((contact[field][0] for field in SCHEMA["nameFallback"] if contact.get(field)), SCHEMA["unnamedContact"]))
@@ -437,8 +473,13 @@ def make_vcards(contacts):
             lines.append(f"EMAIL;TYPE=INTERNET:{escape(email)}")
         for phone in contact.get("phone", []):
             lines.append(f"TEL:{escape(phone)}")
-        if contact.get("notes"):
-            lines.append(f"NOTE:{escape(chr(10).join(contact['notes']))}")
+        if list_name:
+            lines.append(f"CATEGORIES:{escape(list_name)}")
+        notes = list(contact.get("notes", []))
+        if list_name:
+            notes.append(f"Contact list: {list_name}")
+        if notes:
+            lines.append(f"NOTE:{escape(chr(10).join(notes))}")
         lines.append("END:VCARD")
     return "\r\n".join(fold(line) for line in lines) + "\r\n"
 
@@ -446,14 +487,16 @@ def make_vcards(contacts):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="Input .txt, .csv, .tsv, .html, .htm, or .rtf file")
-    parser.add_argument("-o", "--output", type=Path, help="Output file (default: input.vcf)")
+    parser.add_argument("-o", "--output", type=Path, help="Output file (default: input.vcf or input-google.csv)")
+    parser.add_argument("--list-name", default="", help="Optional list name: vCard category/note or Google CSV label")
+    parser.add_argument("--output-format", choices=["vcard", "google-csv"], default="vcard", help="Export format (default: vcard)")
     parser.add_argument("--encoding", help="Input encoding (default: UTF-8 for text, cp1252 for RTF)")
     parser.add_argument("--delimiter", choices=["auto", "tab", "comma", "spaces"], default="auto",
                         help="TXT column separator (default: detect from header)")
     parser.add_argument("--force", action="store_true", help="Replace an existing output file")
     parser.add_argument("--strict", action="store_true", help="Stop if any line is unrecognized")
     args = parser.parse_args()
-    output = args.output or args.input.with_suffix(".vcf")
+    output = args.output or (args.input.with_name(args.input.stem + "-google.csv") if args.output_format == "google-csv" else args.input.with_suffix(".vcf"))
     try:
         if args.input.resolve() == output.resolve():
             raise ValueError("Input and output must be different files.")
@@ -482,7 +525,7 @@ def main():
             print(f"Warning: {warning['message'] if isinstance(warning, dict) else warning}", file=sys.stderr)
         if any(isinstance(warning, str) for warning in warnings) and args.strict:
             raise ValueError("Unrecognized lines found; no output written.")
-        result = make_vcards(contacts)
+        result = make_google_csv(contacts, args.list_name) if args.output_format == "google-csv" else make_vcards(contacts, args.list_name)
         with output.open("w" if args.force else "x", encoding="utf-8", newline="") as handle:
             handle.write(result)
     except UnicodeDecodeError:
