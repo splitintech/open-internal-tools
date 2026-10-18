@@ -37,7 +37,7 @@ const sbom = {
     component: {
       type: 'application',
       name: 'verification-adapter-sdk',
-      version: '0.1.0-beta.0',
+      version: '0.1.0-beta.1',
       licenses: [{ license: { id: 'MIT' } }],
     },
   },

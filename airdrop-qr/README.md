@@ -83,3 +83,14 @@ Each QR destination is the entry URL plus optional UTM (`utm_campaign` defaults 
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+
+## SplitIn Dev tools integration
+
+Hosted route: `https://www.splitin.net/dev-tools/qr-generator` (deployment qualification tracked by the host application). Build with Node 24, `npm ci`, `npm run build`, then `npm test`. Consumers install reviewed versioned tarballs; no sibling-source imports are required.
+
+The hosted playground is isolated from customer verification, onboarding and payment eligibility. Public demonstrations keep state in memory and suppress recording. Provider credentials and launch secrets must never be persisted by a browser client. Test keyboard controls, 320/390/768px layouts and reduced motion as well as physical iOS Safari and Android Chrome.
+
+### Browser exports (0.2)
+
+Import `parseCatalogText`, `catalogErrors`, `generateAssets` and `svgToPng` from `@splitin/airdrop-qr/browser`. JSON uses the existing catalog format. CSV requires `slug,label,url` and optional `blurb`, with UTF-8, quoted commas and quoted newlines supported. Limits: 5 MB input, 250 entries, HTTPS destinations without credentials. Theme values accept only #RGB/#RRGGBB. QR pixels stay dark on white; PNG is 1024px. Pass `signal` and `onProgress(completed,total)` to generation. All assets remain in memory; the CLI retains its filesystem output and 320px SVG markup. HTML works offline and contains no scripts or remote fonts.

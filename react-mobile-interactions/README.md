@@ -218,3 +218,14 @@ Own this package end to end — or explore SplitIn tech careers — at **[https:
 ## License
 
 MIT. Free to use in personal, open-source, and commercial applications. See [LICENSE](LICENSE). Program rules: [CONTRIBUTING.md](../CONTRIBUTING.md).
+
+
+## SplitIn Dev tools integration
+
+Hosted route: `https://www.splitin.net/dev-tools/mobile-interactions` (deployment qualification tracked by the host application). Build with Node 24, `npm ci`, `npm run build`, then `npm test`. Consumers install reviewed versioned tarballs; no sibling-source imports are required.
+
+The hosted playground is isolated from customer verification, onboarding and payment eligibility. Public demonstrations keep state in memory and suppress recording. Provider credentials and launch secrets must never be persisted by a browser client. Test keyboard controls, 320/390/768px layouts and reduced motion as well as physical iOS Safari and Android Chrome.
+
+### Contained playgrounds (0.2)
+
+`MobileEdgeBackHandler` accepts an optional `target: HTMLElement`. Edge coordinates are measured against that element and listeners are removed on target changes/unmount. Omit target to preserve document-wide behavior. Set `hapticPattern={false}` to disable optional vibration. `useSwipeIntent` supports mouse and pen and suppresses duplicate touch streams when pointer events are present. Use a local `MobileBackProvider` to keep demo navigation separate from browser history.

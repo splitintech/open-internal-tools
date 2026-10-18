@@ -1,6 +1,6 @@
 {
   "name": "@splitin/verification-react",
-  "version": "0.1.0-beta.0",
+  "version": "0.1.0-beta.1",
   "description": "Accessible React hooks and components for verification launch, status, appeals, and operations.",
   "license": "MIT",
   "author": "SplitInTech, @ojchavan",
@@ -11,8 +11,13 @@
     "directory": "verification-adapter-sdk/packages/verification-react"
   },
   "type": "module",
-  "sideEffects": ["./dist/styles.css", "./src/styles.css"],
-  "engines": { "node": ">=20" },
+  "sideEffects": [
+    "./dist/styles.css",
+    "./src/styles.css"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -54,16 +59,25 @@
     },
     "./styles.css": "./src/styles.css"
   },
-  "files": ["dist", "src/styles.css", "LICENSE", "NOTICE", "README.md", "package.json"],
-  "publishConfig": { "access": "public" },
+  "files": [
+    "dist",
+    "src/styles.css",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@splitin/verification-adapter-sdk": "0.1.0-beta.0",
-    "@splitin/verification-web": "0.1.0-beta.0"
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.1",
+    "@splitin/verification-web": "0.1.0-beta.1"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -73,9 +87,15 @@
     "react-plaid-link": "^3.5.0 || ^4.0.0"
   },
   "peerDependenciesMeta": {
-    "@stripe/stripe-js": { "optional": true },
-    "persona": { "optional": true },
-    "react-plaid-link": { "optional": true }
+    "@stripe/stripe-js": {
+      "optional": true
+    },
+    "persona": {
+      "optional": true
+    },
+    "react-plaid-link": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",

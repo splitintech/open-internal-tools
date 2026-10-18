@@ -1,7 +1,7 @@
 {
   "name": "@splitin/verification-adapter-plaid-idv",
-  "version": "0.1.0-beta.0",
-  "description": "Official Plaid Identity Verification adapter for the Universal Open-Source Verification Adapter SDK. IDV only — not Auth, Identity, Monitor, or payments.",
+  "version": "0.1.0-beta.1",
+  "description": "Official Plaid Identity Verification adapter for the Universal Open-Source Verification Adapter SDK. IDV only \u2014 not Auth, Identity, Monitor, or payments.",
   "license": "MIT",
   "author": "SplitInTech, @ojchavan",
   "homepage": "https://github.com/splitintech/open-internal-tools/tree/main/verification-adapter-sdk/packages/verification-adapter-plaid-idv#readme",
@@ -12,7 +12,9 @@
   },
   "type": "module",
   "sideEffects": false,
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,22 +30,32 @@
       "require": "./dist/browser.cjs"
     }
   },
-  "files": ["dist", "LICENSE", "NOTICE", "README.md", "package.json"],
-  "publishConfig": { "access": "public" },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@splitin/verification-adapter-sdk": "0.1.0-beta.0",
+    "@splitin/verification-adapter-sdk": "0.1.0-beta.1",
     "jose": "^6.1.0"
   },
   "peerDependencies": {
     "react-plaid-link": "^4.0.0"
   },
   "peerDependenciesMeta": {
-    "react-plaid-link": { "optional": true }
+    "react-plaid-link": {
+      "optional": true
+    }
   },
   "optionalPeerDependencies": {
     "react-plaid-link": "^4.0.0"

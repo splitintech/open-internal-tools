@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(fileURLToPath(new URL('..', import.meta.url)));
-const expectedVersion = '0.1.0-beta.0';
+const expectedVersion = '0.1.0-beta.1';
 const failures = [];
 
 const npmrc = readFileSync(join(root, '.npmrc'), 'utf8');

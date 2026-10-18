@@ -226,12 +226,12 @@ export function VerificationLauncher({
         ) : null}
 
         <footer className="siv-footer siv-actions">
-          <button type="button" className="siv-button" data-variant="danger" onClick={() => void run('cancel', async () => {
+          {cancel ? <button type="button" className="siv-button" data-variant="danger" onClick={() => void run('cancel', async () => {
             if (!cancel) return;
             const result = await cancel();
             onSessionChange('attemptId' in result ? result : { ...session, status: result.status, canResume: false, canRetry: true });
             setMessage('Verification was canceled. Your saved action was not submitted.');
-          })} disabled={Boolean(busy)}>Cancel verification</button>
+          })} disabled={Boolean(busy)}>Cancel verification</button> : null}
           <button type="button" className="siv-button" onClick={() => setAppealOpen(true)} disabled={Boolean(busy)}>Request a review</button>
           <button type="button" className="siv-button" onClick={() => void run('retry', async () => {
             if (!retry || !session.canRetry || !online) return;

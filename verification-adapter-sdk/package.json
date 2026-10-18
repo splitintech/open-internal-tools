@@ -1,7 +1,7 @@
 {
   "name": "verification-adapter-sdk",
   "private": true,
-  "version": "0.1.0-beta.0",
+  "version": "0.1.0-beta.1",
   "description": "MIT-licensed, self-hosted verification adapter SDK workspace.",
   "license": "MIT",
   "author": "SplitInTech, @ojchavan",

@@ -30,6 +30,7 @@ function percentile(values, p) {
   return sorted[index] ?? 0;
 }
 
+const cycles = 200;
 const adapter = createFakeAdapterForScenario('input_required');
 let providerMs = 0;
 const originalCreate = adapter.createAttempt.bind(adapter);
@@ -59,7 +60,9 @@ const platform = createVerificationPlatform({
   store,
   queue,
   authorize: async () => true,
-  runtime: { seedSandboxExamples: true },
+  // This in-memory fake benchmark measures latency, not provider throttling.
+  // Admit the measured cycles plus warmup without changing production defaults.
+  runtime: { seedSandboxExamples: true, rateBudgetPerProvider: cycles + 1 },
 });
 
 await platform.start(userActor, {
@@ -72,7 +75,6 @@ await platform.start(userActor, {
 providerMs = 0;
 const cycleTimes = [];
 const startTimes = [];
-const cycles = 200;
 
 for (let i = 0; i < cycles; i += 1) {
   const beforeProvider = providerMs;

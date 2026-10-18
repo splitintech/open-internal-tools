@@ -11,14 +11,17 @@ import { type GesturePoint, pointFromTouch, triggerHaptic } from "../core/gestur
 
 export type MobileEdgeBackHandlerProps = {
   enabled?: boolean;
+  /** Scope listeners and edge coordinates to a contained demo or panel. */
+  target?: HTMLElement | null;
   onBack: () => void;
   canStart?: (event: TouchEvent) => boolean;
   config?: Partial<EdgeSwipeConfig>;
-  hapticPattern?: number | number[];
+  hapticPattern?: number | number[] | false;
 };
 
 export function MobileEdgeBackHandler({
   enabled = true,
+  target,
   onBack,
   canStart,
   config,
@@ -40,10 +43,12 @@ export function MobileEdgeBackHandler({
       return undefined;
     }
 
-    const mergedConfig = { ...DEFAULT_EDGE_SWIPE_CONFIG, ...configRef.current };
+    const eventTarget = target ?? document;
+    const getConfig = () => ({ ...DEFAULT_EDGE_SWIPE_CONFIG, ...configRef.current });
 
     const handleTouchStart = (event: TouchEvent) => {
-      const touch = event.touches[0];
+      startRef.current = null;
+      const touch = event.touches.length === 1 ? event.touches[0] : undefined;
       if (!touch) {
         return;
       }
@@ -55,12 +60,12 @@ export function MobileEdgeBackHandler({
       if (
         !shouldStartEdgeSwipe(
           {
-            x: touch.clientX,
-            y: touch.clientY,
+            x: touch.clientX - (target?.getBoundingClientRect().left ?? 0),
+            y: touch.clientY - (target?.getBoundingClientRect().top ?? 0),
             target: event.target,
-            viewportWidth: window.innerWidth,
+            viewportWidth: target?.clientWidth ?? window.innerWidth,
           },
-          mergedConfig,
+          getConfig(),
         )
       ) {
         return;
@@ -76,7 +81,7 @@ export function MobileEdgeBackHandler({
         return;
       }
 
-      if (shouldPreventNativeScrollForEdgeSwipe(start, pointFromTouch(touch), mergedConfig) && event.cancelable) {
+      if (shouldPreventNativeScrollForEdgeSwipe(start, pointFromTouch(touch), getConfig()) && event.cancelable) {
         event.preventDefault();
       }
     };
@@ -90,8 +95,8 @@ export function MobileEdgeBackHandler({
         return;
       }
 
-      if (shouldCommitEdgeSwipeBack(start, pointFromTouch(touch), mergedConfig)) {
-        triggerHaptic(hapticPatternRef.current);
+      if (shouldCommitEdgeSwipeBack(start, pointFromTouch(touch), getConfig())) {
+        if (hapticPatternRef.current !== false) triggerHaptic(hapticPatternRef.current);
         onBackRef.current();
       }
     };
@@ -100,18 +105,18 @@ export function MobileEdgeBackHandler({
       startRef.current = null;
     };
 
-    document.addEventListener("touchstart", handleTouchStart, { passive: true });
-    document.addEventListener("touchmove", handleTouchMove, { passive: false });
-    document.addEventListener("touchend", handleTouchEnd, { passive: true });
-    document.addEventListener("touchcancel", handleTouchCancel, { passive: true });
+    eventTarget.addEventListener("touchstart", handleTouchStart as EventListener, { passive: true });
+    eventTarget.addEventListener("touchmove", handleTouchMove as EventListener, { passive: false });
+    eventTarget.addEventListener("touchend", handleTouchEnd as EventListener, { passive: true });
+    eventTarget.addEventListener("touchcancel", handleTouchCancel, { passive: true });
 
     return () => {
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-      document.removeEventListener("touchcancel", handleTouchCancel);
+      eventTarget.removeEventListener("touchstart", handleTouchStart as EventListener);
+      eventTarget.removeEventListener("touchmove", handleTouchMove as EventListener);
+      eventTarget.removeEventListener("touchend", handleTouchEnd as EventListener);
+      eventTarget.removeEventListener("touchcancel", handleTouchCancel);
     };
-  }, [enabled]);
+  }, [enabled, target]);
 
   return null;
 }
