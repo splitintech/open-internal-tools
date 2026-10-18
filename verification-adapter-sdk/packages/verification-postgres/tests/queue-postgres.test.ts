@@ -1,4 +1,5 @@
 import {randomUUID} from 'node:crypto';
+import assert from 'node:assert/strict';
 import pg from 'pg';
 import {describe,it,expect} from 'vitest';
 import {createPostgresStore} from '../src/store.ts';
@@ -17,17 +18,17 @@ describe.skipIf(!process.env.TEST_DATABASE_URL)('durable queue on PostgreSQL',()
   try {
    await store.ensureTenant(tenant);
    const recon=make('reconcile');await queue.enqueue(recon);
-   const [first]=await claim('first');expect(first.nextAttemptAt).toMatch(/T.*Z$/);
+   const [first]=await claim('first');assert(first, 'Expected a claimed first job');expect(first.nextAttemptAt).toMatch(/T.*Z$/);
    await queue.retry(tenant,first.id,first.leaseId!,{errorCode:'processing',retryAfterSeconds:60});
    const retried=await store.getJob(tenant,recon.id);expect(retried?.state).toBe('retryable');expect(Date.parse(retried!.nextAttemptAt)).toBeGreaterThan(now.getTime());
    expect(await claim('too-early')).toHaveLength(0);
-   now=new Date(now.getTime()+120000);const [second]=await claim('second');expect(second.attemptCount).toBe(2);
+   now=new Date(now.getTime()+120000);const [second]=await claim('second');assert(second, 'Expected a claimed second job');expect(second.attemptCount).toBe(2);
    await queue.complete(tenant,recon.id,first.leaseId!);expect((await store.getJob(tenant,recon.id))?.state).toBe('processing');
-   now=new Date(now.getTime()+31000);const [third]=await claim('third');expect(third.id).toBe(recon.id);expect(third.attemptCount).toBe(3);
+   now=new Date(now.getTime()+31000);const [third]=await claim('third');assert(third, 'Expected a claimed third job');expect(third.id).toBe(recon.id);expect(third.attemptCount).toBe(3);
    await queue.complete(tenant,third.id,third.leaseId!);expect((await store.getJob(tenant,recon.id))?.state).toBe('completed');
    await queue.enqueue(make('reconcile'));await queue.enqueue(make('redact'));
    expect(await claim('bounded')).toHaveLength(1);expect(await claim('remaining')).toHaveLength(1);
-   const webhook=make('webhook');await queue.enqueue(webhook);const [event]=await claim('webhook');await queue.complete(tenant,event.id,event.leaseId!);expect(await store.getJob(tenant,event.id)).toBeNull();
+   const webhook=make('webhook');await queue.enqueue(webhook);const [event]=await claim('webhook');assert(event, 'Expected a claimed webhook job');await queue.complete(tenant,event.id,event.leaseId!);expect(await store.getJob(tenant,event.id)).toBeNull();
   }finally{
    for(const table of ['reconciliation_jobs','redaction_jobs','webhook_leases','tenants'])await db.query(`DELETE FROM verification.${table} WHERE tenant_key=$1`,[tenant]);
    await db.end();

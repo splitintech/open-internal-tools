@@ -77,35 +77,9 @@ describe.skipIf(!url)('live PostgreSQL 15/16', () => {
 });
 
 async function runSql(client: { query: (sql: string) => Promise<unknown> }, sql: string): Promise<void> {
-  for (const statement of splitSql(sql)) {
-    await client.query(statement);
-  }
-}
-
-function splitSql(sql: string): string[] {
-  const statements: string[] = [];
-  let buffer = '';
-  let inDollar = false;
-  for (const line of sql.split('\n')) {
-    buffer += `${line}\n`;
-    const trimmed = line.trim();
-    if (!inDollar && trimmed.includes('$$') && !trimmed.endsWith('$$;')) {
-      inDollar = true;
-      continue;
-    }
-    if (inDollar && trimmed.endsWith('$$;')) {
-      inDollar = false;
-      statements.push(buffer);
-      buffer = '';
-      continue;
-    }
-    if (!inDollar && trimmed.endsWith(';') && !trimmed.startsWith('--')) {
-      statements.push(buffer);
-      buffer = '';
-    }
-  }
-  if (buffer.trim()) statements.push(buffer);
-  return statements.map((item) => item.trim()).filter((item) => item && !item.startsWith('--'));
+  // Let PostgreSQL parse complete migration files, including leading comments
+  // and dollar-quoted functions. A hand-written splitter dropped commented DDL.
+  await client.query(sql);
 }
 
 async function insertAttempt(client: { query: (sql: string, params?: unknown[]) => Promise<unknown> }, tenant: string, id: string) {
