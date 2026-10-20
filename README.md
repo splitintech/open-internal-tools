@@ -144,6 +144,7 @@ Use what the folder already uses unless the job clearly needs something else. Cu
 
 | Folder | Language / runtime | Libraries and services |
 | --- | --- | --- |
+| [outreach-engine](outreach-engine/) | TypeScript on Node 24+ | SQLite (`node:sqlite`), Zod, tsup, vitest, MCP SDK; Gmail/Outlook adapters, optional Papr host |
 | [mac-unlock-notify](mac-unlock-notify/) | zsh on macOS | LaunchAgent, `ioreg`, `curl`, Slack incoming webhooks |
 | [slack-agent-hq](slack-agent-hq/) | TypeScript on Node 20+ | Slack Bolt, Slack CLI, YAML config, SQLite (`node:sqlite`), vitest, tsx, npm workspaces |
 | [ideation-loop-system](ideation-loop-system/) | TypeScript on Node 20+ | Same HQ router plus `#ideate` classifier, MEMORY.md, cost gates, specialist inner loops, `/loop` `/audit` `/done` |
@@ -223,6 +224,7 @@ Each folder has a SplitIn URL that 301s to that GitHub tree: `https://www.spliti
 
 | Product | Tech folder | splitin.net | What it does | Maintainer |
 | --- | --- | --- | --- | --- |
+| Outreach Engine (development) | [outreach-engine](outreach-engine/) | Draft only; publication pending | Provider-neutral orchestration with human approvals, suppression, reply-stop and CLI/Papr/local MCP controls; live acceptance pending | Open — independent contributor / project CTO |
 | Hub | [open-internal-tools](https://github.com/splitintech/open-internal-tools) | [tech-stack/open-internal-tools](https://www.splitin.net/tech-stack/open-internal-tools) | Program repo for product-tech folders | Open — independent contributor / project CTO |
 | Mac unlock canary | [mac-unlock-notify](mac-unlock-notify/) | [tech-stack/open-internal-tools/mac-unlock-notify](https://www.splitin.net/tech-stack/open-internal-tools/mac-unlock-notify) | Notify Slack on iPhone when this Mac is unlocked | Open — independent contributor / project CTO |
 | Slack agent HQ | [slack-agent-hq](slack-agent-hq/) | [tech-stack/open-internal-tools/slack-agent-hq](https://www.splitin.net/tech-stack/open-internal-tools/slack-agent-hq) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
@@ -264,3 +266,13 @@ Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](htt
 <p align="center">
   <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
 </p>
+
+
+## Outreach Engine (development)
+
+[Outreach Engine](outreach-engine/) is a provider-neutral, MIT-licensed outreach
+orchestrator with approvals, suppression, reply-stop handling and durable uncertain
+send reconciliation. CLI, loopback HTTP, Papr and local stdio MCP are control
+surfaces, not direct senders. Gmail/Outlook adapters have fake-API coverage; live
+acceptance, remote MCP, release publication and the separate Slack control app
+remain pending. See its [release gates](outreach-engine/docs/release.md).

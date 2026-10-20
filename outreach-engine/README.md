@@ -16,6 +16,7 @@ are thin clients of it.
 > the campaign domain, the importer, inbound processing, the `outreach` CLI, the HTTP API
 > and the Papr Work console are built and tested on fake providers. Real provider adapters
 > and Slack are M8, MCP is M9.
+> Local M9 stdio MCP and M10 release preparation are now implemented in this working tree; external acceptance and publication are still pending.
 > Nothing is emailed until an admin opens the live-send gate. Specification:
 > [BUILD_PLAN.md](BUILD_PLAN.md), milestones in §14.
 
@@ -47,7 +48,7 @@ are thin clients of it.
 | `@splitin/outreach-provider-email-outlook` | M8 | Outlook / Exchange Online adapter via Microsoft Graph: MIME draft-then-send, Sent Items reconciliation, rotating refresh tokens |
 | `@splitin/outreach-provider-kit` | M8 | Shared adapter building blocks: HTTP outcome classification, loopback OAuth (PKCE), DSN parsing |
 | `@splitin/outreach-notify-slack` | M8 | Slack notifications: incoming webhook or `chat.postMessage`, escaped Block Kit |
-| Zoho Mail adapter | M8 | Remaining |
+| Zoho Mail adapter | M8 | Automated sending excluded by current provider policy; see proposed ADR 0005 |
 
 ## Develop
 
@@ -73,3 +74,13 @@ ADR that supersedes the old one, not by editing it.
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+
+## Remaining release gates
+
+See [release preparation](docs/release.md), [operations runbook](docs/runbook.md),
+[threat model](docs/threat-model.md) and [local MCP](packages/outreach-mcp/README.md).
+Local tests do not complete live Gmail/Outlook, Papr or Claude Code acceptance.
+The Slack control app is a separate `slack-agent-hq` PR. Remote MCP remains disabled
+pending issuer/audience/hosting decisions. All packages remain development version
+0.0.0, and no release tag, package publication or deployment is implied.

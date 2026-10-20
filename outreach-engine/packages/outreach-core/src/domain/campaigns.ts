@@ -1,12 +1,13 @@
-import { digestCanonical, ulid } from '@splitin/outreach-contracts';
+import { digestCanonical, ulid, type SenderIdentity } from '@splitin/outreach-contracts';
 import { ConflictError, ForbiddenError, NotFoundError, actorOf, audit, requireRole, type AuthContext } from './auth';
 import { createApproval, createBatchApproval, loadApproval } from './approvals';
 import { compileIssues } from './compile';
 import { loadCampaign, type CampaignVersionRow, type DomainEnv } from './env';
-import { loadStepContext, materializeNext } from './materialize';
+import { assertMaterializationRuntime, loadStepContext, materializeNext } from './materialize';
 import { PlaybookError, parsePlaybook, type Audience, type Policy, type Step } from './playbook';
 import { jurisdictionVerdict, readJurisdictionPolicy } from './jurisdictions';
 import { isSuppressed } from './suppressions';
+import { findTemplate, type TemplateRow } from './templates';
 
 export interface CreateCampaignInput {
   readonly name: string;
@@ -83,7 +84,33 @@ export interface ActivationPreview {
   readonly audienceCount: number;
   readonly excluded: { suppressed: number; noConsent: number; jurisdiction: number; alreadyEnrolled: number; duplicateContact: number };
   readonly sampleRecipients: readonly string[];
-  readonly steps: readonly Pick<Step, 'id' | 'type'>[];
+  readonly steps: readonly Step[];
+  readonly templates: readonly TemplateRow[];
+  readonly sender: SenderIdentity;
+  readonly policy: Policy;
+  readonly audienceHash: string;
+}
+
+
+function activationContent(env: DomainEnv, workspaceId: string, version: CampaignVersionRow, steps: readonly Step[]) {
+  const templates = [...new Set(steps.flatMap((step) => 'template' in step ? [step.template] : []))]
+    .map((ref) => {
+      const template = findTemplate(env.db, workspaceId, ref);
+      if (!template) throw new ConflictError('activation template no longer exists');
+      return template;
+    });
+  const account = env.db.prepare('SELECT sender_identity FROM provider_accounts WHERE workspace_id = ? AND id = ?')
+    .get<{ sender_identity: string }>(workspaceId, version.provider_account_id);
+  if (!account) throw new NotFoundError('provider account');
+  const sender = JSON.parse(account.sender_identity) as SenderIdentity;
+  const contacts = env.db.prepare(`SELECT c.*, cp.value_norm, cp.consent_basis, cp.jurisdiction
+    FROM audience_members a JOIN contacts c ON c.id = a.contact_id JOIN contact_points cp ON cp.id = a.contact_point_id
+    WHERE a.campaign_version_id = ? AND c.workspace_id = ? ORDER BY a.contact_point_id`)
+    .all(version.id, workspaceId);
+  return { templates, sender, contacts };
+}
+function activationHash(version: CampaignVersionRow, steps: readonly Step[], content: ReturnType<typeof activationContent>, audienceHash: string) {
+  return digestCanonical({ steps, policy: version.policy, audienceHash, account: version.provider_account_id, ...content });
 }
 
 /** Snapshots the audience, computes the exact version hash, and requests approval if the policy needs it. */
@@ -121,8 +148,9 @@ export function prepareActivation(env: DomainEnv, ctx: AuthContext, campaignId: 
     const audienceHash = digestCanonical(members.map((member) => member.contact_point_id).sort());
     const sequence = db.prepare('SELECT spec, spec_hash FROM sequence_versions WHERE id = ?').get<{ spec: string; spec_hash: string }>(version.sequence_version_id);
     const steps = (JSON.parse(sequence?.spec ?? '{"steps":[]}') as { steps: Step[] }).steps;
-    const templates = steps.flatMap((step) => ('template' in step ? [step.template] : []));
-    const versionHash = digestCanonical({ spec: sequence?.spec_hash, policy: version.policy_hash, audience: audienceHash, templates, account: version.provider_account_id });
+    const content = activationContent(env, ctx.workspaceId, version, steps);
+    const { templates, sender } = content;
+    const versionHash = activationHash(version, steps, content, audienceHash);
     const policy = JSON.parse(version.policy) as Policy;
     let approvalId: string | null = null;
     if (policy.approval !== 'none') {
@@ -146,7 +174,7 @@ export function prepareActivation(env: DomainEnv, ctx: AuthContext, campaignId: 
       audienceCount: members.length,
       excluded,
       sampleRecipients: members.slice(0, 5).map((member) => member.email),
-      steps: steps.map((step) => ({ id: step.id, type: step.type })),
+      steps, templates, sender, policy, audienceHash,
     };
   });
 }
@@ -162,6 +190,11 @@ export function commitActivation(env: DomainEnv, ctx: AuthContext, input: { camp
     if (campaign.status !== 'draft') throw new ConflictError(`campaign is ${campaign.status}`);
     const version = draftVersion(env, input.campaignId);
     if (!version.version_hash || version.version_hash !== input.operationHash) throw new ConflictError('preview is stale; prepare the activation again');
+    const sequence = db.prepare('SELECT spec FROM sequence_versions WHERE id = ?').get<{ spec: string }>(version.sequence_version_id);
+    const steps = (JSON.parse(sequence?.spec ?? '{"steps":[]}') as { steps: Step[] }).steps;
+    const content = activationContent(env, ctx.workspaceId, version, steps);
+    assertMaterializationRuntime(env, ctx.workspaceId, JSON.parse(version.policy) as Policy, steps);
+    if (activationHash(version, steps, content, version.audience_hash ?? '') !== version.version_hash) throw new ConflictError('activation content changed; prepare again');
     const policy = JSON.parse(version.policy) as Policy;
     if (policy.approval !== 'none') {
       const approval = version.approval_id ? loadApproval(db, ctx.workspaceId, version.approval_id) : undefined;
@@ -214,3 +247,4 @@ export function setCampaignStatus(env: DomainEnv, ctx: AuthContext, campaignId: 
     audit(env.db, ctx, now, 'campaign', campaignId, status, { reason });
   });
 }
+

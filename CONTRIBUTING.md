@@ -33,6 +33,7 @@ git push origin in-app-otp-v0.1.0
 | `@splitin/in-app-otp` | `in-app-otp-v*` | `in-app-otp-publish.yml` |
 | `@splitin/react-mobile-interactions` | `react-mobile-interactions-v*` | `react-mobile-interactions-publish.yml` |
 | `@splitin/verification-*` | `verification-adapter-sdk-v*` | `verification-adapter-sdk-publish.yml` |
+| `@splitin/outreach-*` (development; see release gates) | `outreach-engine-v*` | `outreach-engine-publish.yml` |
 
 Attach the trusted publisher on each npm package **before** pushing a tag
 for a version that is not already on the registry. Already-published

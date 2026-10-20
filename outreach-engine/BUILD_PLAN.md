@@ -926,6 +926,32 @@ Critical path: M0 → M1 → M2 → M3 → M4 → M6 → M8. M5 can run in paral
 
 ---
 
+## 14.1 Working-tree completion update (2026-10-20)
+
+This update does not mark external acceptance as completed.
+
+- M9 Stage 1: local stdio control surface, fixed ten-tool allowlist, durable
+  caller/hash-bound 15-minute prepared operations, trusted host form confirmation,
+  strict inputs and untrusted result envelopes. CLI does not load provider
+  credentials or execute workers. Actual Claude Code acceptance remains pending.
+- M9 Stage 2: no listener or permissive auth placeholder. D4 issuer/audience and
+  HTTPS hosting decisions, OAuth implementation and real ChatGPT acceptance remain.
+- M10 preparation: tag-verified OIDC workflow, coordinated-version/pack checks,
+  package licenses and READMEs, runbook, threat model, release checklist and hub row.
+  Maintainer version assignment, trusted-publisher setup, protected environment,
+  signed tag, publication and separate website entry remain pending.
+- M8: proposed ADR 0005 clarifies that current Zoho Mail policy excludes scheduled
+  automated sends even if labeled manual correspondence. No Zoho sender is shipped.
+  Slack control remains a separate product PR; notification support is not control.
+- Existing three PR acceptance gates remain open: ADR/build-plan/decision review,
+  first allowlisted live Gmail/Outlook send, and live Papr bundle acceptance.
+- Dependency-review run 36539594167 failed before assessment with a dependency
+  graph/feature availability error. The public repository is eligible according
+  to GitHub documentation, but current feature settings need admin verification.
+  The check has not been disabled or treated as a successful security assessment.
+
+---
+
 ## 15. Upstream track (Papr Work) — parallel, non-blocking
 
 | Step | What | When |
@@ -1039,3 +1065,4 @@ Fixtures use only `example.com`, `example.org`, `example.net` and generated name
 ```csv
 email,profile_url,full_name,first_name,org_name,org_domain,title,timezone,attr.segment
 ```
+

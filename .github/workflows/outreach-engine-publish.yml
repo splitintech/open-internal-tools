@@ -1,0 +1,61 @@
+name: outreach-engine-publish
+on:
+  push:
+    tags: ['outreach-engine-v*']
+permissions:
+  contents: read
+concurrency:
+  group: outreach-engine-release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: npm-release
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: outreach-engine
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require verified signed annotated tag on main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        working-directory: .
+        run: |
+          test "$(git cat-file -t "refs/tags/$RELEASE_TAG")" = tag
+          TAG_SHA=$(git rev-parse "refs/tags/$RELEASE_TAG")
+          gh api "repos/$GITHUB_REPOSITORY/git/tags/$TAG_SHA" --jq '.verification.verified' | grep -qx true
+          git merge-base --is-ancestor "refs/tags/$RELEASE_TAG^{}" origin/main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: outreach-engine/package-lock.json
+      - run: npm install -g npm@11.9.0
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check
+      - run: npm run soak
+      - run: npm run mcp:smoke
+      - run: npm run release:verify
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+      - name: Publish through OIDC only
+        run: node scripts/publish-release.mjs
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+      - name: Create release
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --verify-tag --generate-notes --title "$RELEASE_TAG"
+          fi

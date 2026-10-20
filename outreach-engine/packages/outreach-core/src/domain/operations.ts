@@ -3,7 +3,7 @@ import { providerContext } from '../execution/invoke';
 import type { AccountRow } from '../execution/types';
 import { ConflictError, NotFoundError, actorOf, audit, requireRole, type AuthContext, type Role } from './auth';
 import type { DomainEnv, EnrollmentRow } from './env';
-import { loadStepContext, materializeNext, stepIndex } from './materialize';
+import { assertMaterializationRuntime, loadStepContext, materializeNext, stepIndex } from './materialize';
 import { actionApprover } from './campaigns';
 import { checkAccountHealth } from './health';
 import { JurisdictionCode } from './jurisdictions';
@@ -175,6 +175,10 @@ export function recordManualOutcome(env: DomainEnv, ctx: AuthContext, taskId: st
     if (!task.enrollment_id) return;
     const sc = loadStepContext(env.db, task.enrollment_id);
     const step = env.db.prepare('SELECT step_id FROM scheduled_actions WHERE id = ?').get<{ step_id: string | null }>(task.action_id);
-    if (sc && step) materializeNext(env, sc, stepIndex(sc, step.step_id), now, actorOf(ctx), { requestActionApproval: actionApprover(env, ctx.workspaceId, ctx.principalId) });
+    if (sc && step) {
+      assertMaterializationRuntime(env, ctx.workspaceId, sc.policy, sc.steps.slice(stepIndex(sc, step.step_id) + 1));
+      materializeNext(env, sc, stepIndex(sc, step.step_id), now, actorOf(ctx), { requestActionApproval: actionApprover(env, ctx.workspaceId, ctx.principalId) });
+    }
   });
 }
+

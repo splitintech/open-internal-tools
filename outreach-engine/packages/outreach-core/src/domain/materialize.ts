@@ -6,7 +6,16 @@ import { addDuration, nextSlot, resolveZone, durationMs } from './calendar';
 import { loadCampaign, loadEnrollment, loadVersion, type CampaignRow, type CampaignVersionRow, type DomainEnv, type EnrollmentRow } from './env';
 import type { Policy, Step } from './playbook';
 import { createUnsubscribeToken, stopEnrollment } from './suppressions';
+import { ForbiddenError } from './auth';
 import { TemplateRenderError, escapeHtml, findTemplate, render } from './templates';
+
+/** Control surfaces must not silently change compliance content while freezing actions. */
+export function assertMaterializationRuntime(env: DomainEnv, workspaceId: string, policy: Policy, steps: readonly Step[]): void {
+  if (env.unsubscribe) return;
+  const needsLink = policy.unsubscribe === 'link' && steps.some((step) => step.type === 'email.send' || step.type === 'email.reply');
+  const usesToken = steps.some((step) => 'template' in step && findTemplate(env.db, workspaceId, step.template)?.required_tokens.includes('unsubscribe_url'));
+  if (needsLink || usesToken) throw new ForbiddenError('configured unsubscribe runtime is required; use the configured CLI or API to commit');
+}
 
 export interface StepContext {
   readonly enrollment: EnrollmentRow;
@@ -232,4 +241,5 @@ export function materializeNext(
 export function stepIndex(sc: StepContext, stepId: string | null): number {
   return sc.steps.findIndex((step) => step.id === stepId);
 }
+
 

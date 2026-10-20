@@ -215,3 +215,21 @@ describe('stops and holds', () => {
     expect(listReview(env.engine, env.viewer).map((row) => row.state_reason)).toEqual(['not_in_live_allowlist']);
   });
 });
+
+
+it('activation confirmation exposes actual content and becomes stale when personalization changes', async () => {
+  const env = await makeDomainEnv();
+  const contactId = env.contact('ada@example.org');
+  const { campaignId } = createCampaign(env.engine, env.operator, { name: 'Preview', playbook: PLAYBOOK, providerAccountId: env.accountId });
+  const preview = prepareActivation(env.engine, env.operator, campaignId);
+  expect(preview.templates[0]?.body_text).toContain('{{first_name}}');
+  expect(preview.sender.address).toBe('sender@example.com');
+  expect(preview.policy.window.start).toBe('09:00');
+  expect(preview.steps.some((step) => step.type === 'wait')).toBe(true);
+  if (preview.approvalId) decideApproval(env.engine, env.approver, { approvalId: preview.approvalId, decision: 'approved', operationHash: preview.operationHash });
+  env.engine.db.prepare('UPDATE contacts SET first_name = ? WHERE id = ?').run('Changed', contactId);
+  expect(() => commitActivation(env.engine, env.operator, { campaignId, operationHash: preview.operationHash })).toThrow('content changed');
+  expect(env.fake.deliveries).toHaveLength(0);
+  expect(campaignStatus(env.engine, env.viewer, campaignId).status).toBe('draft');
+  env.engine.db.close();
+});

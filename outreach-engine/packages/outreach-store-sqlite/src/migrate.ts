@@ -1,6 +1,7 @@
 import { sha256Hex, type SqlDatabase } from '@splitin/outreach-contracts';
 import { SCHEMA_0001 } from './schema';
 import { SCHEMA_0002 } from './schema-0002';
+import { SCHEMA_0003 } from './schema-0003';
 
 export interface Migration {
   readonly id: string;
@@ -10,6 +11,7 @@ export interface Migration {
 export const MIGRATIONS: readonly Migration[] = [
   { id: '0001_init', sql: SCHEMA_0001 },
   { id: '0002_api_tokens', sql: SCHEMA_0002 },
+  { id: '0003_prepared_operations', sql: SCHEMA_0003 },
 ];
 
 export class MigrationDriftError extends Error {
@@ -49,3 +51,4 @@ export function migrate(db: SqlDatabase, migrations: readonly Migration[] = MIGR
   }
   return ran;
 }
+
