@@ -1066,3 +1066,12 @@ Fixtures use only `example.com`, `example.org`, `example.net` and generated name
 email,profile_url,full_name,first_name,org_name,org_domain,title,timezone,attr.segment
 ```
 
+
+### Local maintenance implementation note
+
+Optional worker-triggered `VACUUM INTO` backups and explicit hash-confirmed admin
+retention batches are implemented; see `docs/maintenance.md` for exact scope,
+default-off configuration, migration compatibility, restore risks and exclusions.
+Retention is intentionally partial PII minimization, not full erasure or the
+literal removal of every copy except a hash. Immutable audit records are not
+pruned or edited; a signed audit-archive lifecycle remains separate work.

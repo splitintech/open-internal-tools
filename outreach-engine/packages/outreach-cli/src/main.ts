@@ -1,3 +1,4 @@
+import { maintenanceCommands } from './commands/maintenance';
 import { parseArgs } from 'node:util';
 import { campaignCommands } from './commands/campaigns';
 import { connectCommands } from './commands/connect';
@@ -8,7 +9,7 @@ import type { Command, Flags } from './commands/types';
 import { createOutput } from './output';
 import { UsageError, openRuntime, type GlobalOptions, type Runtime } from './runtime';
 
-export const COMMANDS: readonly Command[] = [...setupCommands, ...connectCommands, ...contentCommands, ...campaignCommands, ...runtimeCommands];
+export const COMMANDS: readonly Command[] = [...setupCommands, ...connectCommands, ...contentCommands, ...campaignCommands, ...runtimeCommands, ...maintenanceCommands];
 
 const GLOBAL_FLAGS = {
   db: { type: 'string' },

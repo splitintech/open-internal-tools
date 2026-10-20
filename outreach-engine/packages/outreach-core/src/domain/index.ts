@@ -15,3 +15,5 @@ export * from './jurisdictions';
 export * from './health';
 
 export * from './prepared';
+
+export { prepareRetention, commitRetention, RETENTION_LIMITS, type RetentionInput, type RetentionPreview } from './retention';

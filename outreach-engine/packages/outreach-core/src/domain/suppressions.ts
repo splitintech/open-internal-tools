@@ -1,4 +1,4 @@
-import { hmacSha256Hex, safeEqualHex, ulid, type SqlDatabase } from '@splitin/outreach-contracts';
+import { hmacSha256Hex, safeEqualHex, sha256Hex, ulid, type SqlDatabase } from '@splitin/outreach-contracts';
 import { CANCELLABLE_ACTION_STATES } from '@splitin/outreach-contracts';
 import { transitionAction, type Actor } from '../execution/actions-repo';
 import type { ActionRow } from '../execution/types';
@@ -43,7 +43,10 @@ export function isSuppressed(db: SqlDatabase, workspaceId: string, recipient: st
        ) LIMIT 1`,
     )
     .get<{ scope: string; reason: string }>(workspaceId, value, value, providerAccountId ?? '', value, domain);
-  return row ? `${row.scope}:${row.reason}` : null;
+  if (row) return `${row.scope}:${row.reason}`;
+  const fingerprint = db.prepare("SELECT reason FROM suppression_fingerprints WHERE workspace_id = ? AND scheme = 'sha256-email-v1' AND digest = ?")
+    .get<{ reason: string }>(workspaceId, sha256Hex(value));
+  return fingerprint ? `global:${fingerprint.reason}` : null;
 }
 
 type StopStatus = 'replied' | 'opted_out' | 'bounced' | 'completed' | 'stopped' | 'error';

@@ -1,3 +1,4 @@
+import { SCHEMA_0004 } from './schema-0004';
 import { sha256Hex, type SqlDatabase } from '@splitin/outreach-contracts';
 import { SCHEMA_0001 } from './schema';
 import { SCHEMA_0002 } from './schema-0002';
@@ -12,6 +13,7 @@ export const MIGRATIONS: readonly Migration[] = [
   { id: '0001_init', sql: SCHEMA_0001 },
   { id: '0002_api_tokens', sql: SCHEMA_0002 },
   { id: '0003_prepared_operations', sql: SCHEMA_0003 },
+  { id: '0004_maintenance', sql: SCHEMA_0004 },
 ];
 
 export class MigrationDriftError extends Error {

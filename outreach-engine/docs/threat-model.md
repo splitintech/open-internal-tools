@@ -50,8 +50,10 @@ The Slack control app belongs in its separate product PR and needs mapped user
 identity, signed-request validation, replay rejection and operation-bound buttons.
 Notifier support is not evidence that Slack control is implemented.
 
-Automatic retention pruning, backup scheduling, independently reviewed operating
-procedures and live deliverability claims are not completed by these documents.
+Optional worker-driven backups and explicit admin-confirmed retention are described
+in [maintenance](maintenance.md). Neither is enabled by default. Retention is partial
+PII minimization, not full erasure; live operating procedures and deliverability
+acceptance remain outstanding.
 A database restore can forget sends; reconcile before resuming. Treat audit,
 backups, staged import rows and manual-task text as sensitive operational data.
 

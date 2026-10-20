@@ -54,14 +54,29 @@ approver using `kill release`; do not automatically resume after an error clears
 
 ## Backup and restore
 
-No automatic daily backup or retention-pruning scheduler is implemented here.
-Arrange a protected backup process separately. Use SQLite's online backup API or
-`VACUUM INTO` with a new destination, or stop all writers before copying the DB.
-Do not copy the live main DB alone while WAL writes are outstanding. Backups
-contain contact PII and must use the same access controls as the source.
+Maintenance is disabled by default. An admin may opt the running worker into
+consistent local snapshots with `worker --backup-dir /private/backups
+--backup-every-hours 24`. The worker checks before each pass; it does not run while
+the worker is stopped. For an externally scheduled one-shot, use `backup` with
+the same two flags. `backup --dry-run` validates configuration without creating
+backup files (normal database opening/migrations still apply). Choose the path
+and cadence explicitly; no scheduler, credentials, or service is installed.
+
+Snapshots use SQLite `VACUUM INTO`, not a copy of the live main DB. A private
+coordination database serializes claims, including across processes. A completed
+snapshot must pass SQLite integrity and foreign-key checks before cadence is
+recorded. Missing/corrupt prior output triggers another attempt, not false
+success. Failures preserve partial output for investigation. No snapshot is ever
+automatically overwritten or deleted. Use a private local filesystem, not NFS or
+cloud-sync folders; protect/encrypt backups as sensitive data. Monitor disk space
+and arrange a separately approved backup lifecycle. See [maintenance](maintenance.md).
 
 Before restore: stop every worker and control surface; preserve the current DB
 and WAL for investigation; restore into a new private path, run migrations and
 `audit verify`, inspect unresolved attempts, and keep the gate closed. A historical
 snapshot can omit successful sends made after it was taken. Reconcile those with
 provider records before any resumption. Test restore on synthetic data first.
+
+A restored old snapshot can also forget later opt-outs or retention. Keep all send
+gates closed until the latest suppression state and provider outcomes are reconciled.
+Never restore an old snapshot as a way to reverse an opt-out.
