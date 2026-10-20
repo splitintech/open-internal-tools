@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -24,7 +24,8 @@ import { openSqliteDatabase } from '@splitin/outreach-store-sqlite';
 const bundle = resolve(dirname(fileURLToPath(import.meta.url)), '../bundle');
 const read = (path: string) => readFileSync(join(bundle, path), 'utf8');
 
-// The subset of Papr Work's BundleManifestSchema (src/core/types/bundles.ts @ v2.6.18) this bundle relies on.
+// Local contract assertions, not a replacement for the exact upstream schema or host validation.
+// Pinned upstream provenance and unresolved runtime acceptance live in ../compatibility.json.
 const PaprManifest = z.object({
   schemaVersion: z.literal('1.0.0'),
   bundleId: z.string().min(1),
@@ -37,6 +38,15 @@ const PaprManifest = z.object({
   jobs: z.array(z.object({ id: z.string().min(1), name: z.string().min(1), type: z.enum(['python', 'node', 'swift', 'bash', 'agent']), entryPoint: z.string().optional(), appIds: z.array(z.string()) })),
   deploymentProfiles: z.array(z.object({ id: z.string(), name: z.string(), runtimeTarget: z.enum(['local', 'cloud', 'hybrid']) })),
 });
+
+function browserSources(dir = 'apps/outreach-console'): Array<{ path: string; content: string }> {
+  return readdirSync(join(bundle, dir), { withFileTypes: true }).flatMap((entry) => {
+    const path = `${dir}/${entry.name}`;
+    if (entry.name === 'backend') return [];
+    if (entry.isDirectory()) return browserSources(path);
+    return /\.(js|html|css)$/.test(entry.name) ? [{ path, content: read(path) }] : [];
+  });
+}
 
 describe('bundle structure', () => {
   const manifest = PaprManifest.parse(JSON.parse(read('manifest.json')));
@@ -59,11 +69,11 @@ describe('bundle structure', () => {
       for (const key of action.keys) expect(declared.has(key), `${name}:${key}`).toBe(true);
     }
     // The browser never fetches credentials and never injects HTML; only the handler sees the token.
-    expect(read(`${manifest.app.appPath}/app.js`)).not.toMatch(/api\/credentials|process\.env|innerHTML|insertAdjacentHTML/);
+    for (const source of browserSources()) expect(source.content).not.toMatch(/api\/credentials|process\.env|innerHTML|insertAdjacentHTML/);
   });
 
   it('ships JavaScript that parses', () => {
-    for (const file of [`${manifest.app.appPath}/app.js`, `${manifest.app.appPath}/backend/outreach.mjs`, 'jobs/outreach-worker/code/run.mjs']) {
+    for (const file of [...browserSources().filter((f) => f.path.endsWith('.js')).map((f) => f.path), `${manifest.app.appPath}/backend/outreach.mjs`, 'jobs/outreach-worker/code/run.mjs']) {
       expect(spawnSync(process.execPath, ['--check', join(bundle, file)]).status, file).toBe(0);
     }
   });

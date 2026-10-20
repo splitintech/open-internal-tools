@@ -1,46 +1,50 @@
 # Outreach Console for Papr Work
 
-A Papr Work bundle that gives operators a console for the outreach engine: what goes out in the next 24 hours and what is holding it, approvals with the exact content being approved, the human review queue, manual social touches, campaign health, and one button that stops all sending.
+An optional, local-desktop console for the independently running outreach engine: upcoming actions, approvals, review, manual social touches, campaign health and a workspace kill switch.
 
-The engine is **not** inside Papr. It keeps its own SQLite database, because it needs multi-statement transactions that Papr's synced registry databases do not allow (see [ADR 0004](../../docs/adr/0004-papr-host-integration.md)). The console talks to the engine's HTTP API through a server-side backend handler, so the API token never reaches the browser.
+**Status: compatibility preflight, not a validated Papr release.** The current contract baseline is Papr development commit [b34b6c4](https://github.com/Papr-ai/paprwork/commit/b34b6c4090adfb64109004d1a25645a3d3a2bd66), alongside release 2.7.2. Clean desktop import, the full `validate_app` workflow and worker execution inside Papr remain pending. The manifest's declared 2.6.0 floor is not a tested minimum. See [acceptance checklist](docs/ACCEPTANCE.md) and [provenance](compatibility.json).
 
-```text
-Papr mini-app (app.js) --POST /api/app/backend/:action--> backend/outreach.mjs --Bearer token--> outreach serve (loopback)
-Papr job (optional)   --node run.mjs--> outreach worker --once                                    \-> outreach.db
-```
+## Boundaries
 
-## Contents
+- The engine retains its own SQLite database and transactional/audit boundary. The console accesses only its HTTP API, not Papr registry databases. [ADR 0004](../../docs/adr/0004-papr-host-integration.md) records the original decision; this does not imply current Papr lacks atomic database operations.
+- Browser modules call `/api/app/backend/:action`. The allowlisted backend handler injects the API token server-side and forwards fixed API routes. Backend/engine roles remain authoritative.
+- The bundle depends on a separate local engine. It is not cloud-ready: a remote backend's `127.0.0.1` is not the user's desktop. Keep cloud publishing and sharing disabled during local acceptance. `sync.cloudReady: false` is descriptive metadata, not an enforcement guarantee.
+- Optional job code runs a configured local CLI once. It never installs or downloads dependencies. Its schedule is disabled by default.
+- The in-app confirmation dialog is ordinary UI, not trusted MCP/agent-host approval. Human decisions must still follow the engine's authorization requirements.
 
-| Path | What it is |
-| --- | --- |
-| `bundle/manifest.json` | Papr portable bundle manifest (schema 1.0.0) |
-| `bundle/apps/outreach-console/` | The mini-app: `index.html`, `app.js`, `style.css` |
-| `bundle/apps/outreach-console/backend/` | `manifest.json` + `outreach.mjs`: a fixed allowlist of actions mapped to fixed API routes |
-| `bundle/jobs/outreach-worker/` | Optional Papr job running one worker pass per minute (pilot only) |
-| `bundle/skills/outreach.md` | Agent rules: draft, validate and report; never approve, activate or send |
+## Local prerequisites
 
-## Setup
+Use Node 24 for the Papr compatibility baseline. In the engine workspace, install its normal workspace dependencies and build it using the engine's [instructions](../../README.md). The built entry is `packages/outreach-cli/dist/bin.js`; its workspace dependencies must remain available. Do not assume an npm registry release exists.
 
-1. Initialise the engine (outside Papr):
-   ```zsh
-   export OUTREACH_DB=~/Papr/outreach/outreach.db
-   outreach init
-   outreach account add ...            # your provider account (decision D1)
-   outreach principal add papr:console --roles approver
-   outreach token create papr:console --name console --role approver
-   outreach serve                       # loopback only, port 8787
-   ```
-2. Import `bundle/` into Papr Work.
-3. In **Settings → Integration Keys**, add `OUTREACH_API_URL` (`http://127.0.0.1:8787`) and `OUTREACH_API_TOKEN` (the token from step 1). For a read-only wall display, issue a `--role viewer` token instead.
-4. The worker must run somewhere:
-   - **Production (recommended):** `outreach worker --loop` under launchd or systemd.
-   - **Pilot:** enable the bundled `outreach-worker` job, set it to **local-only**, and point its `package.json` at a local build of `@splitin/outreach-cli` until the package is published.
+Initialize a separate test database and start `outreach serve` on loopback. Configure a test principal/token with the intended role. Begin with fake providers, an empty audience and live sending closed. Never put tokens or real contacts into the exported bundle, screenshots or test evidence.
 
-## Acceptance on a live Papr install (not automated here)
+## Import and connect
 
-The bundle is validated against a copy of Papr's manifest schema, and the backend handler is tested against a real API server, both in-process and through the `PAPR_ACTION` subprocess contract. The first run on a real Papr install should still confirm:
+1. Import the local `bundle/` folder into Papr Work. Record the exact Papr version and OS. Keep the app private and cloud publishing disabled.
+2. In Papr's integration-key settings, configure `OUTREACH_API_URL` (for example `http://127.0.0.1:8787`) and `OUTREACH_API_TOKEN`. These are user-scoped, server-only requirements. Use a viewer-role token when validating read-only behavior.
+3. Confirm the imported app ID. The frontend accepts `?appId=<assigned-id>`, then `document.documentElement.dataset.appId`, then `outreach-console` as its fallback.
+4. Verify overview data and role failures before enabling any mutation-capable account. Run `validate_app` and work through [ACCEPTANCE.md](docs/ACCEPTANCE.md).
 
-- [ ] bundle import succeeds and the app opens;
-- [ ] the app id Papr assigns matches `outreach-console`, or pass `?appId=<id>` (Papr apps usually hardcode their id);
-- [ ] `/api/app/backend/overview` returns data (keys injected);
-- [ ] the worker job installs its dependency and completes a pass.
+## Optional worker
+
+The preferred independent engine worker can run outside Papr. To test the optional Papr job instead, configure its environment with:
+
+- `OUTREACH_CLI_ENTRY`: absolute path to a trusted, regular, non-symlink built `packages/outreach-cli/dist/bin.js` file. Relative paths and HTTP/file URLs are rejected.
+- `OUTREACH_DB`: absolute path to the initialized test engine database.
+- `OUTREACH_HOME`: absolute engine home, if different from `$PAPR_HOME/outreach` (or `~/Papr/outreach`). An existing `outreach.config.mjs` there is passed to the trusted CLI.
+- `OUTREACH_WORKER_TIMEOUT_MS`: optional deadline, 100–300000 milliseconds; default 120000. Cancellation or timeout terminates the child. Child stdout/stderr is suppressed to avoid leaking provider data; job output contains only status and redacted diagnostics.
+
+Set the job to local-only and verify its actual execution location before running it. First run one pass with fake providers. Only enable scheduling after live acceptance and explicit operator setup; do not run both this schedule and another worker unintentionally. The wrapper has no package.json or package-install step. It does not remove the engine's separate build/dependency requirement.
+
+## Included files
+
+- `bundle/apps/outreach-console/`: browser entry, small `ui/` modules, styles and backend actions.
+- `bundle/jobs/outreach-worker/code/run.mjs`: dependency-free optional local entry wrapper.
+- `bundle/skills/outreach.md`: recommended agent operating guidance. Bundle import has not been verified to register this as an active skill; do not rely on its mere presence as enforcement.
+- `src/`: engine-API contract, browser test-double, wrapper and compatibility tests.
+
+Run `npx vitest run apps/papr/src` from the engine workspace after installing its normal dependencies. These are local tests, not a Papr desktop test.
+
+## Contribution route
+
+Keep the engine in its own repository. Seek maintainer agreement before proposing a small Papr integration/example or reusable host fix. The [community-apps guide](https://github.com/Papr-ai/paprwork-community-apps/blob/12fae6e6a4d5a367236c78bd701b876a404958e3/CONTRIBUTING.md) prohibits new listing PRs; rare curated offline templates require approval and normally no external dependencies. Do not publish this local-only bundle as a cloud app to bypass that requirement.
