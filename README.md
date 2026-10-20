@@ -47,6 +47,7 @@ This repository is MIT open source. Every new folder is the tech part of a produ
 - **Domain and tool specialists**: each specialist maintains everything for that tool or domain end to end.
 - **People and agents, in sync**: every contributor works with other contributors **and** agents synchronously.
 - **Break the barriers of software development**: every contributor tasks themselves to make every tool **faster**, **smoother**, and **easier for the user** — **low latency**, **high fidelity**, **least compute**, **least memory**.
+- **[neighborhood-map-studio](neighborhood-map-studio/)**: owner-only illustrated map editor and API for Daytona, with durable external storage.
 - **[mac-unlock-notify](mac-unlock-notify/)**: Slack your phone when this Mac is unlocked.
 - **[slack-agent-hq](slack-agent-hq/)**: Slack project-thread router plus taggable Cursor, Claude, Codex, ChatGPT, and specialist bots.
 - **[ideation-loop-system](ideation-loop-system/)**: `#ideate` LOOP — ChatGPT PLAN → Codex PRD → Cursor/xAI/Codex 5.6 sol → Claude UI, one Slack thread, MEMORY.md + logs.
