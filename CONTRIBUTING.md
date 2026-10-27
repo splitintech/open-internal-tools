@@ -11,10 +11,12 @@ See the hub [README tech stack](README.md#tech-stack) before you add a dependenc
 ## How to work
 
 1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `slack-agent-hq`, `ideation-loop-system`, `in-app-otp`, `verification-adapter-sdk`, `react-mobile-interactions`, `vscode-agent-router`, or `airdrop-qr`).
+2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `slack-agent-hq`, `ideation-loop-system`, `in-app-otp`, `verification-adapter-sdk`, `vscode-agent-router`, or `airdrop-qr`).
 3. Follow that folder's README. Keep PRs inside that one folder. Match the language already used there unless the job needs a different one.
 4. Coordinate in the same loop as other contributors and agents — do not silo the work.
 5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
+
+Motion-library contributions belong in [Moggridge](https://github.com/splitintech/moggridge). Follow its [contributor guide](https://github.com/splitintech/moggridge/blob/main/CONTRIBUTING.md); the former `react-mobile-interactions/` folder here is a migration notice.
 
 ## npm releases
 
@@ -23,7 +25,6 @@ token in the repo). Create a **signed** tag from a clean `main`:
 
 ```bash
 scripts/create-release-tag.sh in-app-otp
-scripts/create-release-tag.sh react-mobile-interactions
 scripts/create-release-tag.sh verification-adapter-sdk
 scripts/create-release-tag.sh airdrop-qr
 git push origin in-app-otp-v0.1.0
@@ -32,9 +33,10 @@ git push origin in-app-otp-v0.1.0
 | Product | Tag | Workflow filename on npm Trusted Publisher |
 |---|---|---|
 | `@splitin/in-app-otp` | `in-app-otp-v*` | `in-app-otp-publish.yml` |
-| `@splitin/react-mobile-interactions` | `react-mobile-interactions-v*` | `react-mobile-interactions-publish.yml` |
 | `@splitin/verification-*` | `verification-adapter-sdk-v*` | `verification-adapter-sdk-publish.yml` |
 | `@splitin/airdrop-qr` | `airdrop-qr-v*` | `airdrop-qr-publish.yml` |
+
+`@splitin/react-mobile-interactions` keeps its package name and `react-mobile-interactions-v*` tags, but releases now run from **`splitintech/moggridge`**. Configure its trusted publisher and follow [Moggridge publishing instructions](https://github.com/splitintech/moggridge/blob/main/docs/publishing.md); this hub no longer publishes the motion package.
 
 Attach the trusted publisher on each npm package **before** pushing a tag
 for a version that is not already on the registry. Already-published

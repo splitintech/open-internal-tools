@@ -2,7 +2,6 @@
 # Create a signed release tag for an npm product folder.
 # Usage (from repo root):
 #   scripts/create-release-tag.sh in-app-otp
-#   scripts/create-release-tag.sh react-mobile-interactions
 #   scripts/create-release-tag.sh verification-adapter-sdk
 #   scripts/create-release-tag.sh airdrop-qr
 set -euo pipefail
@@ -12,9 +11,13 @@ cd "$root"
 
 product="${1:-}"
 case "$product" in
-  in-app-otp|react-mobile-interactions|verification-adapter-sdk|airdrop-qr) ;;
+  react-mobile-interactions)
+    echo "Motion releases moved to https://github.com/splitintech/moggridge/blob/main/docs/publishing.md" >&2
+    exit 1
+    ;;
+  in-app-otp|verification-adapter-sdk|airdrop-qr) ;;
   *)
-    echo "Usage: $0 <in-app-otp|react-mobile-interactions|verification-adapter-sdk|airdrop-qr>" >&2
+    echo "Usage: $0 <in-app-otp|verification-adapter-sdk|airdrop-qr>" >&2
     exit 1
     ;;
 esac
