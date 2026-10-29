@@ -189,7 +189,6 @@ Each product retains its branded SplitIn URL; migration notices keep old GitHub 
 | React mobile interactions | [Moggridge](https://github.com/splitintech/moggridge) | [tech-stack/open-internal-tools/react-mobile-interactions](https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
 | Agent Router | [vscode-agent-router](https://github.com/splitintech/vscode-agent-router) | [tech-stack/open-internal-tools/vscode-agent-router](https://www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router) | Route Cursor agents to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API | Open — independent contributor / project CTO |
 | AirDrop QR | [airdrop-qr](https://github.com/splitintech/airdrop-qr) | [tech-stack/open-internal-tools/airdrop-qr](https://www.splitin.net/tech-stack/open-internal-tools/airdrop-qr) | Offline HTML QR cards for AirDrop from any URL catalog | Open — independent contributor / project CTO |
-
 | Contact converter | [rtf-to-vcard](https://github.com/splitintech/rtf-to-vcard) | [Dev tools](https://www.splitin.net/dev-tools/txt-to-vcard) | Local contact conversion and exports | Open — independent contributor / project CTO |
 | Dev Tools Client | [dev-tools-client](https://github.com/splitintech/dev-tools-client) | [Dev tools](https://www.splitin.net/engineering#dev-tools) | Isolated browser verification facade | Open — independent contributor / project CTO |
 
