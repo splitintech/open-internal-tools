@@ -32,8 +32,8 @@
         {
           "workflowName": "jpmc-zelle-quick-pay",
           "databaseId": 40890504924,
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "headSha": "8702626099fbdf303196c315912b31ace8a76f92",
           "url": "https://github.com/splitintech/jpmc-zelle-quick-pay/actions/runs/40890504924"
         }
