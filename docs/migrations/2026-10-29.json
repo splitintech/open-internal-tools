@@ -1,0 +1,183 @@
+{
+  "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+  "products": [
+    {
+      "product": "airdrop-qr",
+      "repository": "https://github.com/splitintech/airdrop-qr",
+      "commit": "8daab470ccbc7be1ed04c09ee8909f8f6f84cd62",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 23,
+      "provenance": "https://github.com/splitintech/airdrop-qr/blob/8daab470ccbc7be1ed04c09ee8909f8f6f84cd62/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880563047,
+          "status": "completed",
+          "url": "https://github.com/splitintech/airdrop-qr/actions/runs/40880563047",
+          "workflowName": "Standalone checks"
+        }
+      ]
+    },
+    {
+      "product": "in-app-otp",
+      "repository": "https://github.com/splitintech/in-app-otp",
+      "commit": "fcbb6957a37d19d7b9b4041aa04934275b6cb176",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 33,
+      "provenance": "https://github.com/splitintech/in-app-otp/blob/fcbb6957a37d19d7b9b4041aa04934275b6cb176/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880568610,
+          "status": "completed",
+          "url": "https://github.com/splitintech/in-app-otp/actions/runs/40880568610",
+          "workflowName": "Standalone checks"
+        }
+      ]
+    },
+    {
+      "product": "rtf-to-vcard",
+      "repository": "https://github.com/splitintech/rtf-to-vcard",
+      "commit": "e85ff065b90d936288492128f5031377212bd6bd",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 19,
+      "provenance": "https://github.com/splitintech/rtf-to-vcard/blob/e85ff065b90d936288492128f5031377212bd6bd/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880571905,
+          "status": "completed",
+          "url": "https://github.com/splitintech/rtf-to-vcard/actions/runs/40880571905",
+          "workflowName": "Contact converter"
+        }
+      ]
+    },
+    {
+      "product": "mac-unlock-notify",
+      "repository": "https://github.com/splitintech/mac-unlock-notify",
+      "commit": "b5cd1045f74b7b7e679a5c4b3d73d6c91749b56e",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 10,
+      "provenance": "https://github.com/splitintech/mac-unlock-notify/blob/b5cd1045f74b7b7e679a5c4b3d73d6c91749b56e/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880579243,
+          "status": "completed",
+          "url": "https://github.com/splitintech/mac-unlock-notify/actions/runs/40880579243",
+          "workflowName": "macOS checks"
+        }
+      ]
+    },
+    {
+      "product": "verification-adapter-sdk",
+      "repository": "https://github.com/splitintech/verification-adapter-sdk",
+      "commit": "3d30221575c11ba535a5dd37e2b828d5d0670f03",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 382,
+      "provenance": "https://github.com/splitintech/verification-adapter-sdk/blob/3d30221575c11ba535a5dd37e2b828d5d0670f03/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880583351,
+          "status": "completed",
+          "url": "https://github.com/splitintech/verification-adapter-sdk/actions/runs/40880583351",
+          "workflowName": "verification-adapter-sdk"
+        },
+        {
+          "conclusion": "success",
+          "databaseId": 40880583515,
+          "status": "completed",
+          "url": "https://github.com/splitintech/verification-adapter-sdk/actions/runs/40880583515",
+          "workflowName": "verification-adapter-sdk-compat"
+        },
+        {
+          "conclusion": "success",
+          "databaseId": 40880583563,
+          "status": "completed",
+          "url": "https://github.com/splitintech/verification-adapter-sdk/actions/runs/40880583563",
+          "workflowName": "verification-adapter-sdk-codeql"
+        }
+      ]
+    },
+    {
+      "product": "dev-tools-client",
+      "repository": "https://github.com/splitintech/dev-tools-client",
+      "commit": "10b7a63d74806d3ed999deea1df28fa83ccbb761",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 24,
+      "provenance": "https://github.com/splitintech/dev-tools-client/blob/10b7a63d74806d3ed999deea1df28fa83ccbb761/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880589692,
+          "status": "completed",
+          "url": "https://github.com/splitintech/dev-tools-client/actions/runs/40880589692",
+          "workflowName": "Standalone client checks"
+        }
+      ]
+    },
+    {
+      "product": "slack-agent-hq",
+      "repository": "https://github.com/splitintech/slack-agent-hq",
+      "commit": "b8b2fd8717b575c65989e180f90d37a6d94a1207",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 106,
+      "provenance": "https://github.com/splitintech/slack-agent-hq/blob/b8b2fd8717b575c65989e180f90d37a6d94a1207/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880593887,
+          "status": "completed",
+          "url": "https://github.com/splitintech/slack-agent-hq/actions/runs/40880593887",
+          "workflowName": "Standalone workspace checks"
+        }
+      ]
+    },
+    {
+      "product": "ideation-loop-system",
+      "repository": "https://github.com/splitintech/ideation-loop-system",
+      "commit": "387e1ab1d9f2d7f3cc80784594e15c58241141c5",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 128,
+      "provenance": "https://github.com/splitintech/ideation-loop-system/blob/387e1ab1d9f2d7f3cc80784594e15c58241141c5/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40880598267,
+          "status": "completed",
+          "url": "https://github.com/splitintech/ideation-loop-system/actions/runs/40880598267",
+          "workflowName": "Standalone workspace checks"
+        }
+      ]
+    },
+    {
+      "product": "vscode-agent-router",
+      "repository": "https://github.com/splitintech/vscode-agent-router",
+      "commit": "9fcc3ebbaec8cb2fc2a89496c6370bac2dcee6dd",
+      "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
+      "retained_upstream_files": 58,
+      "provenance": "https://github.com/splitintech/vscode-agent-router/blob/9fcc3ebbaec8cb2fc2a89496c6370bac2dcee6dd/docs/migration.md",
+      "ci": [
+        {
+          "conclusion": "success",
+          "databaseId": 40881192121,
+          "status": "completed",
+          "url": "https://github.com/splitintech/vscode-agent-router/actions/runs/40881192121",
+          "workflowName": "Standalone extension checks"
+        }
+      ]
+    }
+  ],
+  "excluded_branch_products": [
+    "jpmc-zelle-quick-pay",
+    "group-share",
+    "neighborhood-map-studio",
+    "outreach-engine"
+  ],
+  "npm_publication": false,
+  "marketplace_publication": false,
+  "shared_dependency_review": "Copied into every standalone repository; hub has no remaining product dependency manifests.",
+  "retained_product_source_files": 756,
+  "splitin_consumer_pr": "https://github.com/splitintech/splitin/pull/114"
+}

@@ -1,92 +1,10 @@
-# Universal Open-Source Verification Adapter SDK
+# verification-adapter-sdk has moved
 
-MIT-licensed, **self-hosted** verification adapter contracts, CLI, and
-conformance kit. Hosts talk to Stripe Identity, Persona, Plaid Identity
-Verification, or a fourth-party plugin through one V1 adapter surface.
+The canonical source, issues and contributions now live in **[splitintech/verification-adapter-sdk](https://github.com/splitintech/verification-adapter-sdk)**.
 
-There is **no telemetry to SplitIn**. You run the engine. The United States is
-the first certified engineering market (sandbox contract coverage). These are
-engineering primitives, **not** a legal or regulatory certification. See
-[docs/NOT_COMPLIANCE.md](docs/NOT_COMPLIANCE.md).
+- [Standalone README](https://github.com/splitintech/verification-adapter-sdk#readme)
+- [Migration provenance and source inventory](https://github.com/splitintech/verification-adapter-sdk/blob/3d30221575c11ba535a5dd37e2b828d5d0670f03/docs/migration.md)
+- Verified migration commit: `3d30221575c11ba535a5dd37e2b828d5d0670f03`
+- [Historical hub source](https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/verification-adapter-sdk)
 
-```bash
-npm install @splitin/verification-adapter-sdk
-npx splitin-verification init
-```
-
-Five-minute path: [docs/quickstart.md](docs/quickstart.md).
-
-## Packages
-
-| Package | npm | What it is |
-| --- | --- | --- |
-| `@splitin/verification-adapter-sdk` | `0.1.0-beta.1` | V1 contracts, manifests, JSON Schema, conformance, fake provider |
-| `@splitin/verification-engine` | `0.1.0-beta.1` | Tenant routing, orchestration, protected-action, workers |
-| `@splitin/verification-postgres` | `0.1.0-beta.1` | `verification` schema, durable store and queue |
-| `@splitin/verification-server` | `0.1.0-beta.1` | Standard `/v1` Web API plus Express, Hono, Supabase bindings |
-| `@splitin/verification-web` | `0.1.0-beta.1` | Headless browser launcher and status controllers |
-| `@splitin/verification-react` | `0.1.0-beta.1` | Accessible launcher, status, appeal, operations components |
-| `@splitin/verification-adapter-stripe-identity` | `0.1.0-beta.1` | Stripe Identity server and browser plugin |
-| `@splitin/verification-adapter-persona` | `0.1.0-beta.1` | Persona IDV/KYB server and browser plugin |
-| `@splitin/verification-adapter-plaid-idv` | `0.1.0-beta.1` | Plaid Identity Verification plugin (no banking products) |
-| `@splitin/verification-cli` | `0.1.0-beta.1` | `splitin-verification` CLI (init, doctor, migrate, scaffold, conformance) |
-| `@splitin/verification-compat-splitin-v2` | `0.1.0-beta.1` | Temporary V1 ↔ SplitIn internal V2 map. SplitIn does not import this yet |
-
-Core and server packages have no React or vendor-browser dependency. The core package does not import PostgreSQL, Express, Hono, or vendor SDKs.
-
-## Quickstart
-
-```bash
-git clone https://github.com/splitintech/open-internal-tools.git
-cd open-internal-tools/verification-adapter-sdk
-npm install
-npm test
-npx splitin-verification init --cwd /tmp/verification-sandbox
-npx splitin-verification provider conformance
-```
-
-Generated configuration is **disabled-by-default development**. Production
-HTTP routes stay off until sandbox certification. The CLI never prints `sk_`,
-`rk_`, `whsec_`, or tokens.
-
-## Examples
-
-| Folder | Notes |
-| --- | --- |
-| [examples/express-postgres](examples/express-postgres) | Node/Express handlers + Postgres schema notes |
-| [examples/hono-worker](examples/hono-worker) | Worker + injected durable store |
-| [examples/supabase-edge](examples/supabase-edge) | Edge Function + PostgreSQL |
-| [examples/react-launcher](examples/react-launcher) | Launcher props + operations console model |
-| [examples/fourth-provider](examples/fourth-provider) | Custom plugin for `com.example.employee_check` |
-| [examples/protected-action](examples/protected-action) | Human IDV / KYB `VERIFICATION_REQUIRED` gate |
-
-Every example keeps production routes disabled.
-
-## Docs
-
-- [Quickstart](docs/quickstart.md)
-- [Architecture](docs/architecture.md)
-- [Adapter authoring](docs/adapter-authoring.md)
-- [Stripe Identity](docs/providers/stripe-identity.md) · [Persona](docs/providers/persona.md) · [Plaid IDV](docs/providers/plaid-idv.md)
-- [Database and workers](docs/database-workers.md)
-- [Threat model](docs/threat-model.md)
-- [Security](SECURITY.md)
-- [Privacy and retention](docs/privacy-retention.md)
-- [Operations runbook](docs/operations-runbook.md)
-- [SplitIn V2 migration](docs/migration-splitin-v2.md)
-- [Not a compliance certification](docs/NOT_COMPLIANCE.md)
-- [Publishing](docs/publishing.md)
-
-## License
-
-[MIT](LICENSE). Copyright (c) 2026 SplitInTech.
-
-Hub: [open-internal-tools](https://github.com/splitintech/open-internal-tools).
-Product page: [splitin.net/tech-stack/open-internal-tools/verification-adapter-sdk](https://www.splitin.net/tech-stack/open-internal-tools/verification-adapter-sdk).
-
-
-## SplitIn Dev tools integration
-
-Hosted route: `https://www.splitin.net/dev-tools/verification` (deployment qualification tracked by the host application). Build with Node 24, `npm ci`, `npm run build`, then `npm test`. Consumers install reviewed versioned tarballs; no sibling-source imports are required.
-
-The hosted playground is isolated from customer verification, onboarding and payment eligibility. Public demonstrations keep state in memory and suppress recording. Provider credentials and launch secrets must never be persisted by a browser client. Test keyboard controls, 320/390/768px layouts and reduced motion as well as physical iOS Safari and Android Chrome.
+Public package/API identities are retained. This folder is a migration notice; do not restore an editable second copy or publish from the hub. External package publication and provider configuration are separate release actions.
