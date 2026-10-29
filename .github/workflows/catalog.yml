@@ -11,4 +11,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/check-catalog.py
-      - run: bash -n scripts/create-release-tag.sh

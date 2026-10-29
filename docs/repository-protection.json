@@ -1,0 +1,871 @@
+{
+  "verified_date": "2026-10-29",
+  "repositories": [
+    {
+      "repository": "splitintech/airdrop-qr",
+      "url": "https://github.com/splitintech/airdrop-qr",
+      "ruleset_id": 26135340,
+      "ruleset_url": "https://github.com/splitintech/airdrop-qr/rules/26135340",
+      "verified_at": "2026-10-29T16:00:44.830924+00:00",
+      "main_commit": "8daab470ccbc7be1ed04c09ee8909f8f6f84cd62",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/in-app-otp",
+      "url": "https://github.com/splitintech/in-app-otp",
+      "ruleset_id": 26135349,
+      "ruleset_url": "https://github.com/splitintech/in-app-otp/rules/26135349",
+      "verified_at": "2026-10-29T16:00:48.936879+00:00",
+      "main_commit": "fcbb6957a37d19d7b9b4041aa04934275b6cb176",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/rtf-to-vcard",
+      "url": "https://github.com/splitintech/rtf-to-vcard",
+      "ruleset_id": 26135351,
+      "ruleset_url": "https://github.com/splitintech/rtf-to-vcard/rules/26135351",
+      "verified_at": "2026-10-29T16:00:52.979573+00:00",
+      "main_commit": "e85ff065b90d936288492128f5031377212bd6bd",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "python (3.12)",
+                "integration_id": 15368
+              },
+              {
+                "context": "python (3.9)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/mac-unlock-notify",
+      "url": "https://github.com/splitintech/mac-unlock-notify",
+      "ruleset_id": 26135356,
+      "ruleset_url": "https://github.com/splitintech/mac-unlock-notify/rules/26135356",
+      "verified_at": "2026-10-29T16:00:56.648131+00:00",
+      "main_commit": "b5cd1045f74b7b7e679a5c4b3d73d6c91749b56e",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/verification-adapter-sdk",
+      "url": "https://github.com/splitintech/verification-adapter-sdk",
+      "ruleset_id": 26135360,
+      "ruleset_url": "https://github.com/splitintech/verification-adapter-sdk/rules/26135360",
+      "verified_at": "2026-10-29T16:01:00.972330+00:00",
+      "main_commit": "3d30221575c11ba535a5dd37e2b828d5d0670f03",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "Analyze JavaScript/TypeScript",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (20)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "coverage",
+                "integration_id": 15368
+              },
+              {
+                "context": "hono-worker",
+                "integration_id": 15368
+              },
+              {
+                "context": "import-smoke",
+                "integration_id": 15368
+              },
+              {
+                "context": "postgres (15)",
+                "integration_id": 15368
+              },
+              {
+                "context": "postgres (16)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/dev-tools-client",
+      "url": "https://github.com/splitintech/dev-tools-client",
+      "ruleset_id": 26135363,
+      "ruleset_url": "https://github.com/splitintech/dev-tools-client/rules/26135363",
+      "verified_at": "2026-10-29T16:01:04.645080+00:00",
+      "main_commit": "10b7a63d74806d3ed999deea1df28fa83ccbb761",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/slack-agent-hq",
+      "url": "https://github.com/splitintech/slack-agent-hq",
+      "ruleset_id": 26135366,
+      "ruleset_url": "https://github.com/splitintech/slack-agent-hq/rules/26135366",
+      "verified_at": "2026-10-29T16:01:09.735069+00:00",
+      "main_commit": "b8b2fd8717b575c65989e180f90d37a6d94a1207",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/ideation-loop-system",
+      "url": "https://github.com/splitintech/ideation-loop-system",
+      "ruleset_id": 26135370,
+      "ruleset_url": "https://github.com/splitintech/ideation-loop-system/rules/26135370",
+      "verified_at": "2026-10-29T16:01:13.482596+00:00",
+      "main_commit": "387e1ab1d9f2d7f3cc80784594e15c58241141c5",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/vscode-agent-router",
+      "url": "https://github.com/splitintech/vscode-agent-router",
+      "ruleset_id": 26135374,
+      "ruleset_url": "https://github.com/splitintech/vscode-agent-router/rules/26135374",
+      "verified_at": "2026-10-29T16:01:17.333890+00:00",
+      "main_commit": "9fcc3ebbaec8cb2fc2a89496c6370bac2dcee6dd",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/group-share",
+      "url": "https://github.com/splitintech/group-share",
+      "ruleset_id": 26135377,
+      "ruleset_url": "https://github.com/splitintech/group-share/rules/26135377",
+      "verified_at": "2026-10-29T16:01:21.086379+00:00",
+      "main_commit": "794415b45c7c9f35622ba977148221ee11b237ca",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "verify (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "verify (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/jpmc-zelle-quick-pay",
+      "url": "https://github.com/splitintech/jpmc-zelle-quick-pay",
+      "ruleset_id": 26135006,
+      "ruleset_url": "https://github.com/splitintech/jpmc-zelle-quick-pay/rules/26135006",
+      "verified_at": "2026-10-29T16:01:25.286141+00:00",
+      "main_commit": "8702626099fbdf303196c315912b31ace8a76f92",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "verify",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/neighborhood-map-studio",
+      "url": "https://github.com/splitintech/neighborhood-map-studio",
+      "ruleset_id": 26135389,
+      "ruleset_url": "https://github.com/splitintech/neighborhood-map-studio/rules/26135389",
+      "verified_at": "2026-10-29T16:01:28.894635+00:00",
+      "main_commit": "8696966b9e0ef4858a0d468f8ed8c5a03677014d",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "verify",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/outreach-engine",
+      "url": "https://github.com/splitintech/outreach-engine",
+      "ruleset_id": 26135392,
+      "ruleset_url": "https://github.com/splitintech/outreach-engine/rules/26135392",
+      "verified_at": "2026-10-29T16:01:33.037321+00:00",
+      "main_commit": "9e1ff74f2f96240392f49bb0e25d7e2bdf9335e9",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "check (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "check (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    },
+    {
+      "repository": "splitintech/moggridge",
+      "url": "https://github.com/splitintech/moggridge",
+      "ruleset_id": 26135398,
+      "ruleset_url": "https://github.com/splitintech/moggridge/rules/26135398",
+      "verified_at": "2026-10-29T16:01:37.108806+00:00",
+      "main_commit": "0d51d42894b415bc80af852651b99c140b9733a9",
+      "target": "default branch (main)",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "rules": [
+        {
+          "type": "deletion"
+        },
+        {
+          "type": "non_fast_forward"
+        },
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 0,
+            "dismiss_stale_reviews_on_push": false,
+            "required_reviewers": [],
+            "require_code_owner_review": false,
+            "require_last_push_approval": false,
+            "required_review_thread_resolution": false,
+            "require_extra_approval_for_unattributed_changes": true,
+            "allowed_merge_methods": [
+              "merge",
+              "squash",
+              "rebase"
+            ]
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "do_not_enforce_on_create": false,
+            "required_status_checks": [
+              {
+                "context": "package (22)",
+                "integration_id": 15368
+              },
+              {
+                "context": "package (24)",
+                "integration_id": 15368
+              }
+            ]
+          }
+        }
+      ],
+      "conditions": {
+        "ref_name": {
+          "include": [
+            "~DEFAULT_BRANCH"
+          ],
+          "exclude": []
+        }
+      }
+    }
+  ]
+}
