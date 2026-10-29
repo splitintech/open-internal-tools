@@ -85,4 +85,3 @@ We are seeking **individual contributors** who pick the right tool for the job, 
 Leave every project in its **best possible condition**. Break the barriers of software development: if it can get fast, make it fast; if it can get smaller, make it smaller; if it can be designed beautifully, design it beautifully; if it can cost low, make it cost low; if the user experience can get better, make it better; if it can be monetized, make it monetized; if it can be digitized, make it digitized; if it can save time, make it save time; if it can be integrated, build it — even if few developers can use it, build it.
 
 Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**. Engineering mission, vision, values, and the stack: **[https://www.splitin.net/tech-stack](https://www.splitin.net/tech-stack)**.
-
