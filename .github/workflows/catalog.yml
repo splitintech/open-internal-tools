@@ -1,0 +1,14 @@
+name: Catalog integrity
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check-catalog.py
+      - run: bash -n scripts/create-release-tag.sh

@@ -1,6 +1,6 @@
 # Contributing to open internal tools
 
-Every folder in this repository is the **tech part of a product**. Open a pull request against **one** product folder at a time.
+This repository is the catalog for independently maintained Open Internal Tools products. Product pull requests belong in their canonical repositories.
 
 ## Who we want
 
@@ -10,37 +10,16 @@ See the hub [README tech stack](README.md#tech-stack) before you add a dependenc
 
 ## How to work
 
-1. Fork or branch from `main`.
-2. `cd` into the product-tech folder (for example `mac-unlock-notify`, `slack-agent-hq`, `ideation-loop-system`, `in-app-otp`, `verification-adapter-sdk`, `vscode-agent-router`, or `airdrop-qr`).
-3. Follow that folder's README. Keep PRs inside that one folder. Match the language already used there unless the job needs a different one.
-4. Coordinate in the same loop as other contributors and agents — do not silo the work.
-5. Keep secrets out of git. Never commit Slack webhooks, tokens, or `~/.config` files.
+1. Select the canonical repository from the [project catalog](README.md#projects).
+2. Follow that repository's README and contributor instructions. Product code, tests, issues and releases belong there.
+3. Submit hub pull requests for catalog, program guidance and migration notices.
+4. Coordinate with the product maintainer and keep credentials and local configuration out of Git.
 
-Motion-library contributions belong in [Moggridge](https://github.com/splitintech/moggridge). Follow its [contributor guide](https://github.com/splitintech/moggridge/blob/main/CONTRIBUTING.md); the former `react-mobile-interactions/` folder here is a migration notice.
+## Releases
 
-## npm releases
+The hub no longer publishes the migrated products. Public package names and existing release-tag conventions remain unchanged. Configure npm trusted publishing or marketplace credentials for the standalone repository before enabling its release workflow. Follow each product's `docs/repository-release.md` where supplied; Moggridge retains its own publishing guide.
 
-Public `@splitin/*` packages publish from GitHub Actions with OIDC (no npm
-token in the repo). Create a **signed** tag from a clean `main`:
-
-```bash
-scripts/create-release-tag.sh in-app-otp
-scripts/create-release-tag.sh verification-adapter-sdk
-scripts/create-release-tag.sh airdrop-qr
-git push origin in-app-otp-v0.1.0
-```
-
-| Product | Tag | Workflow filename on npm Trusted Publisher |
-|---|---|---|
-| `@splitin/in-app-otp` | `in-app-otp-v*` | `in-app-otp-publish.yml` |
-| `@splitin/verification-*` | `verification-adapter-sdk-v*` | `verification-adapter-sdk-publish.yml` |
-| `@splitin/airdrop-qr` | `airdrop-qr-v*` | `airdrop-qr-publish.yml` |
-
-`@splitin/react-mobile-interactions` keeps its package name and `react-mobile-interactions-v*` tags, but releases now run from **`splitintech/moggridge`**. Configure its trusted publisher and follow [Moggridge publishing instructions](https://github.com/splitintech/moggridge/blob/main/docs/publishing.md); this hub no longer publishes the motion package.
-
-Attach the trusted publisher on each npm package **before** pushing a tag
-for a version that is not already on the registry. Already-published
-versions are skipped; the workflow still opens a GitHub Release.
+Historical hub tags and releases remain available. Do not publish the same product from both repositories. The [migration ledger](docs/migrations/2026-10-29.json) records pinned source and destination revisions. Branch-only projects are outside this migration and retain their current status.
 
 ## Maintainers
 
