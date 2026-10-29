@@ -4,32 +4,59 @@
     {
       "product": "group-share",
       "repository": "https://github.com/splitintech/group-share",
-      "commit": "5f75dfc891aad6f776b2b607cbe775efccbb71e6",
+      "commit": "794415b45c7c9f35622ba977148221ee11b237ca",
       "source_commit": "25fabdddccec808b2f616558d0a650c8e190813f",
       "source_branch": "group-share",
       "retained_upstream_files": 53,
-      "provenance": "https://github.com/splitintech/group-share/blob/5f75dfc891aad6f776b2b607cbe775efccbb71e6/docs/migration.md",
-      "ci": []
+      "provenance": "https://github.com/splitintech/group-share/blob/794415b45c7c9f35622ba977148221ee11b237ca/docs/migration.md",
+      "ci": [
+        {
+          "workflowName": "Group Share",
+          "databaseId": 40890316085,
+          "status": "completed",
+          "conclusion": "success",
+          "headSha": "794415b45c7c9f35622ba977148221ee11b237ca",
+          "url": "https://github.com/splitintech/group-share/actions/runs/40890316085"
+        }
+      ]
     },
     {
       "product": "jpmc-zelle-quick-pay",
       "repository": "https://github.com/splitintech/jpmc-zelle-quick-pay",
-      "commit": "401be7e5d1a1c08ae8cf50ded7faad939e629a75",
+      "commit": "8702626099fbdf303196c315912b31ace8a76f92",
       "source_commit": "4e8b11a089820b5b9fa4f409cda74ec4ac7da34c",
       "source_branch": "feature/zelle",
       "retained_upstream_files": 46,
-      "provenance": "https://github.com/splitintech/jpmc-zelle-quick-pay/blob/401be7e5d1a1c08ae8cf50ded7faad939e629a75/docs/migration.md",
-      "ci": []
+      "provenance": "https://github.com/splitintech/jpmc-zelle-quick-pay/blob/8702626099fbdf303196c315912b31ace8a76f92/docs/migration.md",
+      "ci": [
+        {
+          "workflowName": "jpmc-zelle-quick-pay",
+          "databaseId": 40890504924,
+          "status": "queued",
+          "conclusion": null,
+          "headSha": "8702626099fbdf303196c315912b31ace8a76f92",
+          "url": "https://github.com/splitintech/jpmc-zelle-quick-pay/actions/runs/40890504924"
+        }
+      ]
     },
     {
       "product": "neighborhood-map-studio",
       "repository": "https://github.com/splitintech/neighborhood-map-studio",
-      "commit": "fc65f2444a62013560c943e5afc18b0ca3ab06b2",
+      "commit": "8696966b9e0ef4858a0d468f8ed8c5a03677014d",
       "source_commit": "87b71450ce3422ec80112de4c680f77775de6937",
       "source_branch": "feat/neighborhood-map-studio",
       "retained_upstream_files": 85,
-      "provenance": "https://github.com/splitintech/neighborhood-map-studio/blob/fc65f2444a62013560c943e5afc18b0ca3ab06b2/docs/migration.md",
-      "ci": [],
+      "provenance": "https://github.com/splitintech/neighborhood-map-studio/blob/8696966b9e0ef4858a0d468f8ed8c5a03677014d/docs/migration.md",
+      "ci": [
+        {
+          "workflowName": "Neighborhood Map Studio",
+          "databaseId": 40890360209,
+          "status": "completed",
+          "conclusion": "success",
+          "headSha": "8696966b9e0ef4858a0d468f8ed8c5a03677014d",
+          "url": "https://github.com/splitintech/neighborhood-map-studio/actions/runs/40890360209"
+        }
+      ],
       "additional_source": {
         "repository": "splitintech/splitin",
         "commit": "08713aed305fc720ce8286dd114475d9034bb69c",
@@ -40,12 +67,21 @@
     {
       "product": "outreach-engine",
       "repository": "https://github.com/splitintech/outreach-engine",
-      "commit": "26f6f5863f65ef017326381a3033a89da7d87da6",
+      "commit": "9e1ff74f2f96240392f49bb0e25d7e2bdf9335e9",
       "source_commit": "13a7ffb75de3c5be017ce05d15e4115f191252d7",
       "source_branch": "papr-adapter",
       "retained_upstream_files": 278,
-      "provenance": "https://github.com/splitintech/outreach-engine/blob/26f6f5863f65ef017326381a3033a89da7d87da6/docs/migration.md",
-      "ci": []
+      "provenance": "https://github.com/splitintech/outreach-engine/blob/9e1ff74f2f96240392f49bb0e25d7e2bdf9335e9/docs/migration.md",
+      "ci": [
+        {
+          "workflowName": "outreach-engine",
+          "databaseId": 40890383479,
+          "status": "completed",
+          "conclusion": "success",
+          "headSha": "9e1ff74f2f96240392f49bb0e25d7e2bdf9335e9",
+          "url": "https://github.com/splitintech/outreach-engine/actions/runs/40890383479"
+        }
+      ]
     }
   ],
   "npm_publication": false,
