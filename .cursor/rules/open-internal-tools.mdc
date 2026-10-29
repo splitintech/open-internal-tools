@@ -28,7 +28,10 @@ We let open source build the tech side of the small community little capitalists
 - Every **domain specialist** and **tool specialist** maintains that tool or domain end to end.
 - Every contributor works with other contributors **and agents synchronously**.
 - Contributors pick the **right tool/language for the job**, compose **existing open source**, keep **indie cost**, **can write without AI**, and use **LLMs plus multi-agent workflows** to ship more.
-- Every maintained product has its own repository. This hub owns catalog entries, program guidance and migration notices; product implementation changes belong in the canonical repository.
+- Every maintained product has its own repository. This hub owns catalog entries, program guidance and historical migration records; product implementation changes belong in the canonical repository.
 - Careers for SplitIn live at https://www.splitin.net/careers-requests
 - Never commit webhooks, tokens, or `~/.config` secrets.
 - Do not push this program from the SplitIn app remote.
+
+- Do not recreate product directories in this catalog. Update `docs/catalog.json`, README and migration/protection records together.
+- Hub validation is `python3 scripts/check-catalog.py`; release tooling belongs in product repositories.

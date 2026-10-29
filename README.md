@@ -2,165 +2,42 @@
   <img src="docs/brand/splitin-logo.png" alt="SplitIn logo" width="96" height="96">
 </p>
 
-<h1 align="center">Open Internal Tools</h1>
+# Open Internal Tools
+
+The catalog for SplitIn's independently maintained open-source tools. **All 14 products
+have moved to their own repositories.** Product source, tests, issues and releases belong
+in those repositories; this hub maintains the directory, program guidance and migration records.
 
 <p align="center">
-  <a href="https://github.com/splitintech/open-internal-tools/blob/main/LICENSE"><img src="https://img.shields.io/github/license/splitintech/open-internal-tools" alt="MIT license"></a>
-  <a href="https://github.com/splitintech/open-internal-tools/stargazers"><img src="https://img.shields.io/github/stars/splitintech/open-internal-tools?style=flat" alt="GitHub stars"></a>
-  <a href="https://github.com/splitintech/open-internal-tools/graphs/contributors"><img src="https://img.shields.io/github/contributors/splitintech/open-internal-tools" alt="Contributors"></a>
-  <a href="https://github.com/splitintech/open-internal-tools/issues"><img src="https://img.shields.io/github/issues/splitintech/open-internal-tools" alt="Issues"></a>
+  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech">
 </p>
 
-<p align="center">
-  <a href="#getting-started">Docs</a>
-  ·
-  <a href="#contributing">Community</a>
-  ·
-  <a href="#projects">Projects</a>
-  ·
-  <a href="https://www.splitin.net/tech-stack">Tech stack</a>
-  ·
-  <a href="https://www.splitin.net/careers-requests">Careers</a>
-</p>
+## Projects
 
-<p align="center">
-  <a href="https://www.splitin.net/tech-stack/open-internal-tools">www.splitin.net/tech-stack/open-internal-tools</a>
-</p>
+Choose a repository below for installation instructions, API documentation, examples,
+configuration and current release status. Distribution describes the project's format;
+it does not mean a package is already published or a hosted integration is production-ready.
 
-<p align="center">
-  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
-</p>
-
-# Open internal tools is how SplitIn lets open source build the **tech side** of small-community little-capitalist products
-
-We let open source build the tech side of the small community little capitalists projects. Maintainers would be confident independent contributors who would love to build the tech for the projects end to end.
-
-We bring open source contributors here to **build and lead end-to-end developer tools**. Projects are **built internally first**, then **open sourced as packages** others can use. A package can **stay open source** and later also ship as a **hosted proprietary SplitIn product**. Think of FFmpeg if it were a little capitalist: a serious end-to-end tool, owned by people who ship it, that makes **end consumers' lives easier** — not a weekend gist.
-
-This MIT repository is the Open Internal Tools catalog. Each maintained product now has an independent repository; the former folders contain migration notices. SplitIn the company lives at [splitin.net](https://www.splitin.net).
-
-- **Internal, then packages**: we build in-house, then publish packages so others can use the same tool.
-- **Stay open, host later**: a project can remain MIT and, when it earns it, also become a hosted SplitIn product. Every contributor would have **% equity** in that hosted service.
-- **Version by version**: every project keeps improving release by release, with out-of-the-box applications.
-- **Best possible condition**: every project uses technological advancements to break the barriers of software development — faster, smaller, more beautiful, cheaper, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
-- **Tools that support tools**: we build as many internal supporting tools as other projects need.
-- **Domain and tool specialists**: each specialist maintains everything for that tool or domain end to end.
-- **People and agents, in sync**: every contributor works with other contributors **and** agents synchronously.
-- **Break the barriers of software development**: every contributor tasks themselves to make every tool **faster**, **smoother**, and **easier for the user** — **low latency**, **high fidelity**, **least compute**, **least memory**.
-- **[mac-unlock-notify](https://github.com/splitintech/mac-unlock-notify)**: Slack your phone when this Mac is unlocked.
-- **[slack-agent-hq](https://github.com/splitintech/slack-agent-hq)**: Slack project-thread router plus taggable Cursor, Claude, Codex, ChatGPT, and specialist bots.
-- **[ideation-loop-system](https://github.com/splitintech/ideation-loop-system)**: `#ideate` LOOP — ChatGPT PLAN → Codex PRD → Cursor/xAI/Codex 5.6 sol → Claude UI, one Slack thread, MEMORY.md + logs.
-- **[in-app-otp](https://github.com/splitintech/in-app-otp)**: `@splitin/in-app-otp` — in-app OTP handoff for marketplace verification.
-- **[verification-adapter-sdk](https://github.com/splitintech/verification-adapter-sdk)**: `@splitin/verification-adapter-sdk` — self-hosted verification adapter contracts, CLI, and provider plugins. No telemetry to SplitIn.
-- **[Moggridge](https://github.com/splitintech/moggridge)**: `@splitin/react-mobile-interactions` — cross-platform motion and gestures, now maintained in its own repository.
-- **[vscode-agent-router](https://github.com/splitintech/vscode-agent-router)**: Cursor / VS Code dispatcher to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API.
-- **[airdrop-qr](https://github.com/splitintech/airdrop-qr)**: `@splitin/airdrop-qr` — offline HTML QR cards for AirDrop sharing from any URL catalog.
-- **[Contact converter](https://github.com/splitintech/rtf-to-vcard)**: local TXT, CSV, HTML and RTF contact exports.
-- **[Dev Tools Client](https://github.com/splitintech/dev-tools-client)**: isolated browser facade with bundled verification dependencies.
-- **Careers**: SplitIn tech careers live at [splitin.net/careers-requests](https://www.splitin.net/careers-requests).
-- **Engineering**: [Mission, vision, values, and the full stack](https://www.splitin.net/tech-stack) — Tech 51%, business 50%; 45% R&D back to open source.
-
-## Table of contents
-
-- [Mission](#open-internal-tools-is-how-splitin-lets-open-source-build-the-tech-side-of-small-community-little-capitalist-products)
-- [Engineering mission and vision](#engineering-mission-and-vision)
-- [How projects work](#how-projects-work)
-- [Best possible condition](#best-possible-condition)
-- [Who we want](#who-we-want)
-- [Tech stack](#tech-stack)
-- [Getting started](#getting-started)
-- [Projects](#projects)
-- [Contributing](#contributing)
-- [Open source](#open-source-vs-splitin-product)
-- [We're seeking individual contributors](#were-seeking-individual-contributors)
-
-## Engineering mission and vision
-
-This is the same engineering copy as [splitin.net/tech-stack](https://www.splitin.net/tech-stack). Housing mission lives on [About](https://www.splitin.net/about). Engineering is here.
-
-**Mission.** We build the tech stack behind the SplitIn closed-source and open-source projects. Individual contributors own folders end to end. We invest **45% as R&D** back to the open-source tools SplitIn uses, plus tech projects that digitize traditional businesses, current business-domain agent integrations, and technology open-source works — to build a future of prosperity. We build communities, design communities, develop buildings, and design buildings.
-
-**Vision.** **Tech 51%. Business 50.** Founders and cofounders of every project, and SplitIn LLC as the parent company, are shareholders. In the world of AI a computer can build many things if people and agents are orchestrated together like adults — for togetherness and prosperity. Everything is written down. You build the first MVP for the application we speak. The best is merged to the main repo with tests, trust-me-bro benchmarks, and live user tests. We build fast and then refine. Every contributor brings an acquaintance after building the building blocks of the architecture. Every project would be allotted funds.
-
-**Values.**
-
-- **45% R&D back to open source** — plus digitized businesses, agent integrations, and open-source work.
-- **Communities and buildings** — build them, design them. That work is all the CTOs.
-- **Founders, cofounders, and SplitIn LLC** are shareholders of every project.
-- **Everyone is an individual contributor** — no spectator roles. Own a folder end to end, in sync with other contributors and agents.
-- **Orchestrated like adults** — people and agents in the same loop.
-- **Everything is written down** — process, decisions, and benchmarks live in the repo.
-- **MVP, then merge** — tests, trust-me-bro benchmarks, and live user tests.
-- **Build fast, then refine** — every contributor brings an acquaintance after building the building blocks of the architecture.
-- **Every project is allotted funds.**
-- **Right tool, indie-cheap, break the barriers** — and **% equity** in the hosted service when a line of work becomes a SplitIn product.
-
-## How projects work
-
-1. **Build internally.** A domain or tool specialist owns the work end to end inside SplitIn.
-2. **Open source as a package.** Others can install and use it. It can stay MIT forever.
-3. **Keep shipping versions.** Out-of-the-box applications improve release by release.
-4. **Support other projects.** Spin up as many internal tools as sibling products need.
-5. **Hosted product when it earns it.** The same line of work can later run as a proprietary SplitIn hosted service. Every contributor would have **% equity** in that hosted service.
-6. **Work in sync.** Contributors coordinate with other contributors and with agents in the same thread of work — not in isolated handoffs.
-
-## Best possible condition
-
-Every project should be in its **best possible condition**. Contributors use technological advancements to **break the barriers of software development**.
-
-- If it can get **fast**, make it fast.
-- If it can get **smaller**, make it smaller.
-- If it can be **designed beautifully**, design it beautifully.
-- If it can **cost low**, make it cost low.
-- If the **user experience** can get better, make it better.
-- If it can be **monetized**, make it monetized.
-- If it can be **digitized**, make it digitized.
-- If it can **save time**, make it save time.
-- If it can be **integrated**, build it.
-- Even if **few developers** can use it, build it.
-
-## Who we want
-
-We are not looking for drive-by typo PRs as the main contribution. We want **contributors who build and lead end-to-end projects** and who already work the way this hub is built:
-
-- You pick the **right tool and language for that job**, not one stack for every folder. Shell for a LaunchAgent. TypeScript for a Slack router. React for mobile motion. Python or SQL when the package needs it.
-- You **pick and choose across open source** — Bolt, Slack CLI, vitest, tsup, existing MCP servers — instead of writing a platform from scratch.
-- You keep **cost as low as an indie developer**: no extra cloud, no extra seats, no extra daemons unless the product requires them.
-- You **use LLMs to write code** and you **ship fast**. Multiple agent workflows (Cursor, Claude, Codex, ChatGPT, and specialists in one thread) are how you scale, not a demo.
-- You **can write without AI**. You use AI **delegation** to solve more problems in the same week, not to skip understanding the system.
-- You are a **domain specialist** or **tool specialist** and you maintain everything for that domain or tool.
-- You can take a product-tech folder from internal build → package → versioned out-of-the-box app.
-- You own scope, architecture, docs, and release — the project CTO.
-- You like FFmpeg-shaped work: one sharp tool, done properly, that consumers feel.
-- You work **synchronously with other contributors and agents**, not as a solo silo.
-- You task yourself to **break the barriers of software development**: faster, smoother, easy for the user, low latency, high fidelity, least compute, least memory.
-- You are comfortable that the package might stay open source **and** later also become a hosted SplitIn product — and that every contributor would have **% equity** in that hosted service.
-- You leave every project in its **best possible condition**: fast, small, beautiful, cheap, better UX, monetized when it can be, digitized when it can be, time-saving, integrated even if only a few developers need it.
-
-If that is you, open an issue to propose a product, or pick up [mac-unlock-notify](https://github.com/splitintech/mac-unlock-notify), [slack-agent-hq](https://github.com/splitintech/slack-agent-hq), [ideation-loop-system](https://github.com/splitintech/ideation-loop-system), [in-app-otp](https://github.com/splitintech/in-app-otp), [verification-adapter-sdk](https://github.com/splitintech/verification-adapter-sdk), [Moggridge](https://github.com/splitintech/moggridge), [vscode-agent-router](https://github.com/splitintech/vscode-agent-router), or [airdrop-qr](https://github.com/splitintech/airdrop-qr) as maintainer.
-
-## Tech stack
-
-The public catalog is **[splitin.net/tech-stack](https://www.splitin.net/tech-stack)**. Folders here pick the right tool for that job.
-
-Use what the folder already uses unless the job clearly needs something else. Current products:
-
-| Folder | Language / runtime | Libraries and services |
-| --- | --- | --- |
-| [mac-unlock-notify](https://github.com/splitintech/mac-unlock-notify) | zsh on macOS | LaunchAgent, `ioreg`, `curl`, Slack incoming webhooks |
-| [slack-agent-hq](https://github.com/splitintech/slack-agent-hq) | TypeScript on Node 22.13+ | Slack Bolt, Slack CLI, YAML config, SQLite (`node:sqlite`), vitest, tsx, npm workspaces |
-| [ideation-loop-system](https://github.com/splitintech/ideation-loop-system) | TypeScript on Node 22.13+ | Same HQ router plus `#ideate` classifier, MEMORY.md, cost gates, specialist inner loops, `/loop` `/audit` `/done` |
-| [in-app-otp](https://github.com/splitintech/in-app-otp) | TypeScript | tsup, vitest; adapters for React, Express, Django, Supabase |
-| [verification-adapter-sdk](https://github.com/splitintech/verification-adapter-sdk) | TypeScript on Node 20+ | tsup, vitest, AJV; CLI, V1 adapter contract, optional SplitIn V2 compat bridge |
-| [Moggridge](https://github.com/splitintech/moggridge) | TypeScript + React | vitest, tsup, mobile gesture / overlay primitives |
-| [vscode-agent-router](https://github.com/splitintech/vscode-agent-router) | TypeScript on Node 20+ | Cursor/VS Code extension, MCP stdio, `tsup`, vitest, official Claude/Codex/Slack CLIs |
-| [airdrop-qr](https://github.com/splitintech/airdrop-qr) | TypeScript on Node 20+ | `tsup`, vitest, `qrcode` SVG, CLI + catalog JSON → offline HTML cards |
-
-Shared defaults: MIT product repositories, install from the selected repository root, secrets in `.env` / `~/.config` never in git, OSS first, indie-cheap to run. Slack-side coding agents are official apps (`@Cursor`, `@Claude`, `@Codex`, `@ChatGPT`) plus MCP/CLI/API rows in `integrations.yaml` — not a new custom bot per vendor.
+| Product / repository | Distribution | Runtime | What it does | Documentation |
+| --- | --- | --- | --- | --- |
+| [AirDrop QR](https://github.com/splitintech/airdrop-qr) | npm library and CLI | Node.js 20+ | Generate offline HTML QR cards for AirDrop sharing. | [README](https://github.com/splitintech/airdrop-qr#readme) |
+| [In-app OTP](https://github.com/splitintech/in-app-otp) | npm library | TypeScript / Node.js | Framework-neutral OTP handoff and verification adapters. | [README](https://github.com/splitintech/in-app-otp#readme) |
+| [Contact Converter](https://github.com/splitintech/rtf-to-vcard) | Python CLI | Python 3.9+ | Convert TXT, CSV, HTML and RTF contacts into vCard exports. | [README](https://github.com/splitintech/rtf-to-vcard#readme) |
+| [Mac Unlock Notify](https://github.com/splitintech/mac-unlock-notify) | macOS utility | zsh / macOS | Send a Slack notification when a Mac is unlocked. | [README](https://github.com/splitintech/mac-unlock-notify#readme) |
+| [Verification Adapter SDK](https://github.com/splitintech/verification-adapter-sdk) | npm workspace | Node.js 20+ | Provider contracts, verification engine, server, CLI and adapters. | [README](https://github.com/splitintech/verification-adapter-sdk#readme) |
+| [Dev Tools Client](https://github.com/splitintech/dev-tools-client) | npm browser facade | TypeScript / React | Browser-facing verification tools with bundled dependencies. | [README](https://github.com/splitintech/dev-tools-client#readme) |
+| [Slack Agent HQ](https://github.com/splitintech/slack-agent-hq) | Node.js application | Node.js 22.13+ | Route project threads and agent requests through Slack. | [README](https://github.com/splitintech/slack-agent-hq#readme) |
+| [Ideation Loop System](https://github.com/splitintech/ideation-loop-system) | Node.js application | Node.js 22.13+ | Coordinate planning, implementation and review in Slack threads. | [README](https://github.com/splitintech/ideation-loop-system#readme) |
+| [Agent Router](https://github.com/splitintech/vscode-agent-router) | VS Code / Cursor extension | Node.js 20+ | Dispatch work through MCP, CLI and API integrations. | [README](https://github.com/splitintech/vscode-agent-router#readme) |
+| [Group Share](https://github.com/splitintech/group-share) | npm library and gateway | Node.js 20+ | Restrict shared app links by invite list, network and expiry. | [README](https://github.com/splitintech/group-share#readme) |
+| [JPMC Zelle Quick Pay](https://github.com/splitintech/jpmc-zelle-quick-pay) | npm library / synthetic beta | Node.js 22+ / React | Orchestrate payment journeys; not a production banking integration. | [README](https://github.com/splitintech/jpmc-zelle-quick-pay#readme) |
+| [Neighborhood Map Studio](https://github.com/splitintech/neighborhood-map-studio) | Application / container | Python 3.11 / Node.js 22+ | Edit illustrated OSM neighborhood maps with Leaflet and FastAPI. | [README](https://github.com/splitintech/neighborhood-map-studio#readme) |
+| [Outreach Engine](https://github.com/splitintech/outreach-engine) | 12 npm packages and clients | Node.js 22.13+ | Durable outreach orchestration with CLI, HTTP, MCP and Papr clients. | [README](https://github.com/splitintech/outreach-engine#readme) |
+| [Moggridge](https://github.com/splitintech/moggridge) | npm React library | React / React Native | Cross-platform motion, gestures and interaction primitives. | [README](https://github.com/splitintech/moggridge#readme) |
 
 ## Getting started
 
-Choose a product below and clone its standalone repository. For example:
+Clone the selected product repository and follow its README. For example:
 
 ```sh
 git clone https://github.com/splitintech/airdrop-qr.git
@@ -170,61 +47,51 @@ npm test
 npm run build
 ```
 
-Follow each repository's README for its runtime, configuration and validation commands. Mac Unlock Notify uses a macOS installer; contact conversion uses Python; the SDK, Slack tools and Agent Router have their own workspace checks. Package names and extension identity remain compatible.
+Some projects are npm libraries; others are applications, a Python CLI, a macOS utility,
+or an editor extension. Each repository documents its own requirements and operational
+limits. In particular, Map Studio includes a Python service, and Zelle remains a synthetic-development beta.
 
-See [the migration ledger](docs/migrations/2026-10-29.json) for pinned destinations, source revisions and provenance. The hub no longer builds or publishes these products. Existing tags, releases and historical source remain available.
+## Migration and history
 
-## Projects
+The former product directories have been removed from `main`. Their source history,
+tags and releases remain in Git. Old folder URLs targeting `main` no longer resolve;
+use the canonical repositories above or the immutable links in the
+[migration index](docs/migrations/README.md).
 
-Each product retains its branded SplitIn URL; migration notices keep old GitHub folder links useful: `https://www.splitin.net/tech-stack/open-internal-tools/{folder}`.
+- [First nine migrations](docs/migrations/2026-10-29.json)
+- [Four previously branch-only products](docs/migrations/2026-10-29-remaining.json)
+- [Moggridge provenance](https://github.com/splitintech/moggridge/blob/main/docs/migration.md)
 
-| Product | Repository | splitin.net | What it does | Maintainer |
-| --- | --- | --- | --- | --- |
-| Hub | [open-internal-tools](https://github.com/splitintech/open-internal-tools) | [tech-stack/open-internal-tools](https://www.splitin.net/tech-stack/open-internal-tools) | Program catalog for independent product repositories | Open — independent contributor / project CTO |
-| Mac unlock canary | [mac-unlock-notify](https://github.com/splitintech/mac-unlock-notify) | [tech-stack/open-internal-tools/mac-unlock-notify](https://www.splitin.net/tech-stack/open-internal-tools/mac-unlock-notify) | Notify Slack on iPhone when this Mac is unlocked | Open — independent contributor / project CTO |
-| Slack agent HQ | [slack-agent-hq](https://github.com/splitintech/slack-agent-hq) | [tech-stack/open-internal-tools/slack-agent-hq](https://www.splitin.net/tech-stack/open-internal-tools/slack-agent-hq) | One Slack thread per project; taggable Cursor/Claude/Codex/ChatGPT plus specialist bots | Open — independent contributor / project CTO |
-| Ideation loop system | [ideation-loop-system](https://github.com/splitintech/ideation-loop-system) | [tech-stack/open-internal-tools/ideation-loop-system](https://www.splitin.net/tech-stack/open-internal-tools/ideation-loop-system) | `#ideate` LOOP: ChatGPT → Codex → Cursor → Claude on one thread, with MEMORY.md, logs, and cost gates | Open — independent contributor / project CTO |
-| In-app OTP | [in-app-otp](https://github.com/splitintech/in-app-otp) | [tech-stack/open-internal-tools/in-app-otp](https://www.splitin.net/tech-stack/open-internal-tools/in-app-otp) | Framework-neutral in-app OTP handoff for marketplace verification | Open — independent contributor / project CTO |
-| Verification adapter SDK | [verification-adapter-sdk](https://github.com/splitintech/verification-adapter-sdk) | [tech-stack/open-internal-tools/verification-adapter-sdk](https://www.splitin.net/tech-stack/open-internal-tools/verification-adapter-sdk) | Self-hosted verification adapter contracts, CLI, and provider plugins | Open — independent contributor / project CTO |
-| React mobile interactions | [Moggridge](https://github.com/splitintech/moggridge) | [tech-stack/open-internal-tools/react-mobile-interactions](https://www.splitin.net/tech-stack/open-internal-tools/react-mobile-interactions) | Swipe tabs, overlay back layers, and native-feeling mobile motion | Open — independent contributor / project CTO |
-| Agent Router | [vscode-agent-router](https://github.com/splitintech/vscode-agent-router) | [tech-stack/open-internal-tools/vscode-agent-router](https://www.splitin.net/tech-stack/open-internal-tools/vscode-agent-router) | Route Cursor agents to Claude, Codex, Slack, and catalog peers over MCP, CLI, or API | Open — independent contributor / project CTO |
-| AirDrop QR | [airdrop-qr](https://github.com/splitintech/airdrop-qr) | [tech-stack/open-internal-tools/airdrop-qr](https://www.splitin.net/tech-stack/open-internal-tools/airdrop-qr) | Offline HTML QR cards for AirDrop from any URL catalog | Open — independent contributor / project CTO |
-| Contact converter | [rtf-to-vcard](https://github.com/splitintech/rtf-to-vcard) | [Dev tools](https://www.splitin.net/dev-tools/txt-to-vcard) | Local contact conversion and exports | Open — independent contributor / project CTO |
-| Dev Tools Client | [dev-tools-client](https://github.com/splitintech/dev-tools-client) | [Dev tools](https://www.splitin.net/engineering#dev-tools) | Isolated browser verification facade | Open — independent contributor / project CTO |
-| Group Share | [group-share](https://github.com/splitintech/group-share) | — | Private app links gated by invite list, network and expiry. | Open — independent contributor / project CTO |
-| JPMC Zelle Quick Pay | [jpmc-zelle-quick-pay](https://github.com/splitintech/jpmc-zelle-quick-pay) | — | TypeScript/React payment journeys; synthetic-development beta. | Open — independent contributor / project CTO |
-| Neighborhood Map Studio | [neighborhood-map-studio](https://github.com/splitintech/neighborhood-map-studio) | — | OpenStreetMap editor, FastAPI service and durable map artwork. | Open — independent contributor / project CTO |
-| Outreach Engine | [outreach-engine](https://github.com/splitintech/outreach-engine) | — | Durable provider-neutral outreach engine, CLI, HTTP, MCP and Papr clients. | Open — independent contributor / project CTO |
+Migration ledgers describe the source and destination snapshots at the time of each move.
+Historical branches remain available for reference. New work and releases belong in the
+standalone repositories. This hub has no product build or publishing workflow.
 
-New products receive independent repositories and a catalog entry here. The four previously branch-only products have now moved; their original feature branches remain historical snapshots. See [their migration ledger](docs/migrations/2026-10-29-remaining.json).
+## Branch protection
+
+The product repositories protect their default branch with pull requests, required CI
+checks, and blocks on force pushes and branch deletion. See the
+[protection policy and verified repository rules](docs/repository-protection.md) for
+check names and links. A repository administrator can manage these rules in GitHub settings.
 
 ## Contributing
 
-We welcome contributions big and small:
+For a product change or bug report, use its canonical repository. For directory, program
+or migration-documentation changes, open a pull request here and run:
 
-- Open an issue or a product request.
-- Send product pull requests to the corresponding standalone repository. Catalog changes belong here.
-- Work with other contributors **and** agents in the same loop — propose, review, and ship together.
-- Task yourself to break the barriers of software development. Leave every project in its **best possible condition**: if it can get fast, make it fast; smaller, make it smaller; designed beautifully, design it beautifully; cost low, make it cost low; UX better, make it better; monetized, monetize it; digitized, digitize it; save time, save time; integrated, build it — even if few developers can use it.
-- Every contributor would have **% equity** in the hosted service that product later provides.
-- See [CONTRIBUTING.md](CONTRIBUTING.md) for secrets policy and the specialist model.
+```sh
+python3 scripts/check-catalog.py
+```
 
-Do not commit webhooks, tokens, or local `~/.config` files.
+See [CONTRIBUTING.md](CONTRIBUTING.md). The [program guide](docs/program.md) preserves
+our engineering mission, contributor model and open-source product philosophy.
 
-## Open-source vs SplitIn product
+## SplitIn
 
-Projects start **internal**, then go out as **open-source packages**. They keep improving **version by version**, including out-of-the-box apps and supporting tools for other projects. A package may **stay open source** and later also run as a **hosted proprietary SplitIn product**. Every contributor would have **% equity** in that hosted service. SplitIn the company is at [https://www.splitin.net](https://www.splitin.net). Listing here does not mean Slack Marketplace distribution.
+- [Engineering and the wider tech stack](https://www.splitin.net/tech-stack)
+- [Open Internal Tools on SplitIn](https://www.splitin.net/tech-stack/open-internal-tools)
+- [Careers and project maintainers](https://www.splitin.net/careers-requests)
 
-## We're seeking individual contributors
+## License
 
-Hey! If you're reading this, you've proven yourself as a dedicated README reader.
-
-We are seeking **individual contributors** who pick the right tool for the job, compose open source instead of rebuilding it, keep cost indie-low, can write the code themselves, and use LLMs plus multi-agent workflows to ship more. Own a product's tech end to end. Every contributor would have **% equity** in the hosted service that product later provides.
-
-Leave every project in its **best possible condition**. Break the barriers of software development: if it can get fast, make it fast; if it can get smaller, make it smaller; if it can be designed beautifully, design it beautifully; if it can cost low, make it cost low; if the user experience can get better, make it better; if it can be monetized, make it monetized; if it can be digitized, make it digitized; if it can save time, make it save time; if it can be integrated, build it — even if few developers can use it, build it.
-
-Explore SplitIn tech careers at **[https://www.splitin.net/careers-requests](https://www.splitin.net/careers-requests)**. Engineering mission, vision, values, and the stack: **[https://www.splitin.net/tech-stack](https://www.splitin.net/tech-stack)**.
-
-<p align="center">
-  <img src="docs/brand/open-internal-tools-banner.webp" alt="Open Internal Tools by SplitInTech — open-source product and developer tools">
-</p>
+This catalog is MIT-licensed; see [LICENSE](LICENSE). Consult each product repository
+for its license and dependency notices.

@@ -1,0 +1,158 @@
+{
+  "products": [
+    {
+      "name": "AirDrop QR",
+      "repository": "https://github.com/splitintech/airdrop-qr",
+      "former_directory": "airdrop-qr",
+      "distribution": "npm library and CLI",
+      "runtime": "Node.js 20+",
+      "description": "Generate offline HTML QR cards for AirDrop sharing.",
+      "documentation": "https://github.com/splitintech/airdrop-qr#readme",
+      "migration_commit": "8daab470ccbc7be1ed04c09ee8909f8f6f84cd62",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/airdrop-qr"
+    },
+    {
+      "name": "In-app OTP",
+      "repository": "https://github.com/splitintech/in-app-otp",
+      "former_directory": "in-app-otp",
+      "distribution": "npm library",
+      "runtime": "TypeScript / Node.js",
+      "description": "Framework-neutral OTP handoff and verification adapters.",
+      "documentation": "https://github.com/splitintech/in-app-otp#readme",
+      "migration_commit": "fcbb6957a37d19d7b9b4041aa04934275b6cb176",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/in-app-otp"
+    },
+    {
+      "name": "Contact Converter",
+      "repository": "https://github.com/splitintech/rtf-to-vcard",
+      "former_directory": "rtf-to-vcard",
+      "distribution": "Python CLI",
+      "runtime": "Python 3.9+",
+      "description": "Convert TXT, CSV, HTML and RTF contacts into vCard exports.",
+      "documentation": "https://github.com/splitintech/rtf-to-vcard#readme",
+      "migration_commit": "e85ff065b90d936288492128f5031377212bd6bd",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/rtf-to-vcard"
+    },
+    {
+      "name": "Mac Unlock Notify",
+      "repository": "https://github.com/splitintech/mac-unlock-notify",
+      "former_directory": "mac-unlock-notify",
+      "distribution": "macOS utility",
+      "runtime": "zsh / macOS",
+      "description": "Send a Slack notification when a Mac is unlocked.",
+      "documentation": "https://github.com/splitintech/mac-unlock-notify#readme",
+      "migration_commit": "b5cd1045f74b7b7e679a5c4b3d73d6c91749b56e",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/mac-unlock-notify"
+    },
+    {
+      "name": "Verification Adapter SDK",
+      "repository": "https://github.com/splitintech/verification-adapter-sdk",
+      "former_directory": "verification-adapter-sdk",
+      "distribution": "npm workspace",
+      "runtime": "Node.js 20+",
+      "description": "Provider contracts, verification engine, server, CLI and adapters.",
+      "documentation": "https://github.com/splitintech/verification-adapter-sdk#readme",
+      "migration_commit": "3d30221575c11ba535a5dd37e2b828d5d0670f03",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/verification-adapter-sdk"
+    },
+    {
+      "name": "Dev Tools Client",
+      "repository": "https://github.com/splitintech/dev-tools-client",
+      "former_directory": "dev-tools-client",
+      "distribution": "npm browser facade",
+      "runtime": "TypeScript / React",
+      "description": "Browser-facing verification tools with bundled dependencies.",
+      "documentation": "https://github.com/splitintech/dev-tools-client#readme",
+      "migration_commit": "10b7a63d74806d3ed999deea1df28fa83ccbb761",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/dev-tools-client"
+    },
+    {
+      "name": "Slack Agent HQ",
+      "repository": "https://github.com/splitintech/slack-agent-hq",
+      "former_directory": "slack-agent-hq",
+      "distribution": "Node.js application",
+      "runtime": "Node.js 22.13+",
+      "description": "Route project threads and agent requests through Slack.",
+      "documentation": "https://github.com/splitintech/slack-agent-hq#readme",
+      "migration_commit": "b8b2fd8717b575c65989e180f90d37a6d94a1207",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/slack-agent-hq"
+    },
+    {
+      "name": "Ideation Loop System",
+      "repository": "https://github.com/splitintech/ideation-loop-system",
+      "former_directory": "ideation-loop-system",
+      "distribution": "Node.js application",
+      "runtime": "Node.js 22.13+",
+      "description": "Coordinate planning, implementation and review in Slack threads.",
+      "documentation": "https://github.com/splitintech/ideation-loop-system#readme",
+      "migration_commit": "387e1ab1d9f2d7f3cc80784594e15c58241141c5",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/ideation-loop-system"
+    },
+    {
+      "name": "Agent Router",
+      "repository": "https://github.com/splitintech/vscode-agent-router",
+      "former_directory": "vscode-agent-router",
+      "distribution": "VS Code / Cursor extension",
+      "runtime": "Node.js 20+",
+      "description": "Dispatch work through MCP, CLI and API integrations.",
+      "documentation": "https://github.com/splitintech/vscode-agent-router#readme",
+      "migration_commit": "9fcc3ebbaec8cb2fc2a89496c6370bac2dcee6dd",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/f5ec32bc4d050bfbd3f01ecc53569038eb9ce308/vscode-agent-router"
+    },
+    {
+      "name": "Group Share",
+      "repository": "https://github.com/splitintech/group-share",
+      "former_directory": "group-share",
+      "distribution": "npm library and gateway",
+      "runtime": "Node.js 20+",
+      "description": "Restrict shared app links by invite list, network and expiry.",
+      "documentation": "https://github.com/splitintech/group-share#readme",
+      "migration_commit": "794415b45c7c9f35622ba977148221ee11b237ca",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/25fabdddccec808b2f616558d0a650c8e190813f/group-share"
+    },
+    {
+      "name": "JPMC Zelle Quick Pay",
+      "repository": "https://github.com/splitintech/jpmc-zelle-quick-pay",
+      "former_directory": "jpmc-zelle-quick-pay",
+      "distribution": "npm library / synthetic beta",
+      "runtime": "Node.js 22+ / React",
+      "description": "Orchestrate payment journeys; not a production banking integration.",
+      "documentation": "https://github.com/splitintech/jpmc-zelle-quick-pay#readme",
+      "migration_commit": "8702626099fbdf303196c315912b31ace8a76f92",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/4e8b11a089820b5b9fa4f409cda74ec4ac7da34c/jpmc-zelle-quick-pay"
+    },
+    {
+      "name": "Neighborhood Map Studio",
+      "repository": "https://github.com/splitintech/neighborhood-map-studio",
+      "former_directory": "neighborhood-map-studio",
+      "distribution": "Application / container",
+      "runtime": "Python 3.11 / Node.js 22+",
+      "description": "Edit illustrated OSM neighborhood maps with Leaflet and FastAPI.",
+      "documentation": "https://github.com/splitintech/neighborhood-map-studio#readme",
+      "migration_commit": "8696966b9e0ef4858a0d468f8ed8c5a03677014d",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/87b71450ce3422ec80112de4c680f77775de6937/neighborhood-map-studio"
+    },
+    {
+      "name": "Outreach Engine",
+      "repository": "https://github.com/splitintech/outreach-engine",
+      "former_directory": "outreach-engine",
+      "distribution": "12 npm packages and clients",
+      "runtime": "Node.js 22.13+",
+      "description": "Durable outreach orchestration with CLI, HTTP, MCP and Papr clients.",
+      "documentation": "https://github.com/splitintech/outreach-engine#readme",
+      "migration_commit": "9e1ff74f2f96240392f49bb0e25d7e2bdf9335e9",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/13a7ffb75de3c5be017ce05d15e4115f191252d7/outreach-engine"
+    },
+    {
+      "name": "Moggridge",
+      "repository": "https://github.com/splitintech/moggridge",
+      "former_directory": "react-mobile-interactions",
+      "distribution": "npm React library",
+      "runtime": "React / React Native",
+      "description": "Cross-platform motion, gestures and interaction primitives.",
+      "documentation": "https://github.com/splitintech/moggridge#readme",
+      "migration_commit": "0d51d42894b415bc80af852651b99c140b9733a9",
+      "historical_source": "https://github.com/splitintech/open-internal-tools/tree/3e34ca2cb722e5970b6659c1d48e00363c2ed315/react-mobile-interactions"
+    }
+  ]
+}
