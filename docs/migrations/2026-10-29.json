@@ -68,10 +68,10 @@
     {
       "product": "vscode-agent-router",
       "repository": "https://github.com/splitintech/vscode-agent-router",
-      "commit": "e8a727a5d7aec4a1cceedb2337f217494e043a31",
+      "commit": "9fcc3ebbaec8cb2fc2a89496c6370bac2dcee6dd",
       "source_commit": "f5ec32bc4d050bfbd3f01ecc53569038eb9ce308",
       "retained_upstream_files": 58,
-      "provenance": "https://github.com/splitintech/vscode-agent-router/blob/e8a727a5d7aec4a1cceedb2337f217494e043a31/docs/migration.md"
+      "provenance": "https://github.com/splitintech/vscode-agent-router/blob/9fcc3ebbaec8cb2fc2a89496c6370bac2dcee6dd/docs/migration.md"
     }
   ],
   "excluded_branch_products": [
