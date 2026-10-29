@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-29",
+  "products": [
+    {
+      "product": "group-share",
+      "repository": "https://github.com/splitintech/group-share",
+      "commit": "5f75dfc891aad6f776b2b607cbe775efccbb71e6",
+      "source_commit": "25fabdddccec808b2f616558d0a650c8e190813f",
+      "source_branch": "group-share",
+      "retained_upstream_files": 53,
+      "provenance": "https://github.com/splitintech/group-share/blob/5f75dfc891aad6f776b2b607cbe775efccbb71e6/docs/migration.md",
+      "ci": []
+    },
+    {
+      "product": "jpmc-zelle-quick-pay",
+      "repository": "https://github.com/splitintech/jpmc-zelle-quick-pay",
+      "commit": "401be7e5d1a1c08ae8cf50ded7faad939e629a75",
+      "source_commit": "4e8b11a089820b5b9fa4f409cda74ec4ac7da34c",
+      "source_branch": "feature/zelle",
+      "retained_upstream_files": 46,
+      "provenance": "https://github.com/splitintech/jpmc-zelle-quick-pay/blob/401be7e5d1a1c08ae8cf50ded7faad939e629a75/docs/migration.md",
+      "ci": []
+    },
+    {
+      "product": "neighborhood-map-studio",
+      "repository": "https://github.com/splitintech/neighborhood-map-studio",
+      "commit": "fc65f2444a62013560c943e5afc18b0ca3ab06b2",
+      "source_commit": "87b71450ce3422ec80112de4c680f77775de6937",
+      "source_branch": "feat/neighborhood-map-studio",
+      "retained_upstream_files": 85,
+      "provenance": "https://github.com/splitintech/neighborhood-map-studio/blob/fc65f2444a62013560c943e5afc18b0ca3ab06b2/docs/migration.md",
+      "ci": [],
+      "additional_source": {
+        "repository": "splitintech/splitin",
+        "commit": "08713aed305fc720ce8286dd114475d9034bb69c",
+        "path": "services/neighborhood-map-studio",
+        "files": 80
+      }
+    },
+    {
+      "product": "outreach-engine",
+      "repository": "https://github.com/splitintech/outreach-engine",
+      "commit": "26f6f5863f65ef017326381a3033a89da7d87da6",
+      "source_commit": "13a7ffb75de3c5be017ce05d15e4115f191252d7",
+      "source_branch": "papr-adapter",
+      "retained_upstream_files": 278,
+      "provenance": "https://github.com/splitintech/outreach-engine/blob/26f6f5863f65ef017326381a3033a89da7d87da6/docs/migration.md",
+      "ci": []
+    }
+  ],
+  "npm_publication": false,
+  "image_publication": false,
+  "service_deployment": false,
+  "source_branches_retained": true,
+  "previous_migration": "2026-10-29.json"
+}

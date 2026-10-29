@@ -3,6 +3,9 @@ import json,pathlib,re
 root=pathlib.Path(__file__).resolve().parents[1]
 ledger=json.loads((root/'docs/migrations/2026-10-29.json').read_text())
 assert len(ledger['products'])==9
+remaining=json.loads((root/'docs/migrations/2026-10-29-remaining.json').read_text())
+assert len(remaining['products'])==4
+ledger['products'] += remaining['products']
 for item in ledger['products']:
  name=item['product'];folder=root/name
  assert sorted(p.name for p in folder.iterdir())==['README.md'],name
@@ -13,4 +16,4 @@ for item in ledger['products']:
 assert not list(root.glob('*/package.json'))
 assert not list((root/'.github/workflows').glob('*publish*'))
 assert 'splitintech/moggridge' in (root/'react-mobile-interactions/README.md').read_text()
-print('Nine standalone migration notices and the existing Moggridge notice verified.')
+print('Thirteen standalone migration notices and the existing Moggridge notice verified.')

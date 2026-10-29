@@ -191,8 +191,12 @@ Each product retains its branded SplitIn URL; migration notices keep old GitHub 
 | AirDrop QR | [airdrop-qr](https://github.com/splitintech/airdrop-qr) | [tech-stack/open-internal-tools/airdrop-qr](https://www.splitin.net/tech-stack/open-internal-tools/airdrop-qr) | Offline HTML QR cards for AirDrop from any URL catalog | Open — independent contributor / project CTO |
 | Contact converter | [rtf-to-vcard](https://github.com/splitintech/rtf-to-vcard) | [Dev tools](https://www.splitin.net/dev-tools/txt-to-vcard) | Local contact conversion and exports | Open — independent contributor / project CTO |
 | Dev Tools Client | [dev-tools-client](https://github.com/splitintech/dev-tools-client) | [Dev tools](https://www.splitin.net/engineering#dev-tools) | Isolated browser verification facade | Open — independent contributor / project CTO |
+| Group Share | [group-share](https://github.com/splitintech/group-share) | — | Private app links gated by invite list, network and expiry. | Open — independent contributor / project CTO |
+| JPMC Zelle Quick Pay | [jpmc-zelle-quick-pay](https://github.com/splitintech/jpmc-zelle-quick-pay) | — | TypeScript/React payment journeys; synthetic-development beta. | Open — independent contributor / project CTO |
+| Neighborhood Map Studio | [neighborhood-map-studio](https://github.com/splitintech/neighborhood-map-studio) | — | OpenStreetMap editor, FastAPI service and durable map artwork. | Open — independent contributor / project CTO |
+| Outreach Engine | [outreach-engine](https://github.com/splitintech/outreach-engine) | — | Durable provider-neutral outreach engine, CLI, HTTP, MCP and Papr clients. | Open — independent contributor / project CTO |
 
-New products receive independent repositories and a catalog entry here. Existing feature-branch products remain on their original branches until separately migrated.
+New products receive independent repositories and a catalog entry here. The four previously branch-only products have now moved; their original feature branches remain historical snapshots. See [their migration ledger](docs/migrations/2026-10-29-remaining.json).
 
 ## Contributing
 
